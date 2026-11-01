@@ -69,4 +69,4 @@ function start(sender, on = true) {
   if (on) poll();
 }
 
-module.exports = { start, setEnabled, onBack, snapshot: () => state };
+module.exports = { start, setEnabled, onBack, linkKind, snapshot: () => state };

@@ -372,7 +372,7 @@ function startMedia() {
     buffer += chunk;
     let i;
     while ((i = buffer.indexOf('\n')) >= 0) {
-      const line = buffer.slice(0, i).replace(/^﻿/, '').trim();
+      const line = buffer.slice(0, i).replace(/^\uFEFF/, '').trim();
       buffer = buffer.slice(i + 1);
       if (!line.startsWith('{')) continue;
       try {
@@ -505,7 +505,7 @@ function findTabUrl(proc, title) {
     ps.on('exit', () => {
       clearTimeout(timer);
       try {
-        const r = JSON.parse(out.replace(/^﻿/, '').trim());
+        const r = JSON.parse(out.replace(/^\uFEFF/, '').trim());
         resolve(r.url || '');
       } catch {
         resolve('');

@@ -30,7 +30,7 @@ function scanOnce() {
     ps.stderr.on('data', (d) => (errOut += d));
     ps.on('exit', (code) => {
       try {
-        const list = JSON.parse(out.replace(/^﻿/, '').trim());
+        const list = JSON.parse(out.replace(/^\uFEFF/, '').trim());
         const items = (Array.isArray(list) ? list : [list]).filter((a) => a && a.name && a.id);
         if (!items.length) throw new Error('empty list');
         catalog = items.sort((a, b) => a.name.localeCompare(b.name));

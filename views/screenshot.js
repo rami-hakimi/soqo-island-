@@ -1,6 +1,6 @@
 // Copied image / screenshot: a toast with the thumbnail. With "Save screenshots to Shelf" on, main
 // already put it on the Shelf for a while ("Added to Shelf ✓", a click opens the Shelf);
-// otherwise clicking saves it to Pictures\Nova Island and puts it on the Shelf.
+// otherwise clicking saves it to Pictures\Soqo Island and puts it on the Shelf.
 (() => {
   bridge.onScreenshot((s) => {
     $('.t-shot').src = s.thumb;

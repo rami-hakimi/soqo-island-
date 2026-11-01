@@ -4,7 +4,7 @@
 // Only time at the computer counts; a long absence starts the count again. It waits during a
 // focus session, quiet hours, fullscreen, or while the island is busy.
 (() => {
-  const KEY = 'nova-water';
+  const KEY = movedKey('soqo-water', 'nova-water');
   const AWAY_RESET_S = 20 * 60; // away this long: start counting again
   const SNOOZE_MS = 15 * 60e3; // closed without drinking: ask again sooner
   let activeMs = 0;

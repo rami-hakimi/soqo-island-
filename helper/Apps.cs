@@ -1,4 +1,4 @@
-// `nova-helper apps`: the Start menu's apps as JSON, [{ name, id, icon, kind }] (was apps.ps1).
+// `soqo-helper apps`: the Start menu's apps as JSON, [{ name, id, icon, kind }] (was apps.ps1).
 //   id   = AppUserModelID from the shell's AppsFolder (launched with shell:AppsFolder\<id>)
 //   kind = 'png' (Store app logo file) | 'file' (exe/lnk to take the icon from) | ''
 using System;

@@ -49,7 +49,7 @@ async function clipboardChanged(isPrivate) {
   clips = [text, ...clips.filter((c) => c !== text)].slice(0, MAX_CLIPS);
   send('clipboard', clips.map((c) => c.slice(0, 300)));
 }
-let smart = null; // what the last copy was recognised as (acted on by nova.js)
+let smart = null; // what the last copy was recognised as (acted on by the main process)
 const lastSmart = () => smart;
 // writing to the clipboard ourselves must not be announced again
 function writeQuiet(text) {

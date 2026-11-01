@@ -1,5 +1,6 @@
 // Which parts of the island are on. Edited in the Settings window, applied live by the island.
 const settings = require('./settings');
+const migrate = require('./migrate');
 
 const DEFAULTS = {
   // expanded tabs
@@ -48,9 +49,9 @@ const DEFAULTS = {
   morningBrief: true,
   wellbeing: true,
   smartClipboard: true,
-  novaEyes: true,
-  novaPrayer: true, // Nova in her prayer cap at the adhan
-  novaFocus: true, // Nova with her headband at focus start / end
+  soqiEyes: true,
+  soqiPrayer: true, // Soqi in her prayer cap at the adhan
+  soqiFocus: true, // Soqi with her headband at focus start / end
   water: true, // the Drop reminds you to drink
   waterEvery: 60, // minutes at the computer between glasses
   waterGoal: 8, // glasses a day (~2 L)
@@ -80,7 +81,11 @@ const RANGES = {
   focusMin: [5, 120], breakMin: [1, 60], longBreakMin: [5, 60], hijriAdjust: [-2, 2], waterEvery: [15, 240], waterGoal: [4, 16], shotShelfMinutes: [5, 1440],
 };
 
-let values = { ...DEFAULTS, ...pick(settings.load('features.json', {})) };
+// settings saved by Nova Island keep working: renamed keys are mapped once and saved back
+const stored = settings.load('features.json', {});
+const mapped = migrate.featureKeys(stored);
+let values = { ...DEFAULTS, ...pick(mapped) };
+if (JSON.stringify(mapped) !== JSON.stringify(stored)) settings.save('features.json', values);
 const listeners = [];
 
 // keep only known keys with values of the right type (numbers clamped to their range)

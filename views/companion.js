@@ -9,7 +9,7 @@
   const AWAY_S = 5 * 60; // this long without input = away
   const LONG_AWAY_MS = 30 * 60e3;
   const WORK_MS = 50 * 60e3;
-  const BRIEF_KEY = 'nova-brief-day';
+  const BRIEF_KEY = movedKey('soqo-brief-day', 'nova-brief-day');
   const CARE = [
     ['Stand up and move', '50 minutes at the screen. Two minutes of moving wakes up body and mind.'],
     ['Rest your eyes', 'Look at something 20 feet away for 20 seconds — the 20-20-20 rule.'],

@@ -1,6 +1,6 @@
 // A new version is downloaded: a toast with "Update now" (main re-sends it on every update
 // check, so an ignored one comes back; it also installs when the app quits). "Update now" first
-// says Nova is about to restart, counting down 10 seconds, then installs and reopens.
+// says the app is about to restart, counting down 10 seconds, then installs and reopens.
 (() => {
   const COUNTDOWN_S = 10;
   let timer = null;

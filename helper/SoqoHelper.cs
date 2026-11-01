@@ -1,4 +1,4 @@
-// Nova Island system bridge, compiled (replaces media.ps1, same protocol).
+// Soqo Island system bridge, compiled (replaces media.ps1, same protocol).
 // Prints one JSON line about every 500 ms: media session (SMTC), volume, brightness, fullscreen,
 // window in front, keyboard layout, Caps Lock.
 // Reads commands on stdin: toggle | next | prev | seek <sec> | vol <0-1> | mute | bright <0-100>
@@ -9,12 +9,21 @@ using System.Collections.Concurrent;
 using System.Globalization;
 using System.IO;
 using System.Management;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Windows.Media.Control;
 using Windows.Storage.Streams;
+
+// Version resource, so the binary identifies itself in Explorer and to security software.
+[assembly: AssemblyTitle("Soqo Island Helper")]
+[assembly: AssemblyDescription("System bridge for Soqo Island (media, volume, brightness, clipboard, windows)")]
+[assembly: AssemblyProduct("Soqo Island")]
+[assembly: AssemblyCopyright("GPL-3.0. Based on Nova Island by AmerTech.")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
 
 [ComImport, Guid("5CDF2C82-841E-4546-9722-0CF74078229A"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 interface IAudioEndpointVolume {
@@ -295,9 +304,9 @@ static class Program {
     return code;
   }
 
-  //   nova-helper                    -> the media/system bridge (JSON lines, commands on stdin)
-  //   nova-helper apps               -> Start menu apps as JSON
-  //   nova-helper yturl <proc> <title> -> URL of the browser tab playing that video
+  //   soqo-helper                    -> the media/system bridge (JSON lines, commands on stdin)
+  //   soqo-helper apps               -> Start menu apps as JSON
+  //   soqo-helper yturl <proc> <title> -> URL of the browser tab playing that video
   [MTAThread]
   static int Main(string[] args) {
     Win.PerMonitorDpi();

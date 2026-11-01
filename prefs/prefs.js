@@ -208,7 +208,7 @@ async function showBridge() {
   el.textContent = s.state === 'ok' ? 'Running' : s.state === 'starting' ? 'Starting…' : 'Stopped';
   const detail = $('#bridge-detail');
   detail.hidden = s.state !== 'failed';
-  detail.textContent = 'Allow Nova Island in your antivirus, then restart it';
+  detail.textContent = 'Allow Soqo Island in your antivirus, then restart it';
 }
 showBridge();
 setInterval(showBridge, 4000);

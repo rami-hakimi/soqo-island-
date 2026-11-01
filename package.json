@@ -1,7 +1,7 @@
 {
-  "name": "nova-island",
-  "version": "1.4.0",
-  "description": "A living island for your Windows desktop",
+  "name": "soqo-island",
+  "version": "2.0.0-alpha.1",
+  "description": "Soqo Island — A Living Island for Windows (سوكو آيلاند)",
   "main": "nova.js",
   "scripts": {
     "start": "electron .",
@@ -13,7 +13,7 @@
     "dist": "electron-builder --win nsis",
     "dist:portable": "electron-builder --win portable"
   },
-  "author": "AmerTech",
+  "author": "Rami Al-Hakimi",
   "license": "GPL-3.0-only",
   "devDependencies": {
     "@eslint/js": "^9.39.5",
@@ -23,9 +23,9 @@
     "globals": "^15.15.0"
   },
   "build": {
-    "appId": "com.dynamicnova.app",
-    "productName": "Nova Island",
-    "copyright": "Copyright © 2026 Nova Island by AmerTech",
+    "appId": "com.soqoisland.app",
+    "productName": "Soqo Island",
+    "copyright": "Copyright © 2026 Soqo Island contributors. Based on Nova Island © 2026 AmerTech (GPL-3.0).",
     "electronLanguages": [
       "en-US",
       "ar"
@@ -40,6 +40,12 @@
       "build/icon.ico",
       "!promo/**",
       "!dist/**",
+      "!docs/**",
+      "!test/**",
+      "!scripts/**",
+      "!eslint.config.js",
+      "!.editorconfig",
+      "!.gitattributes",
       "!*.cmd",
       "!setup-log.txt",
       "!**/*.map",
@@ -48,39 +54,50 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "NOVA-TECH-KIT",
-      "repo": "nova-island"
+      "owner": "rami-hakimi",
+      "repo": "soqo-island-"
     },
     "asarUnpack": [
-      "helper/nova-helper.exe"
+      "helper/soqo-helper.exe"
     ],
     "win": {
       "target": [
         "nsis"
       ],
       "icon": "build/icon.ico",
-      "executableName": "Nova Island"
+      "executableName": "Soqo Island"
     },
     "nsis": {
       "oneClick": false,
-      "artifactName": "Nova-Island-Setup-${version}.${ext}",
+      "artifactName": "Soqo-Island-Setup-${version}.${ext}",
       "license": "LICENSE",
       "perMachine": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
-      "shortcutName": "Nova Island",
+      "shortcutName": "Soqo Island",
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico",
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": false
     },
     "portable": {
-      "artifactName": "Nova Island ${version} portable.exe"
+      "artifactName": "Soqo Island ${version} portable.exe"
     }
   },
   "dependencies": {
     "electron-updater": "^6.8.11",
     "node-ical": "^0.27.3"
+  },
+  "contributors": [
+    "AmerTech (Nova Island, the upstream project)"
+  ],
+  "homepage": "https://github.com/rami-hakimi/soqo-island-",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rami-hakimi/soqo-island-.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rami-hakimi/soqo-island-/issues"
   }
 }

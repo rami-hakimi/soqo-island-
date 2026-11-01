@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer, webUtils } = require('electron');
 
 const on = (channel) => (cb) => ipcRenderer.on(channel, (_e, data) => cb(data));
 
-contextBridge.exposeInMainWorld('nova', {
+contextBridge.exposeInMainWorld('soqo', {
   onMedia: on('media'),
   onToggle: on('toggle'),
   onHover: on('hover'),

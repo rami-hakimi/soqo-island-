@@ -534,7 +534,7 @@ function findTabUrl(proc, title) {
     ps.on('error', () => resolve(''));
     ps.stdout.setEncoding('utf8');
     ps.stdout.on('data', (d) => (out += d));
-    ps.on('exit', () => {
+    ps.on('close', () => { // after stdout is fully read (see apps.js)
       clearTimeout(timer);
       try {
         const r = JSON.parse(out.replace(/^\uFEFF/, '').trim());

@@ -50,6 +50,25 @@ test('fresh installation: Islamic features off, prayer method auto, adhan sound 
   assert.equal(features.get().islamic, false);
 });
 
+test('existing Soqo Island users keep their own choice (no re-derivation without the import marker)', () => {
+  const dir = app.getPath('userData');
+  for (const f of ['features.json', migrate.MARKER]) { try { fs.unlinkSync(path.join(dir, f)); } catch {} }
+  fs.writeFileSync(path.join(dir, 'features.json'), JSON.stringify({ islamic: true, prayerAlerts: false }));
+  let f = freshFeatures().get();
+  assert.equal(f.islamic, true);
+  assert.equal(f.prayerAlerts, false);
+  assert.equal(f.islamicPrompt, false);
+  fs.writeFileSync(path.join(dir, 'features.json'), JSON.stringify({ islamic: false }));
+  f = freshFeatures().get();
+  assert.equal(f.islamic, false);
+  // a Soqo profile from before the master switch existed (no key, no import marker): off
+  fs.writeFileSync(path.join(dir, 'features.json'), JSON.stringify({ tabMedia: true, tabPrayer: true }));
+  f = freshFeatures().get();
+  assert.equal(f.islamic, false);
+  assert.equal(f.islamicPrompt, false);
+  try { fs.unlinkSync(path.join(dir, 'features.json')); } catch {}
+});
+
 test('profile imported from Nova Island: features stay on and the one-time question is armed', () => {
   const dir = app.getPath('userData');
   fs.writeFileSync(path.join(dir, migrate.MARKER), JSON.stringify({ from: 'x', copied: 2 }));

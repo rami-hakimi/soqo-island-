@@ -31,11 +31,10 @@ input { font: inherit; color: inherit; }
 .titlebar { flex: none; height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 6px 0 16px; -webkit-app-region: drag; background: var(--side); }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 13px; }
 .brand b { font-weight: 650; }
-.logo {
-  width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center;
-  background: linear-gradient(140deg, #7b5cff, #3b82f6);
-}
-.logo i { width: 14px; height: 6px; border-radius: 3px; background: #08080c; }
+/* the approved Soqo Island icon (build/icon.png, derived from assets/) */
+.logo { width: 22px; height: 22px; border-radius: 6px; object-fit: contain; flex: none; }
+.about-app { gap: 12px; justify-content: flex-start; }
+.about-icon { width: 40px; height: 40px; border-radius: 10px; flex: none; }
 .win-btns { display: flex; gap: 2px; -webkit-app-region: no-drag; }
 .win-btns button { width: 40px; height: 30px; border-radius: 7px; display: grid; place-items: center; color: var(--text-2); transition: background .15s, color .15s; }
 .win-btns button svg { width: 11px; height: 11px; stroke-width: 1.4; }

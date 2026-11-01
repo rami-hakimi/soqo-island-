@@ -111,11 +111,11 @@ If your prayer features were at their defaults, it asks once whether to keep the
 
 ## Developer and license
 
-Developed by **Rami Al-Hakimi** — [github.com/rami-hakimi](https://github.com/rami-hakimi) —
+Developed by **Rami al-Hakimi** — [github.com/rami-hakimi](https://github.com/rami-hakimi) —
 Netherlands.
 
 Soqo Island is free software under the [GNU General Public License v3.0](LICENSE).
-Copyright © 2026 Rami Al-Hakimi and Soqo Island contributors. Based on **Nova Island**,
+Copyright © 2026 Rami al-Hakimi and Soqo Island contributors. Based on **Nova Island**,
 Copyright © 2026 Nova Island by AmerTech, GPL-3.0; the name "Nova Island", the Nova character
 and the Nova logo belong to the upstream project and are not used here. Third-party notices:
 [`NOTICE.md`](NOTICE.md).

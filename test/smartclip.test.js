@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { classify, calc } = require('../smartclip');
+const { classify, calc } = require('../src/main/smartclip');
 
 test('calc: precedence, parentheses, powers, percent, unicode operators', () => {
   assert.equal(calc('2+3*4'), 14);

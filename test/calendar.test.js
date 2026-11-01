@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const ical = require('node-ical');
-const calendar = require('../calendar');
+const calendar = require('../src/main/calendar');
 
 const ICS = [
   'BEGIN:VCALENDAR',

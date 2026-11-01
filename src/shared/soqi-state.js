@@ -3,7 +3,7 @@
 // is going on (away, cursor nearby, music). No DOM here.
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
-  else root.SoqiState = factory();
+  else /** @type {any} */ (root).SoqiState = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
   const STATES = ['idle', 'happy', 'excited', 'curious', 'listening', 'music', 'sleeping', 'notification', 'download', 'warning'];
   // a stronger reaction replaces a weaker one; an equal or weaker one waits its turn

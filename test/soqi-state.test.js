@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { createMachine, STATES } = require('../shared/soqi-state');
+const { createMachine, STATES } = require('../src/shared/soqi-state');
 
 function clock(start = 1000) {
   let t = start;
@@ -58,7 +58,7 @@ test('equal priority replaces (newest news wins), unknown states are ignored', (
 test('every state has artwork and a default duration', () => {
   const fs = require('fs');
   const path = require('path');
-  const { DEFAULT_MS, PRIORITY } = require('../shared/soqi-state');
+  const { DEFAULT_MS, PRIORITY } = require('../src/shared/soqi-state');
   for (const s of STATES) {
     assert.ok(DEFAULT_MS[s] > 0, s);
     assert.ok(s in PRIORITY, s);

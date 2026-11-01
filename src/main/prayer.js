@@ -6,6 +6,7 @@
 const settings = require('./settings');
 const features = require('./features');
 
+/** @type {(channel: string, data?: unknown) => void} */
 let send = () => {};
 let getLocation = null;
 let data = settings.load('prayer-cache.json', null);
@@ -205,7 +206,7 @@ async function refresh() {
     // next run just after local midnight
     const at = new Date();
     at.setHours(24, 1, 0, 0);
-    midnightTimer = setTimeout(refresh, at - Date.now());
+    midnightTimer = setTimeout(refresh, at.getTime() - Date.now());
   } catch (err) {
     // only when no location is known yet and the time zone has no fallback city: try again soon
     if (!failed) console.warn('[prayer]', err.message, '(retrying quietly)');

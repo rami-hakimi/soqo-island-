@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const { app } = require('electron');
-const features = require('../features');
+const features = require('../src/main/features');
 
 test('defaults are complete and unchanged by unknown keys', () => {
   const before = features.get();
@@ -24,6 +24,7 @@ test('numbers are rounded and clamped to their range', () => {
 });
 
 test('set persists to features.json and notifies listeners; reset restores defaults', () => {
+  /** @type {any} */
   let seen = null;
   features.onChange((f) => { seen = f; });
   features.set({ tabApps: false });

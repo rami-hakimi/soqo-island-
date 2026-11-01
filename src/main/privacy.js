@@ -16,6 +16,7 @@ const NAMES = {
   immersivecontrolpanel: 'Settings', 'adobe audition cc': 'Adobe Audition',
 };
 
+/** @type {(channel: string, data?: unknown) => void} */
 let send = () => {};
 let enabled = true;
 let timer = null;

@@ -8,6 +8,7 @@ const PROBE = 'http://www.msftconnecttest.com/connecttest.txt';
 const LINK_MS = 5000;
 const WIFI_NAME = /wi-?fi|wlan|wireless/i;
 
+/** @type {(channel: string, data?: unknown) => void} */
 let send = () => {};
 let enabled = true;
 let timer = null;

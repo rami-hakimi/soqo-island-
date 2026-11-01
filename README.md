@@ -81,9 +81,9 @@ Copyright © 2026 Soqo Island contributors.
 Based on Nova Island, Copyright © 2026 Nova Island by AmerTech, GPL-3.0. "Nova Island", the
 Nova character and the Nova logo belong to the upstream project and are not used here.
 
-The Qur'an font in `fonts/` (KFGQPC HAFS Uthmanic Script by the King Fahd Glorious Quran
+The Qur'an font in `assets/fonts/` (KFGQPC HAFS Uthmanic Script by the King Fahd Glorious Quran
 Printing Complex) is included unmodified under its own licence, see
-[fonts/KFGQPC-LICENSE.txt](fonts/KFGQPC-LICENSE.txt). It is not covered by the GPL.
+[assets/fonts/KFGQPC-LICENSE.txt](assets/fonts/KFGQPC-LICENSE.txt). It is not covered by the GPL.
 
 The name "Soqo Island" and the Soqi character are the marks of this project; please use a
 different name and mascot for modified versions.

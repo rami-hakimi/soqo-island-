@@ -29,6 +29,7 @@ const IDLE_MS = 2500;
 const OFFLINE_MS = 6000;
 const MAX_THUMB = 400 * 1024;
 
+/** @type {(channel: string, data?: unknown) => void} */
 let send = () => {};
 let items = [];
 let online = false;

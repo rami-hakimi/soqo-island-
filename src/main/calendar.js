@@ -11,6 +11,7 @@ const MAX_EVENTS = 12;
 // meeting links worth a Join button
 const JOIN = /https:\/\/(?:meet\.google\.com\/[a-z0-9-]+|teams\.(?:microsoft|live)\.com\/[^\s"'<>]+|(?:[\w-]+\.)?zoom\.us\/(?:j|my|w)\/[^\s"'<>]+|[\w-]+\.webex\.com\/[^\s"'<>]+)/i;
 
+/** @type {(channel: string, data?: unknown) => void} */
 let send = () => {};
 let cfg = settings.load('calendar.json', { url: '' });
 let state = { events: [], error: '', updated: 0 };

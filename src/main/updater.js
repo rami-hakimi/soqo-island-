@@ -11,6 +11,7 @@ let updater = null;
 let enabled = false;
 let ready = null; // version downloaded and waiting for a restart
 let timer = null;
+/** @type {(channel: string, data?: unknown) => void} */
 let send = () => {};
 let checkFailed = false; // the last check didn't get through: try again when the PC wakes or goes online
 

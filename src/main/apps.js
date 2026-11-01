@@ -16,7 +16,7 @@ const iconCache = new Map();
 let onChange = () => {};
 
 function scriptPath(name) {
-  return path.join(__dirname, name).replace('app.asar', 'app.asar.unpacked');
+  return path.join(__dirname, '..', '..', name).replace('app.asar', 'app.asar.unpacked');
 }
 
 function scanOnce() {

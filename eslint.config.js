@@ -25,7 +25,7 @@ module.exports = [
     },
   },
   {
-    files: ['renderer.js', 'views/*.js'],
+    files: ['src/renderer/island/renderer.js', 'src/renderer/island/views/*.js'],
     languageOptions: { sourceType: 'script', globals: { ...globals.browser, ...islandGlobals, lastMode: 'writable', anchor: 'writable' } },
     rules: {
       'no-redeclare': 'off',
@@ -34,7 +34,7 @@ module.exports = [
     },
   },
   {
-    files: ['prefs/prefs.js', 'mini/mini.js'],
+    files: ['src/renderer/prefs/prefs.js', 'src/renderer/mini/mini.js'],
     languageOptions: { sourceType: 'script', globals: { ...globals.browser, mini: 'readonly' } },
   },
   {
@@ -43,7 +43,7 @@ module.exports = [
   },
   {
     // UMD: runs as a classic script in the island and as CommonJS in tests
-    files: ['shared/*.js'],
+    files: ['src/shared/*.js'],
     languageOptions: { sourceType: 'script', globals: { ...globals.browser, ...globals.node } },
   },
 ];

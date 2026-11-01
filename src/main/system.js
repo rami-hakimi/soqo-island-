@@ -5,6 +5,7 @@ const features = require('./features');
 const settings = require('./settings');
 const smartclip = require('./smartclip');
 
+/** @type {(channel: string, data?: unknown) => void} */
 let send = () => {};
 
 // ---- CPU / RAM ----
@@ -94,11 +95,11 @@ async function getJson(url) {
 // IP geolocation with fallbacks (free services rate-limit often)
 async function locate() {
   const services = [
-    ['https://ipwho.is/', (j) => j.success !== false && { lat: j.latitude, lon: j.longitude, city: j.city, country: j.country_code, timezone: j.timezone?.id }],
-    ['https://get.geojs.io/v1/ip/geo.json', (j) => ({ lat: Number(j.latitude), lon: Number(j.longitude), city: j.city, country: j.country_code, timezone: j.timezone })],
-    ['https://ipapi.co/json/', (j) => ({ lat: j.latitude, lon: j.longitude, city: j.city, country: j.country_code, timezone: j.timezone })],
+    { url: 'https://ipwho.is/', pick: (j) => j.success !== false && { lat: j.latitude, lon: j.longitude, city: j.city, country: j.country_code, timezone: j.timezone?.id } },
+    { url: 'https://get.geojs.io/v1/ip/geo.json', pick: (j) => ({ lat: Number(j.latitude), lon: Number(j.longitude), city: j.city, country: j.country_code, timezone: j.timezone }) },
+    { url: 'https://ipapi.co/json/', pick: (j) => ({ lat: j.latitude, lon: j.longitude, city: j.city, country: j.country_code, timezone: j.timezone }) },
   ];
-  for (const [url, pick] of services) {
+  for (const { url, pick } of services) {
     try {
       const loc = pick(await getJson(url));
       if (loc && Number.isFinite(loc.lat) && Number.isFinite(loc.lon)) return loc;

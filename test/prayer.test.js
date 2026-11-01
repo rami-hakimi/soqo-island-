@@ -4,7 +4,7 @@
 // astronomical reference.
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const prayer = require('../prayer');
+const prayer = require('../src/main/prayer');
 
 const CAIRO = { lat: 30.0444, lon: 31.2357, country: 'EG' };
 const MAKKAH = { lat: 21.4225, lon: 39.8262, country: 'SA' };

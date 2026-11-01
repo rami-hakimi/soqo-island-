@@ -11,7 +11,7 @@
   const sprites = {};
   for (const s of SoqiState.STATES) {
     const i = new Image();
-    i.src = `assets/soqi/${s}.png`;
+    i.src = `../../../assets/soqi/${s}.png`;
     sprites[s] = i;
   }
 

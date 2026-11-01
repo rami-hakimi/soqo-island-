@@ -88,6 +88,14 @@
     },
     "portable": {
       "artifactName": "Soqo Island ${version} portable.exe"
+    },
+    "electronFuses": {
+      "runAsNode": false,
+      "enableCookieEncryption": true,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "onlyLoadAppFromAsar": true
     }
   },
   "dependencies": {

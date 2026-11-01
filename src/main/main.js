@@ -1,5 +1,5 @@
 const {
-  app, BrowserWindow, screen, ipcMain, Tray, Menu, nativeImage, globalShortcut, desktopCapturer, shell, dialog, powerMonitor,
+  app, BrowserWindow, screen, ipcMain, Tray, Menu, nativeImage, globalShortcut, desktopCapturer, shell, dialog, powerMonitor, session,
 } = require('electron');
 const fs = require('fs');
 const path = require('path');
@@ -100,6 +100,11 @@ function defaultAnchor() {
 function clamp(v, lo, hi) {
   return Math.min(Math.max(v, lo), hi);
 }
+
+// IPC arguments come from a renderer: only the expected shapes get through.
+const isStr = (v, max = 4096) => typeof v === 'string' && v.length <= max;
+const isInt = (v, lo, hi) => Number.isInteger(v) && v >= lo && v <= hi;
+const isObj = (v) => !!v && typeof v === 'object' && !Array.isArray(v);
 
 // Clamp the anchor to the display, position the window around it and tell the renderer
 // where the pill sits inside the window.
@@ -324,6 +329,7 @@ function createWindow() {
       preload: path.join(ROOT, 'src', 'preload', 'island.js'),
       contextIsolation: true,
       nodeIntegration: false,
+      sandbox: true,
     },
   });
   win.setAlwaysOnTop(true, 'screen-saver');
@@ -489,7 +495,7 @@ ipcMain.on('shot-to-shelf', () => shotToShelf());
 
 const MEDIA_CMD = /^(toggle|next|prev|mute|seek \d+(\.\d+)?|vol [01](\.\d+)?|bright \d{1,3})$/;
 ipcMain.on('media-cmd', (_e, cmd) => {
-  if (media && typeof cmd === 'string' && MEDIA_CMD.test(cmd)) media.stdin.write(cmd + '\n');
+  if (media && isStr(cmd, 64) && MEDIA_CMD.test(cmd)) media.stdin.write(cmd + '\n');
 });
 
 function mediaWrite(cmd) {
@@ -530,7 +536,8 @@ function youtubeId(url) {
   return m ? m[1] : null;
 }
 
-ipcMain.handle('mini-open', async (_e, req) => {
+ipcMain.handle('mini-open', (_e, req) => (isObj(req) ? miniOpen(req) : { ok: false, error: 'bad-request' }));
+async function miniOpen(req) {
   const appId = String(req?.app || '');
   const proc = browserProc(appId);
   if (!proc || !APP_ID.test(appId)) return { ok: false, error: 'not-browser' };
@@ -558,7 +565,7 @@ ipcMain.handle('mini-open', async (_e, req) => {
     },
   });
   return { ok: true };
-});
+}
 
 // --- glass backdrop ---
 // CSS backdrop-filter cannot see other windows, so capture the screen area under the
@@ -627,6 +634,7 @@ let enteredAt = 0;
 let suppressUntilLeave = false;
 
 ipcMain.on('island-rect', (_e, r) => {
+  if (!isObj(r) || ![r.x, r.y, r.width, r.height].every((n) => Number.isFinite(n))) return;
   const resized = r.width !== islandRect.width || r.height !== islandRect.height;
   islandRect = r;
   if (resized) {
@@ -687,7 +695,7 @@ function pollCursor() {
 
 // Text inputs (app search) need keyboard focus; the window is otherwise non-focusable.
 ipcMain.on('focus-input', (_e, on) => {
-  if (!win) return;
+  if (!win || typeof on !== 'boolean') return;
   win.setFocusable(!!on);
   if (on) win.focus();
 });
@@ -695,33 +703,33 @@ ipcMain.on('focus-input', (_e, on) => {
 // --- apps ---
 ipcMain.handle('apps-list', () => apps.list());
 ipcMain.handle('apps-all', () => apps.all());
-ipcMain.on('apps-add', (_e, id) => apps.add(id));
-ipcMain.on('apps-remove', (_e, id) => apps.remove(id));
-ipcMain.on('apps-launch', (_e, id) => apps.launch(id));
-ipcMain.on('apps-reorder', (_e, ids) => apps.reorder(ids));
+ipcMain.on('apps-add', (_e, id) => { if (isStr(id, 512)) apps.add(id); });
+ipcMain.on('apps-remove', (_e, id) => { if (isStr(id, 512)) apps.remove(id); });
+ipcMain.on('apps-launch', (_e, id) => { if (isStr(id, 512)) apps.launch(id); });
+ipcMain.on('apps-reorder', (_e, ids) => { if (Array.isArray(ids) && ids.every((id) => isStr(id, 512))) apps.reorder(ids); });
 
 // --- shelf ---
 const shelfChanged = async () => send('shelf', await shelf.list());
 ipcMain.handle('shelf-list', () => shelf.list());
 ipcMain.on('shelf-add', (_e, paths) => {
-  if (Array.isArray(paths)) shelf.add(paths);
+  if (Array.isArray(paths) && paths.length <= 64 && paths.every((p) => isStr(p, 1024))) shelf.add(paths);
   shelfChanged();
 });
-ipcMain.on('shelf-remove', (_e, p) => { shelf.remove(p); shelfChanged(); });
+ipcMain.on('shelf-remove', (_e, p) => { if (isStr(p, 1024)) { shelf.remove(p); shelfChanged(); } });
 ipcMain.on('shelf-clear', () => { shelf.clear(); shelfChanged(); });
-ipcMain.on('shelf-open', (_e, p) => shelf.open(p));
-ipcMain.on('shelf-reveal', (_e, p) => shelf.reveal(p));
-ipcMain.on('shelf-drag', (e, p) => shelf.startDrag(e.sender, p));
+ipcMain.on('shelf-open', (_e, p) => { if (isStr(p, 1024)) shelf.open(p); });
+ipcMain.on('shelf-reveal', (_e, p) => { if (isStr(p, 1024)) shelf.reveal(p); });
+ipcMain.on('shelf-drag', (e, p) => { if (isStr(p, 1024)) shelf.startDrag(e.sender, p); });
 
 // --- system ---
 ipcMain.handle('system-snapshot', () => system.snapshot());
-ipcMain.on('clip-copy', (_e, i) => system.copyClip(i));
+ipcMain.on('clip-copy', (_e, i) => { if (isInt(i, 0, 64)) system.copyClip(i); });
 ipcMain.on('clip-clear', () => system.clearClips());
 ipcMain.handle('prayer-snapshot', () => prayer.snapshot());
 
 // --- IDM Nova downloads ---
 ipcMain.handle('dl-snapshot', () => downloads.snapshot());
-ipcMain.on('dl-control', (_e, id, action) => downloads.control(typeof id === 'string' ? id : '', String(action)));
+ipcMain.on('dl-control', (_e, id, action) => { if (isStr(action, 32)) downloads.control(isStr(id, 2048) ? id : '', action); });
 
 // --- start with Windows / setup ---
 // Start with Windows = a shortcut in the user's Startup folder (works for both the dev
@@ -835,7 +843,7 @@ ipcMain.on('open-settings', () => prefsWindow.open());
 ipcMain.on('island-ready', () => log.info('island ready'));
 ipcMain.on('update-install', () => updater.install());
 ipcMain.handle('features-get', () => features.get());
-ipcMain.on('features-set', (_e, patch) => features.set(patch));
+ipcMain.on('features-set', (_e, patch) => { if (isObj(patch)) features.set(patch); });
 ipcMain.on('features-reset', () => features.reset());
 ipcMain.on('reminder-preview', () => send('reminder-now'));
 ipcMain.handle('general-get', () => generalState());
@@ -845,7 +853,7 @@ const SUPPORT_LINKS = {
   upstream: 'https://github.com/NOVA-TECH-KIT/nova-island', // the project this app is based on
 };
 ipcMain.on('open-support', (_e, key) => {
-  if (Object.hasOwn(SUPPORT_LINKS, key)) shell.openExternal(SUPPORT_LINKS[key]);
+  if (isStr(key, 32) && Object.hasOwn(SUPPORT_LINKS, key)) shell.openExternal(SUPPORT_LINKS[key]);
 });
 ipcMain.handle('bridge-status', () => bridgeStatus());
 ipcMain.on('open-log', () => {
@@ -869,6 +877,7 @@ ipcMain.handle('net-get', () => network.snapshot());
 // smart clipboard: act on what main itself recognised, never on data from the page
 const VIDEO_HOSTS = /(^|\.)(youtube\.com|youtu\.be|instagram\.com|tiktok\.com|x\.com|twitter\.com|facebook\.com|fb\.watch|vimeo\.com|reddit\.com|soundcloud\.com|dailymotion\.com)$/i;
 ipcMain.on('clip-action', async (_e, action) => {
+  if (!isStr(action, 32)) return;
   const s = system.lastSmart();
   if (!s) return;
   if (s.type === 'url' && action === 'open' && /^https?:\/\//i.test(s.url)) shell.openExternal(s.url);
@@ -895,26 +904,28 @@ ipcMain.handle('dl-folder-add', async (e) => {
   const r = await dialog.showOpenDialog(win, { title: 'Add a download folder', properties: ['openDirectory'] });
   return r.canceled || !r.filePaths[0] ? folderDownloads.folderList() : folderDownloads.addFolder(r.filePaths[0]);
 });
-ipcMain.handle('dl-folder-remove', (_e, p) => folderDownloads.removeFolder(p));
+ipcMain.handle('dl-folder-remove', (_e, p) => (isStr(p, 1024) ? folderDownloads.removeFolder(p) : folderDownloads.folderList()));
 ipcMain.handle('cal-get', () => ({ ...calendar.snapshot(), hasUrl: calendar.hasUrl() }));
-ipcMain.handle('cal-set', (_e, url) => calendar.setUrl(url));
+ipcMain.handle('cal-set', (_e, url) => (isStr(url, 2048) ? calendar.setUrl(url) : { ok: false }));
 // only meeting links the calendar itself produced (Meet / Teams / Zoom / Webex, https)
 ipcMain.on('open-meeting', (_e, link) => {
-  if (calendar.isJoinLink(link)) shell.openExternal(link);
+  if (isStr(link, 2048) && calendar.isJoinLink(link)) shell.openExternal(link);
 });
 ipcMain.handle('loc-search', async (_e, q) => {
+  if (!isStr(q, 200)) return [];
   try {
     return await system.searchCity(q);
   } catch {
     return null;
   }
 });
-ipcMain.on('loc-set', (_e, loc) => system.setLocation(loc));
+ipcMain.on('loc-set', (_e, loc) => { if (loc === null || isObj(loc)) system.setLocation(loc); });
 system.onLocationChange((info) => {
   prayer.refresh();
   prefsWindow.send('location', info);
 });
 ipcMain.on('general-set', (_e, key, value) => {
+  if (!isStr(key, 32)) return;
   const on = !!value;
   if (key === 'shown') {
     userHidden = !on;
@@ -998,6 +1009,13 @@ function runKeyHas(valueName) {
 }
 
 app.whenReady().then(() => {
+  // Pages never need a browser permission (no camera, mic, geolocation or notifications from web
+  // content): deny them all, and never allow a <webview>.
+  session.defaultSession.setPermissionRequestHandler((_wc, _permission, callback) => callback(false));
+  session.defaultSession.setPermissionCheckHandler(() => false);
+  app.on('web-contents-created', (_e, contents) => {
+    contents.on('will-attach-webview', (e) => e.preventDefault());
+  });
   migrateStartup();
   if (process.argv.includes('--setup')) runSetup();
   createWindow();

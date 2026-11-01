@@ -8,7 +8,7 @@
     switch (s.type) {
       case 'url': {
         const dl = idmOnline;
-        showToast('clip-url', s.host, dl ? 'Download' : 'Open', 0, 5000);
+        showToast('clip-url', s.host, dl ? t('clip.download') : t('clip.open'), 0, 5000);
         state.toastAction = () => bridge.clipAction(dl ? 'download' : 'open');
         break;
       }
@@ -20,11 +20,11 @@
         showToast('clip-math', `${s.expr} =`, s.result, 0, 6000);
         state.toastAction = () => {
           bridge.clipAction('copy');
-          showToast('done', 'Copied', s.result, 0, 1400);
+          showToast('done', t('clip.copied'), s.result, 0, 1400);
         };
         break;
       case 'text':
-        showToast('clip-text', `${s.words.toLocaleString()} words`, `${s.chars.toLocaleString()} chars`, 0, 2600);
+        showToast('clip-text', t('clip.words', { n: s.words.toLocaleString(LOCALE()) }), t('clip.chars', { n: s.chars.toLocaleString(LOCALE()) }), 0, 2600);
         break;
       default:
         break;

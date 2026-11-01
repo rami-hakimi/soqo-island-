@@ -3,6 +3,8 @@ const settings = require('./settings');
 const migrate = require('./migrate');
 
 const DEFAULTS = {
+  // language of the interface: auto (Windows' display language), en, ar
+  lang: 'auto',
   // expanded tabs
   tabMedia: true,
   tabApps: true,
@@ -77,6 +79,8 @@ const DEFAULTS = {
   longBreakMin: 15,
 };
 
+// string settings and their allowed values
+const ENUMS = { lang: ['auto', 'en', 'ar'] };
 // number settings and their allowed range
 const RANGES = {
   remindEvery: [1, 240], remindFor: [5, 300], quietFrom: [0, 1439], quietTo: [0, 1439],
@@ -97,6 +101,8 @@ function pick(obj) {
     if (!(k in DEFAULTS)) continue;
     if (RANGES[k]) {
       if (Number.isFinite(v)) out[k] = Math.min(Math.max(Math.round(v), RANGES[k][0]), RANGES[k][1]);
+    } else if (ENUMS[k]) {
+      if (ENUMS[k].includes(v)) out[k] = v;
     } else if (typeof v === 'boolean') out[k] = v;
   }
   return out;

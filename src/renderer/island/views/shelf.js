@@ -19,18 +19,18 @@
     current = items;
     view.classList.toggle('empty-shelf', !items.length);
     badge.classList.toggle('on', items.length > 0);
-    count.textContent = `${items.length} ${items.length === 1 ? 'file' : 'files'}`;
+    count.textContent = t('shelf.count', { count: items.length });
     itemsEl.innerHTML = '';
     for (const f of items) {
       const d = document.createElement('div');
       d.className = 'file';
       d.draggable = true;
-      d.title = `${f.path}\nClick to open · Right-click to show in folder · Drag to use`;
+      d.title = t('shelf.itemTitle', { path: f.path });
       d.innerHTML =
         `${f.icon ? `<img src="${f.icon}" alt="">` : ''}` +
         `<span class="fname" dir="auto">${esc(f.name)}</span>` +
-        `${f.until ? `<span class="left" data-until="${f.until}" title="Leaves the Shelf on its own">${timeLeft(f.until)}</span>` : ''}` +
-        `<button class="x" aria-label="Remove ${esc(f.name)}">${ICON_X}</button>`;
+        `${f.until ? `<span class="left" data-until="${f.until}" title="${esc(t('shelf.leaves'))}">${timeLeft(f.until)}</span>` : ''}` +
+        `<button class="x" aria-label="${esc(t('shelf.remove', { name: f.name }))}">${ICON_X}</button>`;
       d.addEventListener('click', (e) => {
         if (e.target.closest('.x')) bridge.shelf.remove(f.path);
         else bridge.shelf.open(f.path);
@@ -55,6 +55,7 @@
 
   $('#shelf-clear').addEventListener('click', () => bridge.shelf.clear());
 
+  window.addEventListener('island:i18n', () => renderItems(current));
   bridge.onShelf(renderItems);
   bridge.shelf.list().then(renderItems);
 })();

@@ -24,7 +24,7 @@
     }
     if (typeof m.caps === 'boolean') {
       if (lastCaps !== null && m.caps !== lastCaps && feat('capsToast')) {
-        showToast('caps', 'Caps Lock', m.caps ? 'On' : 'Off', 0, 1400);
+        showToast('caps', t('kbd.caps'), m.caps ? t('kbd.on') : t('kbd.off'), 0, 1400);
         $('.l-toast').classList.toggle('on', m.caps);
       }
       lastCaps = m.caps;

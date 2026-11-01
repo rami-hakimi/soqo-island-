@@ -38,13 +38,11 @@
   function remind() {
     const n = load();
     const g = goal();
-    const sub = n >= g
-      ? `Daily goal reached (${g} glasses) 🎉 — one more won't hurt`
-      : `<b>${n}</b> of ${g} glasses today`;
+    const sub = n >= g ? t('water.goalReached', { g }) : t('water.progress', { n, g });
     return playScene({
-      mood: 'happy', tone: 'water', badge: '💧 Water',
-      title: 'Drink a glass of water', sub, ms: 20000,
-      button: { label: 'I drank ✓', onClick: drank },
+      mood: 'happy', tone: 'water', badge: t('water.badge'), lang: I18N.lang,
+      title: t('water.title'), sub, ms: 20000,
+      button: { label: t('water.drank'), onClick: drank },
       onClose: () => { activeMs = Math.max(0, everyMs() - SNOOZE_MS); },
     });
   }
@@ -53,7 +51,7 @@
     const n = load() + 1;
     save(n);
     const g = goal();
-    showToast('done', n >= g ? 'Water goal reached!' : 'Glass of water ✓', `${n} / ${g}`, 0, 2400);
+    showToast('done', n >= g ? t('water.goalToast') : t('water.glassToast'), `${n} / ${g}`, 0, 2400);
     if (n === g) celebrate(['#38bdf8', '#a5f3fc', '#ffd479']);
   }
   window.logWater = drank;

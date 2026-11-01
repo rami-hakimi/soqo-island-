@@ -3,6 +3,8 @@ const { contextBridge, ipcRenderer } = require('electron');
 const on = (channel) => (cb) => ipcRenderer.on(channel, (_e, data) => cb(data));
 
 contextBridge.exposeInMainWorld('prefs', {
+  i18n: ipcRenderer.sendSync('i18n-get-sync'),
+  onI18n: on('i18n'),
   features: () => ipcRenderer.invoke('features-get'),
   setFeatures: (patch) => ipcRenderer.send('features-set', patch),
   resetFeatures: () => ipcRenderer.send('features-reset'),

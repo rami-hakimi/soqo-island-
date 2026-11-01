@@ -7,9 +7,10 @@
 
   const minutes = (ms) => Math.max(0, Math.round(ms / 60000));
   function when(ev, now) {
-    if (ev.start <= now) return 'now';
+    if (ev.start <= now) return t('cal.now');
     const m = minutes(ev.start - now);
-    return m >= 60 ? `in ${Math.floor(m / 60)}h ${m % 60 ? `${m % 60}m` : ''}`.trim() : `in ${m} min`;
+    if (m < 60) return t('cal.inMin', { m });
+    return m % 60 ? t('cal.inHM', { h: Math.floor(m / 60), m: m % 60 }) : t('cal.inH', { h: Math.floor(m / 60) });
   }
 
   function tick() {
@@ -31,14 +32,14 @@
         const id = `${ev.id}|${min}`;
         if (left <= min * 60000 && left > (min - 1) * 60000 && !fired.has(id)) {
           fired.add(id);
-          showToast('meet', ev.title, `in ${min} min`, 0, 5000);
+          showToast('meet', ev.title, t('meet.inMin', { m: min }), 0, 5000);
         }
       }
       const startId = `${ev.id}|start`;
       if (left <= 0 && left > -60000 && !fired.has(startId)) {
         fired.add(startId);
-        showToast('meet-now', ev.title, ev.link ? 'Join' : 'Now', 0, 12000);
-        note('📅', `Meeting started: ${ev.title}`);
+        showToast('meet-now', ev.title, ev.link ? t('meet.join') : t('meet.now'), 0, 12000);
+        note('📅', t('meet.started', { title: ev.title }));
         window.soqi?.react('notification', 6000);
         if (ev.link) state.toastAction = () => bridge.openMeeting(ev.link);
         island.classList.add('meet-flash');

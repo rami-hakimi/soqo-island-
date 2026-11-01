@@ -10,7 +10,7 @@
     let left = COUNTDOWN_S;
     // stays put under the cursor; a click just shows it again
     const show = () => {
-      showToast('updating', 'Updating · back in a few seconds', String(left), 0, left * 1000 + 600);
+      showToast('updating', t('upd.updating'), String(left), 0, left * 1000 + 600);
       state.toastAction = show;
     };
     show();
@@ -28,7 +28,7 @@
 
   bridge.onUpdate((u) => {
     if (timer) return;
-    showToast('update', `Update ready · ${u.version}`, 'Update now', 0, 20000);
+    showToast('update', t('upd.ready', { v: u.version }), t('upd.now'), 0, 20000);
     state.toastAction = countdown;
     window.soqi?.react('notification', 6000);
   });

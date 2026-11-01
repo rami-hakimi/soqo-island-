@@ -10,11 +10,7 @@
   const LONG_AWAY_MS = 30 * 60e3;
   const WORK_MS = 50 * 60e3;
   const BRIEF_KEY = movedKey('soqo-brief-day', 'nova-brief-day');
-  const CARE = [
-    ['Stand up and move', '50 minutes at the screen. Two minutes of moving wakes up body and mind.'],
-    ['Rest your eyes', 'Look at something 20 feet away for 20 seconds — the 20-20-20 rule.'],
-    ['Take a deep breath', 'In for 4, hold for 4, out for 4. Three times.'],
-  ];
+  const CARE = [['care.move', 'care.moveText'], ['care.eyes', 'care.eyesText'], ['care.breathe', 'care.breatheText']];
 
   let awayFrom = 0; // when the current absence started
   let activeSince = Date.now();
@@ -26,7 +22,8 @@
   const markBrief = () => { try { localStorage.setItem(BRIEF_KEY, today()); } catch {} };
   const mins = (ms) => {
     const m = Math.round(ms / 60000);
-    return m < 60 ? `${m} min` : `${Math.floor(m / 60)} h${m % 60 ? ` ${m % 60} min` : ''}`;
+    if (m < 60) return t('dur.min', { m });
+    return m % 60 ? t('dur.hm', { h: Math.floor(m / 60), m: m % 60 }) : t('dur.h', { h: Math.floor(m / 60) });
   };
   const line = (icon, html) => `<span class="ln">${icon} ${html}</span>`;
   // Arabic words (prayer names, Hijri date) keep their own direction inside the English lines
@@ -34,30 +31,30 @@
 
   function greeting() {
     const h = new Date().getHours();
-    return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+    return h < 12 ? t('greet.morning') : h < 17 ? t('greet.afternoon') : t('greet.evening');
   }
 
   async function brief() {
     markBrief();
     const lines = [];
     const now = new Date();
-    const date = now.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' });
+    const date = now.toLocaleDateString(LOCALE() || 'en-US', { weekday: 'long', day: 'numeric', month: 'long' });
     const hijri = $('#pr-hijri')?.textContent || '';
     lines.push(line('📆', `<b>${esc(date)}</b>${hijri ? ` · ${ar(esc(hijri))}` : ''}`));
     try {
       const w = (await bridge.system.snapshot())?.weather;
-      if (w) lines.push(line('🌤️', `<b>${w.temp}°</b> in ${esc(w.city || 'your city')} · H ${w.hi}° L ${w.lo}°`));
+      if (w) lines.push(line('🌤️', t('brief.weather', { temp: w.temp, city: esc(w.city || t('brief.yourCity')), hi: w.hi, lo: w.lo })));
     } catch {}
     const pr = window.nextPrayerText?.();
     if (pr && feat('tabPrayer')) {
       const [name, ...time] = pr.split(' ');
-      lines.push(line('🕌', `Next prayer: <b>${ar(esc(name))}</b> ${esc(time.join(' '))}`));
+      lines.push(line('🕌', t('brief.nextPrayer', { name: ar(esc(name)), time: esc(time.join(' ')) })));
     }
     const meets = window.meetingsToday?.() || [];
     if (meets.length) {
       const first = meets[0];
-      const t = new Date(first.start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-      lines.push(line('📅', `${meets.length === 1 ? '1 meeting' : `${meets.length} meetings`} today · first: <b>${esc(first.title)}</b> ${t}`));
+      const at = new Date(first.start).toLocaleTimeString(LOCALE(), { hour: 'numeric', minute: '2-digit' });
+      lines.push(line('📅', t('brief.meetings', { count: meets.length, title: esc(first.title), time: at })));
     }
     queue({ kind: 'brief', badge: greeting(), html: `<span class="big">${greeting()} 👋</span>${lines.join('')}`, ref: '', ms: 14000 });
   }
@@ -67,14 +64,14 @@
     const news = happenings.filter((h) => h.at >= since);
     if (!news.length && awayMs < LONG_AWAY_MS) return;
     const lines = news.slice(-4).map((h) => line(h.icon, esc(h.text)));
-    if (news.length > 4) lines.push(line('…', `and ${news.length - 4} more`));
-    if (!lines.length) lines.push(line('☕', 'You missed nothing. All quiet.'));
-    queue({ kind: 'welcome', badge: 'Welcome back', html: `<span class="big">Welcome back 👋</span><span class="ln">Away for ${mins(awayMs)}</span>${lines.join('')}`, ref: '', ms: 12000 });
+    if (news.length > 4) lines.push(line('…', t('welcome.more', { n: news.length - 4 })));
+    if (!lines.length) lines.push(line('☕', t('welcome.quiet')));
+    queue({ kind: 'welcome', badge: t('welcome.title'), html: `<span class="big">${t('welcome.title')} 👋</span><span class="ln">${t('welcome.away', { dur: mins(awayMs) })}</span>${lines.join('')}`, ref: '', ms: 12000 });
   }
 
   function care() {
     const [title, text] = CARE[careIdx++ % CARE.length];
-    queue({ kind: 'care', badge: 'Break', html: `<span class="big">${title} 🌿</span><span class="ln">${text}</span>`, ref: '', ms: 15000 });
+    queue({ kind: 'care', badge: t('care.badge'), html: `<span class="big">${t(title)} 🌿</span><span class="ln">${t(text)}</span>`, ref: '', ms: 15000 });
   }
 
   // cards wait while the island is open, hidden, showing another card or a toast

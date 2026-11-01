@@ -10,7 +10,7 @@ const islandGlobals = {
   note: 'readonly', happenings: 'readonly', fmt: 'readonly', playTones: 'readonly', focusing: 'readonly',
   compactKind: 'readonly', internalDrag: 'writable', ICON_X: 'readonly', ICON_PLUS: 'readonly', REMINDERS: 'readonly',
   playScene: 'readonly', sceneShowing: 'readonly', endScene: 'readonly', cardShowing: 'readonly', showCard: 'readonly',
-  movedKey: 'readonly', SoqiState: 'readonly',
+  movedKey: 'readonly', SoqiState: 'readonly', I18n: 'readonly', I18N: 'writable', t: 'readonly', LOCALE: 'readonly',
 };
 
 module.exports = [
@@ -35,7 +35,8 @@ module.exports = [
   },
   {
     files: ['src/renderer/prefs/prefs.js', 'src/renderer/mini/mini.js'],
-    languageOptions: { sourceType: 'script', globals: { ...globals.browser, mini: 'readonly' } },
+    languageOptions: { sourceType: 'script', globals: { ...globals.browser, mini: 'readonly', I18n: 'readonly' } },
+    rules: { 'no-unused-vars': ['warn', { args: 'none', caughtErrors: 'none', varsIgnorePattern: '^(LOCALE|t)$' }] },
   },
   {
     files: ['test/**/*.js'],

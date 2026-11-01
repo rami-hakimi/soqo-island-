@@ -154,8 +154,9 @@ function hijriOf(day, adjust) {
   const parts = (locale, month) => Object.fromEntries(new Intl.DateTimeFormat(`${locale}-u-ca-islamic-umalqura-nu-latn`, { timeZone: 'UTC', day: 'numeric', month, year: 'numeric' })
     .formatToParts(noon).map((x) => [x.type, x.value]));
   const ar = parts('ar', 'long');
+  const en = parts('en', 'long');
   const num = parts('en', 'numeric');
-  return { text: `${Number(num.day)} ${ar.month} ${parseInt(num.year, 10)}`, month: Number(num.month) };
+  return { text: `${Number(num.day)} ${ar.month} ${parseInt(num.year, 10)}`, textEn: `${Number(num.day)} ${en.month} ${parseInt(num.year, 10)}`, month: Number(num.month) };
 }
 
 function calcDay(day, loc, zone) {
@@ -182,6 +183,7 @@ function calcDay(day, loc, zone) {
       isha: at(t.isha),
     },
     hijri: hijri.text,
+    hijriEn: hijri.textEn,
     hijriMonth: hijri.month, // 9 = Ramadan
     method: method.name,
     // times are wall-clock times in this zone, which may differ from the PC's

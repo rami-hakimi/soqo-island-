@@ -4,6 +4,7 @@ const { clipboard } = require('electron');
 const features = require('./features');
 const settings = require('./settings');
 const smartclip = require('./smartclip');
+const i18n = require('./i18n');
 
 /** @type {(channel: string, data?: unknown) => void} */
 let send = () => {};
@@ -167,11 +168,11 @@ function locationInfo() {
   return manual ? { mode: 'manual', ...manual } : { mode: 'auto', name: location?.city || '' };
 }
 
-// city search for Settings (Open-Meteo geocoding, no key)
+// city search for Settings (Open-Meteo geocoding, no key); names come back in the UI language
 async function searchCity(query) {
   const q = String(query || '').trim().slice(0, 80);
   if (q.length < 2) return [];
-  const url = `https://geocoding-api.open-meteo.com/v1/search?count=6&language=ar&format=json&name=${encodeURIComponent(q)}`;
+  const url = `https://geocoding-api.open-meteo.com/v1/search?count=6&language=${i18n.get().lang}&format=json&name=${encodeURIComponent(q)}`;
   const j = await getJson(url);
   return (j.results || []).map((r) => ({
     name: r.name, country: r.country || '', countryCode: r.country_code || '', admin: r.admin1 || '', lat: r.latitude, lon: r.longitude, timezone: r.timezone || '',

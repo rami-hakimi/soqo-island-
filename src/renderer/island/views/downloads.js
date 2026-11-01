@@ -15,7 +15,7 @@
     open: '<svg class="s" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>',
     reveal: '<svg class="s" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>',
   };
-  const TITLES = { pause: 'Pause', resume: 'Resume', open: 'Open', reveal: 'Show in folder' };
+  const TITLES = { pause: 'dl.pause', resume: 'dl.resume', open: 'dl.open', reveal: 'dl.reveal' };
 
   const TYPES = [
     [/^(mp4|mkv|webm|avi|mov|wmv|flv|m4v|ts)$/, 'video', 270],
@@ -39,16 +39,16 @@
   const pctOf = (d) => (d.total > 0 ? Math.min(1, d.downloaded / d.total) : null);
 
   function meta(d) {
-    const of = d.total > 0 ? `${bytes(d.downloaded)} of ${bytes(d.total)}` : bytes(d.downloaded);
+    const of = d.total > 0 ? t('dl.of', { done: bytes(d.downloaded), total: bytes(d.total) }) : bytes(d.downloaded);
     switch (d.status) {
-      case 'processing': return 'Merging audio & video…';
-      case 'queued': return 'Waiting in queue';
-      case 'paused': return `Paused · ${of}`;
-      case 'error': return `Failed${d.error ? ` · ${d.error}` : ''}`;
-      case 'completed': return `${bytes(d.total || d.downloaded)} · Done`;
+      case 'processing': return t('dl.merging');
+      case 'queued': return t('dl.queued');
+      case 'paused': return t('dl.paused', { of });
+      case 'error': return `${t('dl.failed')}${d.error ? ` · ${d.error}` : ''}`;
+      case 'completed': return `${bytes(d.total || d.downloaded)} · ${t('dl.done')}`;
       default:
-        if (d.stage === 'connecting' || d.stage === 'starting') return 'Connecting…';
-        return [of, d.speed > 0 && speedText(d.speed), d.eta != null && `${fmt(d.eta)} left`].filter(Boolean).join(' · ');
+        if (d.stage === 'connecting' || d.stage === 'starting') return t('dl.connecting');
+        return [of, d.speed > 0 && speedText(d.speed), d.eta != null && t('dl.left', { time: fmt(d.eta) })].filter(Boolean).join(' · ');
     }
   }
 
@@ -103,7 +103,7 @@
     const box = r.querySelector('.dl-acts');
     if (box.dataset.key !== key) {
       box.dataset.key = key;
-      box.innerHTML = acts.map((a) => `<button class="dl-btn" data-act="${a}" title="${TITLES[a]}" aria-label="${TITLES[a]}">${ICONS[a]}</button>`).join('');
+      box.innerHTML = acts.map((a) => `<button class="dl-btn" data-act="${a}" title="${esc(t(TITLES[a]))}" aria-label="${esc(t(TITLES[a]))}">${ICONS[a]}</button>`).join('');
     }
     return r;
   }
@@ -131,18 +131,18 @@
       const prev = known.get(d.id);
       if ((d.source === 'folder' ? primed : idmPrimed) && feat('dlToasts')) {
         if (!prev && (MOVING.includes(d.status) || d.status === 'queued')) {
-          showToast('dl-start', d.name, 'Downloading', 0, 2600);
+          showToast('dl-start', d.name, t('dl.downloading'), 0, 2600);
         // a quick browser download may show up already finished
         } else if ((prev ? prev !== 'completed' : d.source === 'folder') && d.status === 'completed') {
           island.classList.add('dl-flash');
           setTimeout(() => island.classList.remove('dl-flash'), 4300);
-          showToast('dl-done', d.name, 'Done', 1, 4200);
-          note('✅', `Downloaded ${d.name}`);
+          showToast('dl-done', d.name, t('dl.done'), 1, 4200);
+          note('✅', t('dl.noteDone', { name: d.name }));
           celebrate(['#30d158', '#40c8ff', '#ffd479']);
           window.soqi?.react('download');
         } else if (prev && prev !== 'error' && d.status === 'error') {
-          showToast('dl-error', d.name, 'Failed', 0, 4200);
-          note('⚠️', `Download failed: ${d.name}`);
+          showToast('dl-error', d.name, t('dl.failed'), 0, 4200);
+          note('⚠️', t('dl.noteFailed', { name: d.name }));
           window.soqi?.react('warning');
         }
       }
@@ -168,7 +168,7 @@
     };
     const pctText = pct == null ? '' : `${Math.floor(pct * 100)}%`;
     $('#c-dl-pct').textContent = $('#vc-dl-pct').textContent = merging ? '' : pctText || '•••';
-    $('#c-dl-speed').textContent = merging ? 'Merging' : speed > 0 ? speedText(speed) : '';
+    $('#c-dl-speed').textContent = merging ? t('dl.merge') : speed > 0 ? speedText(speed) : '';
     const spin = merging || pct == null;
     $$('.c-ring').forEach((r) => {
       r.classList.toggle('spin', spin);
@@ -179,24 +179,19 @@
     island.classList.toggle('dl-indet', spin);
     $('#dl-badge').classList.toggle('on', moving.length > 0);
     $('#dl-summary').textContent = moving.length
-      ? `${moving.length} downloading${speed > 0 ? ` · ${speedText(speed)}` : ''}`
-      : `${items.length} recent`;
+      ? `${t('dl.nDownloading', { n: moving.length })}${speed > 0 ? ` · ${speedText(speed)}` : ''}`
+      : t('dl.recent', { n: items.length });
   }
 
   function update(p) {
+    lastPayload = p;
     for (const [url, data] of Object.entries(p?.thumbs || {})) thumbs.set(url, data);
     const items = p?.items || [];
     // IDM Nova went away: its downloads are forgotten, the folder ones stay
     if (!p?.online) for (const id of known.keys()) if (!id.startsWith('f:')) known.delete(id);
     view.classList.toggle('dl-offline', !items.length);
-    $('#dl-empty-title').textContent = p?.outdated
-      ? 'IDM Nova needs an update'
-      : p?.online ? 'No active downloads' : 'IDM Nova is not running';
-    $('#dl-empty-sub').textContent = p?.outdated
-      ? 'This IDM Nova build can\'t share live progress yet. Install the latest build.'
-      : p?.online
-        ? 'Downloads from IDM Nova show up here live, with progress and speed.'
-        : 'Start it and your downloads will show up here live.';
+    $('#dl-empty-title').textContent = p?.outdated ? t('dl.outdatedTitle') : p?.online ? t('dl.noneTitle') : t('dl.offlineTitle');
+    $('#dl-empty-sub').textContent = p?.outdated ? t('dl.outdatedSub') : p?.online ? t('dl.noneSub') : t('dl.offlineSub');
     $('#dl-launch').hidden = !p?.canLaunch;
 
     if (items.length) lastSeen = Date.now();
@@ -226,6 +221,8 @@
     if (e.detail.mode === 'expanded' && e.detail.prev === 'compact' && compactKind() === 'dl') selectTab('downloads');
   });
 
+  let lastPayload = null;
+  window.addEventListener('island:i18n', () => { if (lastPayload) update(lastPayload); });
   bridge.onDownloads(update);
   bridge.onDownloadThumb(({ url, data }) => {
     thumbs.set(url, data);

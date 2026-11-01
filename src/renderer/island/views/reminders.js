@@ -4,7 +4,7 @@
   const layer = $('.l-reminder');
   const textEl = $('#rm-text');
   const bar = $('.rm-time b');
-  const KIND_NAME = { ayah: 'آية', dhikr: 'ذكر', dua: 'دعاء' };
+  const KIND_NAME = { ayah: 'reminder.ayah', dhikr: 'reminder.dhikr', dua: 'reminder.dua' };
   const KIND_FEATURE = { ayah: 'remindAyah', dhikr: 'remindDhikr', dua: 'remindDua' };
   const WIDTH = 500;
   const V_WIDTH = 340; // docked to a side edge
@@ -104,7 +104,7 @@
     const english = item.html != null;
     layer.dir = measure.dir = english ? 'ltr' : 'rtl';
     layer.lang = english ? 'en' : 'ar';
-    $('#rm-kind').textContent = item.badge || KIND_NAME[item.kind] || '';
+    $('#rm-kind').textContent = item.badge || (KIND_NAME[item.kind] ? t(KIND_NAME[item.kind]) : '');
     textEl.innerHTML = content(item);
     textEl.classList.toggle('ui', item.html != null);
     $('#rm-ref').textContent = item.ref || '';

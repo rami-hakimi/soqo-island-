@@ -1,7 +1,6 @@
 {
   "app.name": "سوكو آيلاند",
   "app.tagline": "جزيرة حيّة لويندوز",
-
   "menu.show": "إظهار الجزيرة",
   "menu.vertical": "عمودية (على الحافة اليمنى / اليسرى)",
   "menu.resetPosition": "إعادة ضبط الموضع",
@@ -11,7 +10,6 @@
   "menu.quit": "إنهاء",
   "dialog.addFolder": "إضافة مجلد تنزيلات",
   "prefs.windowTitle": "إعدادات سوكو آيلاند",
-
   "common.close": "إغلاق",
   "common.settings": "الإعدادات",
   "common.open": "فتح",
@@ -23,7 +21,6 @@
   "common.more": "أكثر",
   "common.earlier": "أبكر",
   "common.later": "لاحقًا",
-
   "island.label": "سوكو آيلاند",
   "tabs.views": "الأقسام",
   "tabs.music": "الموسيقى",
@@ -36,11 +33,9 @@
   "tabs.system": "النظام",
   "chip.idle": "خامل",
   "chip.media": "وسائط",
-
   "stats.cpu": "المعالج",
   "stats.ram": "الذاكرة",
   "stats.memory": "الذاكرة",
-
   "media.nowPlaying": "يُشغَّل الآن",
   "media.nowPlayingIn": "يُشغَّل الآن · {app}",
   "media.nothing": "لا شيء يُشغَّل",
@@ -58,7 +53,6 @@
   "media.mute": "كتم الصوت",
   "media.volume": "مستوى الصوت",
   "vol.muted": "مكتوم",
-
   "apps.clickToOpen": "انقر للفتح",
   "apps.add": "إضافة",
   "apps.edit": "تعديل",
@@ -71,7 +65,6 @@
   "apps.addName": "إضافة {name}",
   "apps.loading": "جارٍ تحميل التطبيقات…",
   "apps.none": "لم يُعثر على تطبيقات",
-
   "shelf.dropHere": "أفلت الملفات هنا",
   "shelf.dropHint": "اسحب الملفات إلى الجزيرة لتبقى في متناولك، ثم اسحبها منها إلى أي مكان.",
   "shelf.clear": "مسح",
@@ -85,7 +78,6 @@
   "shelf.leaves": "يغادر الرف من تلقاء نفسه",
   "shelf.remove": "إزالة {name}",
   "shelf.addFailed": "تعذّرت إضافة هذه الملفات إلى الرف",
-
   "dl.offlineTitle": "IDM Nova غير مشغّل",
   "dl.offlineSub": "شغّله وستظهر تنزيلاتك هنا مباشرة.",
   "dl.outdatedTitle": "IDM Nova يحتاج إلى تحديث",
@@ -111,7 +103,6 @@
   "dl.recent": "{n} مؤخرًا",
   "dl.noteDone": "تم تنزيل {name}",
   "dl.noteFailed": "فشل تنزيل {name}",
-
   "prayer.next": "الصلاة القادمة",
   "prayer.alerts": "التنبيهات",
   "prayer.alertsTitle": "تنبيه قبل الصلاة بعشر دقائق وعند الأذان",
@@ -134,11 +125,9 @@
   "prayer.iftarWish": " · تقبّل الله صيامك",
   "prayer.iftar": "الإفطار",
   "prayer.ramadan": "رمضان كريم · {label} {time} · بعد {left}",
-
   "reminder.ayah": "آية",
   "reminder.dhikr": "ذكر",
   "reminder.dua": "دعاء",
-
   "timer.pick": "اختر مدة",
   "timer.min": "د",
   "timer.focus": "تركيز",
@@ -162,11 +151,9 @@
   "focus.doneToast": "اكتمل التركيز {n}",
   "focus.breakMin": "استراحة {min} دقيقة",
   "focus.breakOver": "انتهت الاستراحة",
-
   "battery.charging": "جارٍ الشحن",
   "battery.onBattery": "على البطارية",
   "battery.low": "البطارية منخفضة",
-
   "weather.loading": "جارٍ تحميل الطقس…",
   "weather.clear": "صافٍ",
   "weather.partly": "غائم جزئيًا",
@@ -177,7 +164,6 @@
   "weather.storm": "عاصفة رعدية",
   "weather.inCity": "{label} في {city}",
   "weather.hiLo": "العظمى {hi}° الصغرى {lo}°",
-
   "sys.network": "الشبكة",
   "sys.inUse": "قيد الاستخدام",
   "sys.brightness": "السطوع",
@@ -185,7 +171,6 @@
   "sys.clearClips": "مسح سجل الحافظة",
   "clips.empty": "يظهر النص المنسوخ هنا",
   "clips.copy": "انقر للنسخ",
-
   "cal.now": "الآن",
   "cal.inMin": "بعد {m} د",
   "cal.inH": "بعد {h} س",
@@ -194,7 +179,6 @@
   "meet.join": "انضمام",
   "meet.now": "الآن",
   "meet.started": "بدأ الاجتماع: {title}",
-
   "greet.morning": "صباح الخير",
   "greet.afternoon": "طاب يومك",
   "greet.evening": "مساء الخير",
@@ -220,7 +204,6 @@
   "dur.min": "{m} د",
   "dur.h": "{h} س",
   "dur.hm": "{h} س {m} د",
-
   "water.badge": "💧 ماء",
   "water.title": "اشرب كوب ماء",
   "water.goalReached": "بلغت هدف اليوم ({g} أكواب) 🎉 — كوب إضافي لا يضر",
@@ -228,7 +211,6 @@
   "water.drank": "شربت ✓",
   "water.goalToast": "بلغت هدف الماء!",
   "water.glassToast": "كوب ماء ✓",
-
   "net.wifi": "Wi-Fi",
   "net.ethernet": "إيثرنت",
   "net.offline": "غير متصل",
@@ -241,12 +223,10 @@
   "net.back": "عاد الاتصال",
   "net.wifiConnected": "تم الاتصال بشبكة Wi-Fi",
   "net.noteBack": "عاد الاتصال {ago}",
-
   "pv.cam": "{apps} يستخدم الكاميرا",
   "pv.mic": "{apps} يستخدم الميكروفون",
   "pv.cameraLabel": "الكاميرا: {apps}",
   "pv.micLabel": "الميكروفون: {apps}",
-
   "shot.imageSaved": "تم حفظ الصورة",
   "shot.saved": "تم حفظ لقطة الشاشة",
   "shot.addedToShelf": "أُضيفت إلى الرف ✓",
@@ -254,21 +234,17 @@
   "shot.copied": "تم نسخ لقطة الشاشة",
   "shot.addToShelf": "إضافة إلى الرف",
   "shot.onShelf": "على الرف",
-
   "upd.ready": "التحديث جاهز · {v}",
   "upd.now": "حدّث الآن",
   "upd.updating": "جارٍ التحديث · نعود بعد ثوانٍ",
-
   "clip.download": "تنزيل",
   "clip.open": "فتح",
   "clip.words": "{n} كلمة",
   "clip.chars": "{n} حرف",
   "clip.copied": "تم النسخ",
-
   "kbd.caps": "Caps Lock",
   "kbd.on": "مفعّل",
   "kbd.off": "معطّل",
-
   "mini.title": "المشغّل المصغّر",
   "mini.cantPlay": "لا يمكن تشغيل هذا الفيديو في المشغّل المصغّر",
   "mini.ownerOnly": "صاحبه يسمح بتشغيله على YouTube فقط. نعود إلى التبويب…",
@@ -276,12 +252,10 @@
   "mini.backTitle": "العودة إلى التبويب (يُكمل من هنا)",
   "mini.closeTitle": "إغلاق (يبقى التبويب متوقفًا عند هذه النقطة)",
   "mini.resize": "تغيير الحجم",
-
   "p.nav.pages": "الصفحات",
   "p.nav.general": "عام",
   "p.nav.island": "الجزيرة",
   "p.nav.companion": "الرفيق",
-  "p.nav.faith": "الصلاة والذكر",
   "p.nav.alerts": "التنبيهات والخصوصية",
   "p.nav.connections": "الاتصالات",
   "p.nav.support": "الدعم",
@@ -292,7 +266,6 @@
   "p.savedDone": "تم",
   "p.savedReport": "تم نسخ التقرير",
   "p.savedReset": "أُعيد الضبط إلى الافتراضي",
-
   "p.general.language": "اللغة",
   "p.general.langAuto": "تلقائي",
   "p.general.langEn": "English",
@@ -316,7 +289,6 @@
   "p.location.searching": "جارٍ البحث…",
   "p.location.failed": "فشل البحث. تحقّق من اتصالك.",
   "p.location.none": "لا نتائج",
-
   "p.island.tabs": "الأقسام",
   "p.island.keepOne": "أبقِ قسمًا واحدًا على الأقل",
   "p.island.collapsed": "عند الطيّ",
@@ -327,7 +299,6 @@
   "p.island.mediaPill": "إظهار الوسائط",
   "p.island.mediaTitle": "العنوان",
   "p.island.trackPeek": "بطاقة المقطع الجديد",
-
   "p.soqi.hero": "سوقي الدلفين",
   "p.soqi.heroText": "يعيش في جزيرتك: يختلس النظر إلى المؤشر، ويرقص على موسيقاك، ويهتف لتنزيلاتك، ويغفو حين تبتعد.",
   "p.soqi.title": "سوقي",
@@ -350,7 +321,6 @@
   "p.water.reminder": "تذكير بشرب الماء",
   "p.water.every": "كل",
   "p.water.goal": "الهدف اليومي",
-
   "p.faith.prayer": "الصلاة",
   "p.faith.alerts": "تنبيهات الصلاة",
   "p.faith.hanafi": "العصر على المذهب الحنفي",
@@ -367,7 +337,6 @@
   "p.faith.from": "من",
   "p.faith.to": "إلى",
   "p.faith.preview": "أظهر واحدًا الآن",
-
   "p.alerts.title": "التنبيهات",
   "p.alerts.volume": "مستوى الصوت",
   "p.alerts.brightness": "السطوع",
@@ -382,7 +351,6 @@
   "p.privacy.dots": "نقاط الميكروفون والكاميرا",
   "p.privacy.clips": "سجل الحافظة",
   "p.privacy.clipsHint": "يُحفظ في الذاكرة فقط",
-
   "p.cal.title": "التقويم",
   "p.cal.meetings": "الاجتماعات القادمة",
   "p.cal.placeholder": "رابط iCal ‏(https://… .ics)",
@@ -417,7 +385,6 @@
   "p.trouble.log": "سجل الأخطاء",
   "p.trouble.copyReport": "نسخ التقرير",
   "p.trouble.all": "كل الإعدادات",
-
   "p.support.lead": "سوكو آيلاند مجاني ومفتوح المصدر (GPL-3.0)، بلا إعلانات ولا تتبّع، وسيبقى كذلك.",
   "p.support.star": "نجمة على GitHub",
   "p.support.starHint": "مجانًا، وتساعد الآخرين على اكتشاف سوكو آيلاند",
@@ -426,7 +393,6 @@
   "p.support.openSource": "مفتوح المصدر",
   "p.support.openSourceHint": "GPL-3.0 · مبني على مشروع Nova Island",
   "p.support.credits": "الاعتمادات",
-
   "unit.glasses": "{n} أكواب",
   "unit.none": "بلا",
   "unit.dayPlus": "+{n} يوم",
@@ -435,5 +401,52 @@
   "unit.daysMinus": "−{n} أيام",
   "unit.min": "{n} د",
   "unit.h": "{n} س",
-  "unit.s": "{n} ث"
+  "unit.s": "{n} ث",
+  "p.nav.features": "الميزات",
+  "p.islamic.title": "الميزات الإسلامية",
+  "p.islamic.enable": "تفعيل الميزات الإسلامية",
+  "p.islamic.enableHint": "مواقيت الصلاة والأذكار والأدعية وآيات القرآن. معطّلة في التثبيت الجديد؛ كل ما يلي يسري فقط عندما تكون مفعّلة.",
+  "p.islamic.prayerTab": "مواقيت الصلاة",
+  "p.islamic.slide": "الصلاة القادمة على الجزيرة",
+  "p.islamic.notifications": "تنبيهات الصلاة",
+  "p.islamic.adhan": "صوت الأذان",
+  "p.islamic.scenes": "المشاهد الإسلامية",
+  "p.islamic.scenesHint": "سوقي يعلن الأذان بجانب بطاقة",
+  "p.islamic.method": "طريقة الحساب",
+  "p.islamic.methodAuto": "تلقائي (حسب البلد)",
+  "p.islamic.location": "الموقع",
+  "p.islamic.locationHint": "غيّر المدينة من «عام»",
+  "p.islamic.active": "الحالي: {city} · {method}",
+  "p.islamic.inactive": "لم يُحسب بعد",
+  "p.islamic.sources": "نص القرآن بخط مجمع الملك فهد لطباعة المصحف الشريف (حفص)؛ مواقيت الصلاة تُحسب على هذا الجهاز بطريقة PrayTimes.",
+  "onboarding.badge": "مرحبًا",
+  "onboarding.title": "مرحبًا بك في سوكو آيلاند",
+  "onboarding.sub": "الموسيقى والتنزيلات والتطبيقات ورف للملفات وتنبيهات ذكية، كلها في هذه الجزيرة الصغيرة. اضغط <b>Ctrl+Alt+I</b> لفتحها، وزر الفأرة الأيمن للقائمة. الميزات الاختيارية مثل مواقيت الصلاة تجدها في الإعدادات › الميزات.",
+  "onboarding.settings": "فتح الإعدادات",
+  "onboarding.later": "لاحقًا",
+  "islamicPrompt.badge": "الميزات الإسلامية",
+  "islamicPrompt.title": "هل تُبقي مواقيت الصلاة والتذكيرات؟",
+  "islamicPrompt.sub": "كانت مفعّلة في إعدادات Nova Island لديك. أبقِها أو عطّلها، ويمكنك تغيير ذلك في أي وقت من الإعدادات › الميزات.",
+  "islamicPrompt.keep": "إبقاؤها",
+  "islamicPrompt.off": "تعطيلها",
+  "prayer.method.MWL": "رابطة العالم الإسلامي",
+  "prayer.method.ISNA": "الجمعية الإسلامية لأمريكا الشمالية",
+  "prayer.method.EGYPT": "الهيئة المصرية العامة للمساحة",
+  "prayer.method.MAKKAH": "جامعة أم القرى، مكة",
+  "prayer.method.KARACHI": "جامعة العلوم الإسلامية، كراتشي",
+  "prayer.method.TEHRAN": "معهد الجيوفيزياء، طهران",
+  "prayer.method.GULF": "منطقة الخليج",
+  "prayer.method.KUWAIT": "الكويت",
+  "prayer.method.QATAR": "قطر",
+  "prayer.method.SINGAPORE": "المجلس الإسلامي في سنغافورة",
+  "prayer.method.JAKIM": "جاكيم، ماليزيا",
+  "prayer.method.KEMENAG": "وزارة الشؤون الدينية، إندونيسيا",
+  "prayer.method.FRANCE": "اتحاد المنظمات الإسلامية في فرنسا",
+  "prayer.method.TURKEY": "رئاسة الشؤون الدينية، تركيا",
+  "prayer.method.RUSSIA": "الإدارة الدينية لمسلمي روسيا",
+  "prayer.method.DUBAI": "دبي",
+  "prayer.method.TUNISIA": "تونس",
+  "prayer.method.ALGERIA": "الجزائر",
+  "prayer.method.MOROCCO": "المغرب",
+  "prayer.method.JORDAN": "وزارة الأوقاف، الأردن"
 }

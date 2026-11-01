@@ -18,6 +18,8 @@ contextBridge.exposeInMainWorld('soqo', {
   onAnchor: on('anchor'),
   onPrayer: on('prayer'),
   prayerSnapshot: () => ipcRenderer.invoke('prayer-snapshot'),
+  onboarding: () => ipcRenderer.invoke('onboarding-get'),
+  onboardingDone: () => ipcRenderer.send('onboarding-done'),
   onDownloads: on('downloads'),
   onDownloadThumb: on('dl-thumb'),
   onFeatures: on('features'),

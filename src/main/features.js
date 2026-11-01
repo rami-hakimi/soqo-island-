@@ -1,6 +1,11 @@
 // Which parts of the island are on. Edited in the Settings window, applied live by the island.
+const fs = require('fs');
+const path = require('path');
+const { app } = require('electron');
 const settings = require('./settings');
 const migrate = require('./migrate');
+const Islamic = require('../shared/islamic');
+const { METHODS } = require('./prayer-methods');
 
 const DEFAULTS = {
   // language of the interface: auto (Windows' display language), en, ar
@@ -26,6 +31,13 @@ const DEFAULTS = {
   hudVolume: true,
   hudBrightness: true,
   battery: true,
+  // Islamic features: optional, off for new installations; the master gates everything
+  // prayer / dhikr / Qur'an related (see shared/islamic.js). The individual switches below
+  // keep their own values for when the master is turned on.
+  islamic: false,
+  islamicPrompt: false, // a profile imported from Nova Island: ask once whether to keep them
+  prayerMethod: 'auto', // calculation method: auto (by country) or a key of prayer-methods.js
+  adhanSound: true, // the soft chime at the adhan (prayer notifications must be on too)
   prayerAlerts: true,
   asrHanafi: false, // Asr by the Hanafi shadow rule
   hijriAdjust: 0, // days added to the Hijri date (local moon sighting)
@@ -80,7 +92,7 @@ const DEFAULTS = {
 };
 
 // string settings and their allowed values
-const ENUMS = { lang: ['auto', 'en', 'ar'] };
+const ENUMS = { lang: ['auto', 'en', 'ar'], prayerMethod: ['auto', ...Object.keys(METHODS)] };
 // number settings and their allowed range
 const RANGES = {
   remindEvery: [1, 240], remindFor: [5, 300], quietFrom: [0, 1439], quietTo: [0, 1439],
@@ -89,7 +101,12 @@ const RANGES = {
 
 // settings saved by Nova Island keep working: renamed keys are mapped once and saved back
 const stored = settings.load('features.json', {});
-const mapped = migrate.featureKeys(stored);
+let mapped = migrate.featureKeys(stored);
+// a profile copied from Nova Island (no master switch there): decide once what it meant
+if (!('islamic' in mapped) && fs.existsSync(path.join(app.getPath('userData'), migrate.MARKER))) {
+  const d = Islamic.fromNova(mapped);
+  mapped = { ...mapped, islamic: d.islamic, islamicPrompt: d.prompt };
+}
 let values = { ...DEFAULTS, ...pick(mapped) };
 if (JSON.stringify(mapped) !== JSON.stringify(stored)) settings.save('features.json', values);
 const listeners = [];

@@ -114,4 +114,43 @@
   setTimeout(() => {
     if (feat('morningBrief') && !briefDone() && new Date().getHours() >= 4) brief();
   }, 9000);
+
+  // Fresh installation: a short, neutral welcome (music, downloads, apps, shelf, alerts) with a
+  // way into Settings. Nothing religious: Islamic features are opt-in under Settings › Features.
+  async function onboarding() {
+    try {
+      const o = await bridge.onboarding();
+      if (!o?.pending) return;
+    } catch { return; }
+    const shown = window.playScene?.({
+      mood: 'happy', tone: 'water', badge: t('onboarding.badge'), lang: I18N.lang,
+      title: t('onboarding.title'), sub: t('onboarding.sub'), ms: 45000,
+      button: { label: t('onboarding.settings'), onClick: () => { bridge.onboardingDone(); bridge.openSettings(); } },
+      button2: { label: t('onboarding.later'), onClick: () => bridge.onboardingDone() },
+      onClose: () => bridge.onboardingDone(),
+    });
+    if (!shown) bridge.onboardingDone();
+  }
+  setTimeout(onboarding, 4000);
+
+  // Imported from Nova Island with the prayer features at their defaults: ask once whether to
+  // keep them. They stay on until answered; closing the card asks again next start.
+  let asked = false;
+  function askIslamic() {
+    if (asked || !state.features.islamicPrompt) return;
+    asked = true;
+    const decide = (on) => bridge.setFeatures({ islamic: on, islamicPrompt: false });
+    const shown = window.playScene?.({
+      mood: 'curious', tone: 'gold', badge: t('islamicPrompt.badge'), lang: I18N.lang,
+      title: t('islamicPrompt.title'), sub: t('islamicPrompt.sub'), ms: 120000,
+      button: { label: t('islamicPrompt.keep'), onClick: () => decide(true) },
+      button2: { label: t('islamicPrompt.off'), onClick: () => decide(false) },
+      onClose: () => { asked = false; },
+    });
+    if (!shown) asked = false;
+  }
+  // the first features event can arrive before this script runs (the parser yields between
+  // scripts), so also check once after the island has settled
+  window.addEventListener('island:features', () => setTimeout(askIslamic, 2500));
+  setTimeout(askIslamic, 3500);
 })();

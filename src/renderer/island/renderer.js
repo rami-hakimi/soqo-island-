@@ -37,7 +37,8 @@ const state = {
   reminderSize: [500, 140],
   sceneUntil: 0, // the island is a character (views/scene.js) until then
 };
-const feat = (key) => state.features[key] !== false;
+// a switch is on unless it is false; Islamic switches also need the master (shared/islamic.js)
+const feat = (key) => Islamic.isOn(state.features, key);
 
 // Good news: sparkles fly out of the island's edges.
 function celebrate(colors = ['#ffd479', '#30d158', '#8ab4ff', '#ff6b9d']) {

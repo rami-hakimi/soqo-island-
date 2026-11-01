@@ -278,3 +278,50 @@ animation polish, a static-glass switch (SEC-11), DPI/multi-monitor pass.
   is the same code that was launched in the DevTools-driven checks.
 - Not done: tag/release (owner), code signing (owner), NSIS Arabic installer strings,
   CHANGELOG.
+
+## Stage 9 — Optional Islamic Features (2026-11-01) ✅
+Soqo Island is a general-purpose desktop utility; the Islamic features from upstream stay
+complete but become opt-in.
+**Changes**
+- `src/shared/islamic.js`: master switch `islamic` (default **off** for new installations)
+  gates `tabPrayer`, `slidePrayer`, `prayerAlerts`, `adhanSound`, `soqiPrayer`, `reminders`,
+  `remindAyah/Dhikr/Dua`; individual switches keep their values so turning the master back on
+  restores the user's choices. The renderer's `feat()` reads through this gate, so the prayer
+  tab, idle slides, adhan alerts and scenes, dhikr/du'a/Qur'an cards and the morning brief's
+  prayer line all disappear together.
+- Main: `prayer.setEnabled()` starts/stops the calculation and the midnight timer; nothing
+  prayer-related runs while off and `prayer-snapshot` returns `null`. No location request is
+  made for prayer (the weather feature's IP lookup is independent and a city can be set
+  manually). New `adhanSound` switch; `prayerMethod` (auto by country, or any of the 20
+  methods, now in `src/main/prayer-methods.js`) with an "Active: city · method" line.
+- Settings › **Features** (renamed from "Prayer & Dhikr"; Arabic الميزات): "Enable Islamic
+  Features" master toggle with hint, then prayer times, next-prayer slide, notifications,
+  adhan sound, Islamic scenes, calculation method, location status, Hanafi Asr, Hijri
+  adjustment, and the dhikr/du'a/Qur'an group; all hidden while the master is off. The Island
+  and Companion pages hide their prayer rows too. Source attribution line (KFGQPC, PrayTimes).
+- Migration from Nova Island (`Islamic.fromNova`): all three signals explicitly off → off;
+  any explicit tuning → on, no question; untouched defaults → stay on and a one-time card
+  asks "Keep prayer times and reminders?" with Keep on / Turn off (closing asks again next
+  start). Decision persisted so it is never re-derived.
+- Neutral onboarding on a fresh installation (`onboardingPending` in settings.json): a
+  welcome card naming music, downloads, apps, shelf and alerts, with "Open Settings" /
+  "Later"; no religious content. Scenes gained a second button.
+- `SOQO_MIGRATE_FROM` (unpackaged runs) points the import at a test folder.
+
+**Checks ran**
+- Unit: 4 new tests (gate, Nova derivation, fresh defaults incl. method validation, imported
+  profile decision persisted) → 43/43; `npm run verify` green, i18n gate 0 problems
+  (443 en / 450 ar keys).
+- Live, fresh install (isolated folder): at start `islamic=false`, prayer tab and slides
+  hidden, `prayer-snapshot` null, no religious reminder card even with the interval forced
+  to 1 min, welcome card shown and dismissed. `setFeatures({islamic:true})` → prayer tab
+  appears, main calculates (MWL, Fajr 05:40 for Amsterdam), Settings › Features lists 21
+  methods, switching to ISNA recalculates, turning the master off from Settings reports
+  `enabled:false, timer:false` and hides everything again. Zero page errors.
+- Live, import of a Nova-style profile (`SOQO_MIGRATE_FROM`): settings copied, features
+  on with the one-time card ("Keep on" / "Turn off"); "Turn off" → `islamic=false`,
+  `islamicPrompt=false` persisted, prayer UI hidden, snapshot null.
+
+**Open**: a real adhan audio file is not shipped (the "adhan sound" is the soft chime, as
+upstream); the helper's Start-menu scan logged one empty first answer and succeeded on retry
+(pre-existing retry path).

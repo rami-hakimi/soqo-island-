@@ -17,7 +17,10 @@ const DATA_DIR = !app.isPackaged && process.env.SOQO_USER_DATA
   : path.join(app.getPath('appData'), 'soqo-island');
 app.setPath('userData', DATA_DIR);
 const migrate = require('./migrate');
-const migratedFrom = migrate.userData(path.join(app.getPath('appData'), 'dynamic-nova'), DATA_DIR);
+// SOQO_MIGRATE_FROM (unpackaged runs only) points the import at a test folder
+const OLD_DATA = !app.isPackaged && process.env.SOQO_MIGRATE_FROM ? path.resolve(process.env.SOQO_MIGRATE_FROM) : path.join(app.getPath('appData'), 'dynamic-nova');
+const freshInstall = !fs.existsSync(path.join(DATA_DIR, 'settings.json')) && !fs.existsSync(path.join(DATA_DIR, 'features.json'));
+const migratedFrom = migrate.userData(OLD_DATA, DATA_DIR);
 const log = require('./log');
 log.init();
 if (migratedFrom) log.info(`settings copied from ${migratedFrom}`);
@@ -57,6 +60,7 @@ let prefs = Object.assign(
   { ax: null, ay: null, docked: false, vertical: false, side: 'right' },
   settings.load('settings.json', {})
 );
+if (freshInstall && !migratedFrom && prefs.onboardingPending === undefined) prefs.onboardingPending = true;
 
 // The island's position is an "anchor": the top-center of the collapsed pill, in screen
 // coordinates. The window (always fully on screen) follows it, and the renderer places the
@@ -729,6 +733,15 @@ ipcMain.handle('system-snapshot', () => system.snapshot());
 ipcMain.on('clip-copy', (_e, i) => { if (isInt(i, 0, 64)) system.copyClip(i); });
 ipcMain.on('clip-clear', () => system.clearClips());
 ipcMain.handle('prayer-snapshot', () => prayer.snapshot());
+ipcMain.handle('prayer-info', () => prayer.info());
+ipcMain.handle('prayer-methods', () => Object.entries(prayer.METHODS).map(([key, m]) => ({ key, name: m.name })));
+// first run of a fresh installation: the island shows a short welcome once (no religious content)
+ipcMain.handle('onboarding-get', () => ({ pending: !!prefs.onboardingPending }));
+ipcMain.on('onboarding-done', () => {
+  if (!prefs.onboardingPending) return;
+  prefs.onboardingPending = false;
+  settings.save('settings.json', prefs);
+});
 
 // --- IDM Nova downloads ---
 ipcMain.handle('dl-snapshot', () => downloads.snapshot());
@@ -928,6 +941,7 @@ ipcMain.on('loc-set', (_e, loc) => { if (loc === null || isObj(loc)) system.setL
 system.onLocationChange((info) => {
   prayer.refresh();
   prefsWindow.send('location', info);
+  setTimeout(() => prefsWindow.send('prayer', prayer.info()), 1500);
 });
 ipcMain.on('general-set', (_e, key, value) => {
   if (!isStr(key, 32)) return;
@@ -940,7 +954,7 @@ ipcMain.on('general-set', (_e, key, value) => {
   else if (key === 'resetPosition') resetPosition();
   notifyGeneral();
 });
-let prayerCalc = `${features.get().asrHanafi}|${features.get().hijriAdjust}`;
+let prayerCalc = `${features.get().asrHanafi}|${features.get().hijriAdjust}|${features.get().prayerMethod}`;
 let autoUpdate = features.get().autoUpdate;
 features.onChange((f) => {
   if (i18n.setSetting(f.lang)) {
@@ -954,13 +968,15 @@ features.onChange((f) => {
     omniKey = '';
     layout();
   }
-  const calc = `${f.asrHanafi}|${f.hijriAdjust}`;
+  prayer.setEnabled(f.islamic);
+  const calc = `${f.asrHanafi}|${f.hijriAdjust}|${f.prayerMethod}`;
   if (calc !== prayerCalc) {
     prayerCalc = calc;
     prayer.refresh();
   }
   send('features', f);
   prefsWindow.send('features', f);
+  prefsWindow.send('prayer', prayer.info());
   downloads.setEnabled(f.downloads);
   downloads.setFolders(f.folderDownloads);
   privacy.setEnabled(f.privacyDots);
@@ -1033,7 +1049,8 @@ app.whenReady().then(() => {
   buildTray();
   startMedia();
   system.start(send);
-  prayer.start(send, system.getLocation);
+  prayer.onUpdate(() => prefsWindow.send('prayer', prayer.info()));
+  prayer.start(send, system.getLocation, features.get().islamic);
   downloads.start(send, features.get().downloads, features.get().folderDownloads);
   privacy.start(send, features.get().privacyDots);
   network.start(send, features.get().netToasts);

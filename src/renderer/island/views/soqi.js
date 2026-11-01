@@ -25,7 +25,7 @@
 
   // Is there a reason for Soqi to be out right now?
   function visible() {
-    if (anchor.vertical || anchor.addr || state.moving || !state.visible) return false;
+    if (!feat('companion') || anchor.vertical || anchor.addr || state.moving || !state.visible) return false;
     if (lastMode === 'scene' || lastMode === 'peek') return false;
     // never beside a dhikr / du'a / Qur'an card; the companion's own cards (welcome, brief, break) are hers
     if (lastMode === 'reminder') return reactsOn() && machine.reacting() && /\b(welcome|brief|care)\b/.test($('.l-reminder').className);

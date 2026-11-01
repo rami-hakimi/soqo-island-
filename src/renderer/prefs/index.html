@@ -119,6 +119,9 @@
         <div class="group">
           <h2 data-i18n="p.soqi.title">Soqi</h2>
           <div class="card">
+            <label class="row"><div class="txt"><b data-i18n="p.soqi.show">Show Soqi</b><small data-i18n="p.soqi.showHint">Off: the island works exactly the same, without the companion</small></div><input type="checkbox" class="sw" data-feature="companion"></label>
+          </div>
+          <div class="card" data-needs="companion">
             <label class="row"><b data-i18n="p.soqi.eyes">Peeks at the cursor</b><input type="checkbox" class="sw" data-feature="soqiEyes"></label>
             <label class="row"><div class="txt"><b data-i18n="p.soqi.reacts">Reacts to events</b><small data-i18n="p.soqi.reactsHint">Downloads, alerts, music, welcome back</small></div><input type="checkbox" class="sw" data-feature="soqiReacts"></label>
             <label class="row"><div class="txt"><b data-i18n="p.soqi.motion">Movement</b><small data-i18n="p.soqi.motionHint">Off: still pictures only. Also off with Windows' reduced-motion setting</small></div><input type="checkbox" class="sw" data-feature="soqiMotion"></label>
@@ -220,7 +223,8 @@
         <div class="group">
           <h2 data-i18n="p.privacy.title">Privacy</h2>
           <div class="card">
-            <label class="row"><b data-i18n="p.privacy.dots">Mic &amp; camera dots</b><input type="checkbox" class="sw" data-feature="privacyDots"></label>
+            <label class="row"><div class="txt"><b data-i18n="p.privacy.dots">Mic &amp; camera dots</b><small data-i18n="p.privacy.dotsHint">Shows which app is using them; it does not block access</small></div><input type="checkbox" class="sw" data-feature="privacyDots"></label>
+            <label class="row"><div class="txt"><b data-i18n="p.privacy.liveGlass">Live glass backdrop</b><small data-i18n="p.privacy.liveGlassHint">Captures the screen area under the island to blur it; the capture never leaves the app. Off: a plain dark pane and no capture</small></div><input type="checkbox" class="sw" data-feature="liveGlass"></label>
             <label class="row"><div class="txt"><b data-i18n="p.privacy.clips">Clipboard history</b><small data-i18n="p.privacy.clipsHint">Kept in memory only</small></div><input type="checkbox" class="sw" data-feature="clipboardHistory"></label>
           </div>
         </div>

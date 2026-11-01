@@ -55,9 +55,13 @@ const DEFAULTS = {
   screenshotToast: true,
   shotAutoShelf: true,
   shotShelfMinutes: 20,
-  // mic / camera in use
+  // mic / camera in use (shows who uses them; it does not block anything)
   privacyDots: true,
-  // companion
+  // the glass: live = the screen area under the island is captured and blurred (never leaves
+  // the app); off = a plain dark pane and no capture at all
+  liveGlass: true,
+  // companion (master: Soqi shown at all)
+  companion: true,
   netToasts: true,
   welcomeBack: true,
   morningBrief: true,

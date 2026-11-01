@@ -589,6 +589,29 @@ function setPlayingUI(playing) {
   view.classList.toggle('playing', playing);
   view.classList.toggle('paused', state.media.has && !playing);
   $$('.eq').forEach((e) => e.classList.toggle('paused', !playing));
+  $('#m-soqi').src = `../../../assets/soqi/${playing ? 'music' : 'listening'}.png`;
+}
+
+// waveform: 28 bars with fixed pseudo-random heights (decorative; the slider below seeks)
+const WAVE_BARS = 28;
+const waveEl = $('#m-wave');
+{
+  let seed = 7;
+  const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+  for (let i = 0; i < WAVE_BARS; i++) {
+    const bar = document.createElement('i');
+    const centre = 1 - Math.abs(i - WAVE_BARS / 2) / (WAVE_BARS / 2); // taller toward the middle
+    bar.style.setProperty('--h', (0.25 + rnd() * 0.45 + centre * 0.3).toFixed(2));
+    bar.style.setProperty('--d', rnd().toFixed(2));
+    waveEl.append(bar);
+  }
+}
+let wavePlayed = -1;
+function drawWave(fraction) {
+  const n = Math.round(Math.max(0, Math.min(1, fraction || 0)) * WAVE_BARS);
+  if (n === wavePlayed) return;
+  wavePlayed = n;
+  waveEl.childNodes.forEach((bar, i) => bar.classList.toggle('on', i < n));
 }
 
 // True while the user is looking at the player itself (e.g. the YouTube tab in Chrome),
@@ -679,6 +702,7 @@ function tickProgress() {
   $('#m-pos').textContent = fmt(pos);
   $('#m-dur').textContent = `-${fmt(m.dur - pos)}`;
   if (!seek.dragging) seek.set(pos / m.dur);
+  drawWave(pos / m.dur);
 }
 
 $$('[data-cmd]').forEach((btn) =>
@@ -1061,6 +1085,10 @@ function refreshTabs() {
 function applyFeatures(f) {
   state.features = f || {};
   $$('[data-feat]').forEach((el) => el.classList.toggle('off', !feat(el.dataset.feat)));
+  // Soqi in the player only while the companion is on; a solid pane when live glass is off
+  $('#m-soqi').hidden = !feat('companion');
+  island.classList.toggle('static-glass', !feat('liveGlass'));
+  if (!feat('liveGlass')) bdCtx.clearRect(0, 0, bd.width, bd.height);
   if ($('.info-slide.on')?.classList.contains('off')) showSlide(0);
   refreshTabs();
   render();

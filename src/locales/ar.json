@@ -448,5 +448,10 @@
   "prayer.method.TUNISIA": "تونس",
   "prayer.method.ALGERIA": "الجزائر",
   "prayer.method.MOROCCO": "المغرب",
-  "prayer.method.JORDAN": "وزارة الأوقاف، الأردن"
+  "prayer.method.JORDAN": "وزارة الأوقاف، الأردن",
+  "p.soqi.show": "إظهار سوقي",
+  "p.soqi.showHint": "عند الإيقاف تعمل الجزيرة كما هي تمامًا، من دون الرفيق",
+  "p.privacy.dotsHint": "تُظهر أي تطبيق يستخدمهما؛ ولا تمنع الوصول",
+  "p.privacy.liveGlass": "خلفية الزجاج الحية",
+  "p.privacy.liveGlassHint": "تلتقط منطقة الشاشة أسفل الجزيرة لتمويهها؛ لا تغادر اللقطة التطبيق أبدًا. عند الإيقاف: لوح داكن ثابت ولا التقاط"
 }

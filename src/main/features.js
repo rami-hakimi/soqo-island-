@@ -89,6 +89,10 @@ const DEFAULTS = {
   quietHours: false,
   quietFrom: 23 * 60,
   quietTo: 7 * 60,
+  // running timer pill (Settings › Timer): size of the countdown, and whether a running timer
+  // stays visible while an app is full screen
+  timerSize: 'small',
+  timerOnTop: false,
   // focus sessions (Pomodoro)
   focusMin: 25,
   breakMin: 5,
@@ -96,7 +100,7 @@ const DEFAULTS = {
 };
 
 // string settings and their allowed values
-const ENUMS = { lang: ['auto', 'en', 'ar'], prayerMethod: ['auto', ...Object.keys(METHODS)] };
+const ENUMS = { lang: ['auto', 'en', 'ar'], prayerMethod: ['auto', ...Object.keys(METHODS)], timerSize: ['small', 'medium', 'large'] };
 // number settings and their allowed range
 const RANGES = {
   remindEvery: [1, 240], remindFor: [5, 300], quietFrom: [0, 1439], quietTo: [0, 1439],

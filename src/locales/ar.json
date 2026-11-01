@@ -460,5 +460,18 @@
   "p.support.license": "الرخصة",
   "p.support.thirdParty": "مكوّنات خارجية",
   "p.support.thirdPartyHint": "خط مجمع الملك فهد (حفص)، Electron، node-ical، Open-Meteo، طريقة PrayTimes",
-  "p.dl.idmHint": "تقدّم مباشر وتحكّم عند تثبيت مدير التنزيلات IDM"
+  "p.dl.idmHint": "تقدّم مباشر وتحكّم عند تثبيت مدير التنزيلات IDM",
+  "p.nav.timer": "المؤقّت",
+  "p.timer.running": "المؤقّت أثناء العمل",
+  "p.timer.size": "حجم العرض",
+  "p.timer.sizeHint": "حجم كبسولة العدّ التنازلي أثناء عمل المؤقّت. يُظهر الحجمان المتوسط والكبير زرّي الإيقاف المؤقت وإعادة الضبط عند التحويم.",
+  "p.timer.small": "صغير",
+  "p.timer.medium": "متوسط",
+  "p.timer.large": "كبير",
+  "p.timer.onTop": "إبقاء المؤقّت ظاهرًا في وضع ملء الشاشة",
+  "p.timer.onTopHint": "تطفو الجزيرة دائمًا فوق النوافذ الأخرى مثل Chrome؛ مع هذا الخيار تبقى أيضًا عندما يكون تطبيق في وضع ملء الشاشة",
+  "p.timer.focusTitle": "جلسات التركيز",
+  "p.timer.focusMin": "تركيز",
+  "p.timer.breakMin": "استراحة",
+  "p.timer.longBreakMin": "استراحة طويلة"
 }

@@ -96,6 +96,9 @@ const SIZE = { idle: 1, compact: 2, toast: 3, peek: 4, reminder: 4, scene: 4, ex
 function timerActive() {
   return state.timer.running || state.timer.remaining > 0;
 }
+const timerSize = () => TimerPill.normalize(state.features.timerSize);
+// a medium / large timer pill shows its own controls on hover instead of opening the island
+const timerHoverPill = () => !anchor.vertical && !anchor.addr && compactKind() === 'timer' && TimerPill.inlineControls(timerSize(), timerActive());
 
 // What the compact pill shows, by priority: timer, playing media, a running download.
 function compactKind() {
@@ -115,6 +118,7 @@ function currentMode() {
   if (state.reminderUntil > now && !state.pinned && !state.dragging) {
     return state.toast && now < state.toastUntil ? 'toast' : 'reminder';
   }
+  if (!state.moving && state.hover && !state.pinned && !state.dragging && timerHoverPill()) return 'compact';
   if (!state.moving && (state.hover || state.pinned || state.dragging)) return 'expanded';
   if (state.toast && now < state.toastUntil) return 'toast';
   if (now < state.peekUntil && !state.mediaFront) return 'peek';
@@ -146,6 +150,16 @@ function render() {
   const wide = showTitle;
   if (wide !== island.classList.contains('c-wide')) {
     island.classList.toggle('c-wide', wide);
+    if (typeof positionIsland === 'function') positionIsland();
+  }
+  // running-timer pill size and its hover state (inline controls)
+  const tmd = kind === 'timer' && timerSize() === 'medium';
+  const tlg = kind === 'timer' && timerSize() === 'large';
+  const thover = mode === 'compact' && state.hover && !state.pinned && timerHoverPill();
+  if (tmd !== island.classList.contains('t-md') || tlg !== island.classList.contains('t-lg') || thover !== island.classList.contains('t-hover')) {
+    island.classList.toggle('t-md', tmd);
+    island.classList.toggle('t-lg', tlg);
+    island.classList.toggle('t-hover', thover);
     if (typeof positionIsland === 'function') positionIsland();
   }
   setCompactTitle(!showTitle ? '' : kind === 'media' ? state.media.title : state.dl.title);
@@ -265,6 +279,12 @@ island.addEventListener('click', (e) => {
     return;
   }
   if (justMoved || lastMode === 'expanded' || lastMode === 'reminder' || lastMode === 'scene' || e.target.closest(NO_DRAG)) return;
+  // a hovered timer pill shows its controls; a click on the pill itself opens the whole island
+  if (lastMode === 'compact' && island.classList.contains('t-hover')) {
+    state.pinned = true;
+    render();
+    return;
+  }
   state.hover = true;
   render();
 });
@@ -283,6 +303,10 @@ let anchor = { x: window.innerWidth / 2, y: 8, docked: false, vertical: false, s
 function positionIsland() {
   let [w, h] = (anchor.vertical ? VDIMS : DIMS)[lastMode] || DIMS.idle;
   if (lastMode === 'compact' && !anchor.vertical && island.classList.contains('c-wide')) w = COMPACT_WIDE;
+  if (lastMode === 'compact' && !anchor.vertical && compactKind() === 'timer') {
+    const d = TimerPill.dims(timerSize(), { hover: island.classList.contains('t-hover') });
+    if (d) [w, h] = d;
+  }
   if (lastMode === 'reminder') [w, h] = state.reminderSize;
   // in the browser's address bar: a slim pill, or a thin line while the user types there
   if (anchor.addr && !anchor.vertical && (lastMode === 'idle' || lastMode === 'compact')) {
@@ -301,19 +325,8 @@ function positionIsland() {
     wake();
     return;
   }
-  const W = window.innerWidth;
-  const H = window.innerHeight;
-  const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
-  let x;
-  let y;
-  if (anchor.vertical) {
-    // flush against the screen edge, centered on the anchor, kept inside the window
-    x = anchor.side === 'left' ? 0 : W - w;
-    y = clamp(anchor.y - h / 2, 4, H - h - 4);
-  } else {
-    x = clamp(anchor.x - w / 2, 4, W - w - 4);
-    y = anchor.docked ? 0 : clamp(anchor.y, 0, H - h - 6);
-  }
+  // centred on the anchor and kept inside the window (shared/timer-pill.js, unit-tested)
+  const { x, y } = TimerPill.place(anchor, [w, h], { width: window.innerWidth, height: window.innerHeight });
   island.style.setProperty('--x', `${Math.round(x)}px`);
   island.style.setProperty('--y', `${Math.round(y)}px`);
   wake(); // the glass must follow the island while it slides into place
@@ -924,6 +937,7 @@ function setTimer(min, phase = null) {
   render();
 }
 
+let reportedRunning = null;
 function drawTimer() {
   const tm = state.timer;
   const rem = tm.running ? Math.max(0, (tm.endAt - Date.now()) / 1000) : tm.remaining;
@@ -937,6 +951,15 @@ function drawTimer() {
   $('#tm-state').textContent = tm.running ? label : started ? t('timer.paused') : tm.total ? t('timer.ready') : t('timer.pick');
   $('#tm-focus').classList.toggle('sel', !!tm.phase);
   $('#tm-reset').disabled = !tm.total;
+  // the inline controls of the medium / large pill mirror the Timer tab
+  const ct = $('#ct-toggle');
+  ct.classList.toggle('paused', !tm.running);
+  ct.setAttribute('aria-label', tm.running ? t('timer.pause') : t('timer.resume'));
+  // main keeps a running timer visible in full screen when asked (Settings › Timer)
+  if (tm.running !== reportedRunning) {
+    reportedRunning = tm.running;
+    bridge.timerState(tm.running);
+  }
   return rem;
 }
 
@@ -968,6 +991,9 @@ function beep() {
 }
 
 $$('[data-min]').forEach((b) => b.addEventListener('click', () => setTimer(Number(b.dataset.min))));
+// inline controls on the running-timer pill (same actions as the Timer tab)
+$('#ct-toggle').addEventListener('click', (e) => { e.stopPropagation(); $('#tm-start').click(); });
+$('#ct-reset').addEventListener('click', (e) => { e.stopPropagation(); $('#tm-reset').click(); });
 
 $('#tm-start').addEventListener('click', () => {
   if (!state.timer.total) setTimer(5);

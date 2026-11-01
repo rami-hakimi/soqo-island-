@@ -47,6 +47,7 @@ contextBridge.exposeInMainWorld('soqo', {
     snapshot: () => ipcRenderer.invoke('dl-snapshot'),
     control: (id, action) => ipcRenderer.send('dl-control', id, action),
   },
+  timerState: (running) => ipcRenderer.send('timer-state', !!running),
   dragStart: () => ipcRenderer.send('drag-start'),
   dragEnd: () => ipcRenderer.send('drag-end'),
 

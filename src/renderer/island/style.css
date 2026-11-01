@@ -590,6 +590,28 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .c-title.scroll.rtl span { animation-direction: alternate-reverse; }
 @keyframes marquee { 0%, 14% { transform: translateX(0); } 86%, 100% { transform: translateX(var(--dist)); } }
 .l-compact.timer .c-title { display: none; }
+/* running timer sizes (Settings › Timer); the countdown is the prominent element: bold tabular digits */
+#island:not(.vertical).compact.t-md { --w: 250px; --h: 44px; --r: 22px; }
+#island:not(.vertical).compact.t-lg { --w: 310px; --h: 60px; --r: 30px; }
+#island:not(.vertical).compact.t-md.t-hover { --w: 322px; }
+#island:not(.vertical).compact.t-lg.t-hover { --w: 394px; }
+#island.t-md .l-compact, #island.t-lg .l-compact { justify-content: center; gap: 10px; }
+#island.t-md .l-compact .c-time { font-size: 24px; font-weight: 700; letter-spacing: .01em; }
+#island.t-lg .l-compact .c-time { font-size: 44px; font-weight: 700; letter-spacing: .01em; line-height: 1; }
+#island.t-md .l-compact .c-ico { width: 22px; height: 22px; }
+#island.t-lg .l-compact .c-ico { width: 28px; height: 28px; }
+/* inline pause / resume and reset, shown only while hovering a medium or large pill */
+.c-tctl { display: none; align-items: center; gap: 6px; margin-inline-start: 8px; }
+#island.t-hover .l-compact .c-tctl { display: flex; }
+.ct { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--fill-1); color: var(--text-1); transition: background var(--dur-fast), transform .2s var(--spring); }
+.ct:hover { background: var(--fill-2); }
+.ct:active { transform: scale(.9); }
+.ct svg { width: 15px; height: 15px; }
+.ct .ct-play { display: none; fill: currentColor; }
+.ct.paused .ct-pause { display: none; }
+.ct.paused .ct-play { display: block; }
+#island.t-lg .ct { width: 36px; height: 36px; }
+#island.t-lg .ct svg { width: 18px; height: 18px; }
 
 /* ============ IDM downloads ============ */
 :root { --dl-rgb: 0, 201, 187; }

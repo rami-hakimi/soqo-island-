@@ -26,6 +26,7 @@
       </label>
       <a href="#general" data-page="general"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg><span data-i18n="p.nav.general">General</span></a>
       <a href="#island" data-page="island"><svg viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="4"/></svg><span data-i18n="p.nav.island">Island</span></a>
+      <a href="#timer" data-page="timer"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg><span data-i18n="p.nav.timer">Timer</span></a>
       <a href="#companion" data-page="companion"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg><span data-i18n="p.nav.companion">Companion</span></a>
       <a href="#faith" data-page="faith"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><span data-i18n="p.nav.features">Features</span></a>
       <a href="#alerts" data-page="alerts"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span data-i18n="p.nav.alerts">Alerts &amp; Privacy</span></a>
@@ -105,6 +106,38 @@
             <label class="row"><b data-i18n="p.island.mediaPill">Show media</b><input type="checkbox" class="sw" data-feature="mediaPill"></label>
             <label class="row sub" data-needs="mediaPill"><b data-i18n="p.island.mediaTitle">Title</b><input type="checkbox" class="sw" data-feature="mediaTitle"></label>
             <label class="row"><b data-i18n="p.island.trackPeek">New track card</b><input type="checkbox" class="sw" data-feature="trackPeek"></label>
+          </div>
+        </div>
+      </section>
+
+      <!-- TIMER -->
+      <section id="timer" class="page">
+        <h1 data-i18n="p.nav.timer">Timer</h1>
+        <div class="group">
+          <h2 data-i18n="p.timer.running">Running timer</h2>
+          <div class="card">
+            <div class="row"><div class="txt"><b data-i18n="p.timer.size">Display size</b><small data-i18n="p.timer.sizeHint">How big the countdown pill is while a timer runs. Medium and large show pause and reset on hover.</small></div>
+              <div class="seg" role="radiogroup" aria-label="Display size" data-i18n-aria="p.timer.size">
+                <button role="radio" data-size="small" data-i18n="p.timer.small">Small</button>
+                <button role="radio" data-size="medium" data-i18n="p.timer.medium">Medium</button>
+                <button role="radio" data-size="large" data-i18n="p.timer.large">Large</button>
+              </div>
+            </div>
+            <label class="row"><div class="txt"><b data-i18n="p.timer.onTop">Keep a running timer visible in full screen</b><small data-i18n="p.timer.onTopHint">The island always floats above other windows such as Chrome; with this on it also stays while an app is full screen</small></div><input type="checkbox" class="sw" data-feature="timerOnTop"></label>
+          </div>
+        </div>
+        <div class="group">
+          <h2 data-i18n="p.timer.focusTitle">Focus sessions</h2>
+          <div class="card">
+            <div class="row"><b data-i18n="p.timer.focusMin">Focus</b>
+              <div class="stepper" data-num="focusMin" data-steps="5,10,15,20,25,30,45,60,90,120" data-unit="min"><button data-dir="-1" aria-label="Less" data-i18n-aria="common.less">−</button><output></output><button data-dir="1" aria-label="More" data-i18n-aria="common.more">+</button></div>
+            </div>
+            <div class="row"><b data-i18n="p.timer.breakMin">Break</b>
+              <div class="stepper" data-num="breakMin" data-steps="1,2,3,5,10,15,20,30,45,60" data-unit="min"><button data-dir="-1" aria-label="Less" data-i18n-aria="common.less">−</button><output></output><button data-dir="1" aria-label="More" data-i18n-aria="common.more">+</button></div>
+            </div>
+            <div class="row"><b data-i18n="p.timer.longBreakMin">Long break</b>
+              <div class="stepper" data-num="longBreakMin" data-steps="5,10,15,20,30,45,60" data-unit="min"><button data-dir="-1" aria-label="Less" data-i18n-aria="common.less">−</button><output></output><button data-dir="1" aria-label="More" data-i18n-aria="common.more">+</button></div>
+            </div>
           </div>
         </div>
       </section>

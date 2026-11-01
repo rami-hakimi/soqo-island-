@@ -38,7 +38,7 @@ const updater = require('./updater');
 app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling');
 
 const WIN_W = 640;
-const WIN_H = 320;
+const WIN_H = 356;
 const HOVER_INTENT_MS = 280;
 
 let win = null;
@@ -57,7 +57,8 @@ let prefs = Object.assign(
 // island inside the window so it expands toward the free space near screen edges.
 const PILL_HALF_W = 120;   // half of the widest collapsed pill (keep in sync with style.css)
 const PILL_H = 34;
-const FLOAT_TOP = 8;       // gap above a floating island inside the window
+const FLOAT_TOP = 8;       // gap above a floating island inside the window (at the screen top)
+const HEADROOM = 44;       // room above a floating island lower down, where Soqi can peek out
 const SNAP_PX = 28;        // distance from the top edge that docks the island
 const CENTER_SNAP_PX = 40; // horizontal magnet to the screen center while docked
 // In vertical mode the anchor is the middle of the pill on the left or right screen edge.
@@ -164,7 +165,7 @@ function layout() {
     anchor.x = clamp(anchor.x, b.x + PILL_HALF_W, b.x + b.width - PILL_HALF_W);
     anchor.y = prefs.docked ? b.y : clamp(anchor.y, b.y, wa.y + wa.height - PILL_H - 6);
     wx = Math.round(clamp(anchor.x - WIN_W / 2, b.x, b.x + b.width - WIN_W));
-    wy = Math.round(prefs.docked ? b.y : clamp(anchor.y - FLOAT_TOP, b.y, wa.y + wa.height - WIN_H));
+    wy = Math.round(prefs.docked ? b.y : clamp(anchor.y - HEADROOM, b.y, wa.y + wa.height - WIN_H));
   }
   const cur = win.getBounds();
   if (cur.x !== wx || cur.y !== wy || cur.width !== WIN_W || cur.height !== WIN_H) {
@@ -838,10 +839,7 @@ ipcMain.handle('general-get', () => generalState());
 // Settings > Support: the page names a link, main holds the addresses
 const SUPPORT_LINKS = {
   github: 'https://github.com/rami-hakimi/soqo-island-',
-  // the upstream project this app is based on, and its author's support links
-  upstream: 'https://github.com/NOVA-TECH-KIT/nova-island',
-  kofi: 'https://ko-fi.com/binamer',
-  instapay: 'https://ipn.eg/S/binamerbm/instapay/38txJO',
+  upstream: 'https://github.com/NOVA-TECH-KIT/nova-island', // the project this app is based on
 };
 ipcMain.on('open-support', (_e, key) => {
   if (Object.hasOwn(SUPPORT_LINKS, key)) shell.openExternal(SUPPORT_LINKS[key]);
@@ -951,7 +949,8 @@ features.onChange((f) => {
 });
 
 function trayIcon() {
-  const img = nativeImage.createFromPath(path.join(__dirname, 'build', 'icon.png'));
+  // the dolphin silhouette in brand cyan reads on both dark and light taskbars
+  const img = nativeImage.createFromPath(path.join(__dirname, 'build', 'tray-color.png'));
   if (!img.isEmpty()) return img.resize({ width: 16, height: 16, quality: 'best' });
   // fallback: white pill
   const size = 16;

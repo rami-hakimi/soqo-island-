@@ -30,5 +30,6 @@
     if (timer) return;
     showToast('update', `Update ready · ${u.version}`, 'Update now', 0, 20000);
     state.toastAction = countdown;
+    window.soqi?.react('notification', 6000);
   });
 })();

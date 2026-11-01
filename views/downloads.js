@@ -139,9 +139,11 @@
           showToast('dl-done', d.name, 'Done', 1, 4200);
           note('✅', `Downloaded ${d.name}`);
           celebrate(['#30d158', '#40c8ff', '#ffd479']);
+          window.soqi?.react('download');
         } else if (prev && prev !== 'error' && d.status === 'error') {
           showToast('dl-error', d.name, 'Failed', 0, 4200);
           note('⚠️', `Download failed: ${d.name}`);
+          window.soqi?.react('warning');
         }
       }
       known.set(d.id, d.status);

@@ -10,7 +10,7 @@ const islandGlobals = {
   note: 'readonly', happenings: 'readonly', fmt: 'readonly', playTones: 'readonly', focusing: 'readonly',
   compactKind: 'readonly', internalDrag: 'writable', ICON_X: 'readonly', ICON_PLUS: 'readonly', REMINDERS: 'readonly',
   playScene: 'readonly', sceneShowing: 'readonly', endScene: 'readonly', cardShowing: 'readonly', showCard: 'readonly',
-  movedKey: 'readonly',
+  movedKey: 'readonly', SoqiState: 'readonly',
 };
 
 module.exports = [
@@ -40,5 +40,10 @@ module.exports = [
   {
     files: ['test/**/*.js'],
     languageOptions: { globals: { ...globals.node } },
+  },
+  {
+    // UMD: runs as a classic script in the island and as CommonJS in tests
+    files: ['shared/*.js'],
+    languageOptions: { sourceType: 'script', globals: { ...globals.browser, ...globals.node } },
   },
 ];

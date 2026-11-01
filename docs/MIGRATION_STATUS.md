@@ -105,3 +105,59 @@ location changed.
 - Owner decision: keep the upstream author's donation links on the Support page?
 - Helper binary is still unsigned (SEC-3); CI will rebuild it from source in Stage 8.
 - The `version` 2.0.0-alpha.1 is a proposal; the updater compares it with GitHub releases.
+
+## Stage 2b — Approved artwork, Soqi state system, Egypt review (2026-11-01) ✅
+Owner's additional requirements of 2026-11-01 folded in: use the artwork in `assets/`, remove
+all Nova imagery, review Egypt-specific project details, implement Soqi's ten states.
+
+**Changes**
+- `scripts/prepare-art.py` derives every shipped image from the approved originals (details
+  in ART_ASSET_REQUESTS.md): app icon + `.ico`, tray silhouette, ten Soqi sprites, mascot
+  hero. Originals untouched and excluded from the installer. The earlier generated placeholder
+  icon and its script were removed.
+- `shared/soqi-state.js`: priority state machine (idle, happy, excited, curious, listening,
+  music, sleeping, notification, download, warning) with reactions on top of a resting mood
+  derived from away / cursor nearby / typing / music. Unit-tested (4 tests).
+- `views/soqi.js`: one sprite peeks over the island — beside the pill's end when the island is
+  at the screen top or docked, over the top edge when it floats lower (the window gained 44 px
+  of headroom for this), on the roof of the open island, over the companion's own cards, never
+  beside dhikr / du'a / Qur'an cards. Leans toward the cursor when curious; CSS motion per
+  mood (bob, breathe, wiggle, nod, shiver) disabled by reduced motion and by the new Movement
+  switch. Asleep after 5 min away.
+- Hooks on real events: download done / failed, internet lost / back, low battery, meeting
+  start, prayer heads-up, screenshot, update ready, mic/camera use, welcome-back / brief /
+  break cards, celebrations, music playing / paused, typing in the app search.
+- Scenes (`views/scene.js`): the island becomes a 72 px glass porthole with Soqi inside
+  (adhan → notification, water → happy, focus start → listening, focus done → excited). The
+  Nova blob skin, face, limbs and costume props were removed from markup and CSS.
+- Settings › Companion: mascot hero, switches "Peeks at the cursor", "Reacts to events",
+  "Movement" (new features `soqiReacts`, `soqiMotion`), adhan, focus, celebrations. Settings
+  accent colours moved to the brand palette (#00A8FF / #00C9BB). Tray uses the cyan dolphin.
+- Egypt review: the upstream author's Ko-fi and InstaPay (Egypt) donation rows were removed
+  from Settings › Support and from README; attribution stays as one "Credits" row linking to
+  the upstream project plus `NOTICE.md`. No Netherlands address or registration was invented.
+  Location-sensitive features keep using the user's own location / time zone; the
+  time-zone capital table and the country → calculation-method table are legitimate
+  geographic data and stay. `system.js` city search still asks Open-Meteo for Arabic names
+  (`language=ar`): to follow the UI language in Stage 5.
+- `promo/` (upstream screenshots and the Nova character renderer) removed from the tree;
+  the island's accessibility label is now "Soqo Island".
+
+**Checks ran**
+- `npm run check` 62/62 · `npm run lint` clean · `npm test` 34/34.
+- Electron launch on Windows 11 with `--remote-debugging-port` and an isolated data folder;
+  the island was driven over the DevTools protocol and screenshotted in 14 states (brief
+  card, idle, curious, download, warning, expanded music/prayer, adhan scene, focus scene,
+  floating and docked placements, Settings › Companion and Support). All sprites loaded,
+  zero page errors, `island ready` in 0.6 s.
+
+**Not run / not verifiable here**: the compact music pill with a real player (the live
+bridge overwrote the simulated media state; geometry is identical to the idle pill); the
+tray icon's look on a light taskbar; multi-monitor.
+
+**Risks / open**
+- With the island at its default place (screen top) Soqi appears beside the pill's end, which
+  needs ~44 px of free width right of the island; near the right screen edge she is clipped
+  by the window bounds (she is pointer-transparent, so nothing breaks).
+- `playScene({ who, props, arms })` callers were updated; any external script still passing
+  `who: 'drop'` gets the happy pose.

@@ -42,7 +42,7 @@
       ? `Daily goal reached (${g} glasses) 🎉 — one more won't hurt`
       : `<b>${n}</b> of ${g} glasses today`;
     return playScene({
-      who: 'drop', props: ['glass'], arms: 'hold', tone: 'water', badge: '💧 Water',
+      mood: 'happy', tone: 'water', badge: '💧 Water',
       title: 'Drink a glass of water', sub, ms: 20000,
       button: { label: 'I drank ✓', onClick: drank },
       onClose: () => { activeMs = Math.max(0, everyMs() - SNOOZE_MS); },

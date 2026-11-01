@@ -26,9 +26,11 @@
       setTimeout(() => island.classList.remove('net-down'), 4600);
       showToast('net-off', n.link === 'none' ? 'No connection' : 'Internet lost', '', 0, 4500);
       note('📡', 'Internet lost');
+      window.soqi?.react('warning');
     } else if (p.internet === false && n.internet) {
       const gone = downAt ? Date.now() - downAt : 0;
       showToast('net-on', 'Back online', gone ? ago(gone) : label(n), 0, 3500);
+      window.soqi?.react('happy', 3500);
       note('📶', `Back online ${gone ? ago(gone) : ''}`.trim());
       downAt = 0;
     } else if (n.link === 'wifi' && p.link !== 'wifi' && n.internet) {

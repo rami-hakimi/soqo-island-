@@ -1,0 +1,46 @@
+{
+  "source": "Glossy Soqi Dolphin Emotion Sticker Sheet.png",
+  "states": {
+    "idle": {
+      "file": "idle.png",
+      "size": 256
+    },
+    "happy": {
+      "file": "happy.png",
+      "size": 256
+    },
+    "excited": {
+      "file": "excited.png",
+      "size": 256
+    },
+    "curious": {
+      "file": "curious.png",
+      "size": 256
+    },
+    "listening": {
+      "file": "listening.png",
+      "size": 256
+    },
+    "music": {
+      "file": "music.png",
+      "size": 256
+    },
+    "sleeping": {
+      "file": "sleeping.png",
+      "size": 256
+    },
+    "notification": {
+      "file": "notification.png",
+      "size": 256
+    },
+    "download": {
+      "file": "download.png",
+      "size": 256
+    },
+    "warning": {
+      "file": "warning.png",
+      "size": 256
+    }
+  },
+  "full": "soqi-full.png"
+}

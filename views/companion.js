@@ -86,6 +86,7 @@
     const c = pending;
     pending = null;
     showCard(c);
+    window.soqi?.react(c.kind === 'care' ? 'curious' : 'happy', c.ms);
   }
   setInterval(flush, 1000);
 

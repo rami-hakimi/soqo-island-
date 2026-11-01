@@ -173,6 +173,8 @@
     bridge.focusInput(true);
     setTimeout(() => search.focus(), 60);
   });
+  search.addEventListener('focus', () => window.soqi?.set('typing', true));
+  search.addEventListener('blur', () => window.soqi?.set('typing', false));
   search.addEventListener('input', renderList);
   search.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closePicker();

@@ -50,7 +50,7 @@
               </div>
             </div>
             <label class="row"><b data-i18n="p.general.show">Show island</b><input type="checkbox" class="sw" data-general="shown"></label>
-            <label class="row"><b data-i18n="p.general.startWithWindows">Start with Windows</b><input type="checkbox" class="sw" data-general="startWithWindows"></label>
+            <label class="row"><div class="txt"><b data-i18n="p.general.startWithWindows">Launch at Windows startup</b><small data-i18n="p.general.startWithWindowsHint">Starts quietly as the floating island when you sign in. Also listed under Windows Settings › Apps › Startup.</small></div><input type="checkbox" class="sw" data-general="startWithWindows"></label>
             <div class="row"><b data-i18n="p.general.orientation">Orientation</b>
               <div class="seg" role="radiogroup" aria-label="Orientation" data-i18n-aria="p.general.orientation">
                 <button role="radio" data-orient="h" data-i18n="p.general.horizontal">Horizontal</button>
@@ -285,7 +285,10 @@
         <div class="group">
           <h2 data-i18n="p.support.about">About</h2>
           <div class="card">
-            <div class="row"><div class="txt"><b data-i18n="p.support.openSource">Open source</b><small data-i18n="p.support.openSourceHint">GPL-3.0 · based on the Nova Island project</small></div><button class="btn" data-support="upstream" data-i18n="p.support.credits">Credits</button></div>
+            <div class="row"><div class="txt"><b data-i18n="app.name">Soqo Island</b><small><span data-i18n="app.tagline">A Living Island for Windows</span> · <span id="about-version"></span></small></div></div>
+            <div class="row"><div class="txt"><b data-i18n="p.support.developer">Developed by Rami Al-Hakimi</b><small data-i18n="p.support.developerHint">Netherlands · free and open source</small></div><button class="btn" data-support="developer">GitHub</button></div>
+            <div class="row"><div class="txt"><b data-i18n="p.support.openSource">Open source</b><small data-i18n="p.support.openSourceHint">GPL-3.0 · based on the Nova Island project by AmerTech</small></div><div class="btns"><button class="btn" data-support="license" data-i18n="p.support.license">License</button><button class="btn" data-support="upstream" data-i18n="p.support.credits">Credits</button></div></div>
+            <div class="row"><div class="txt"><b data-i18n="p.support.thirdParty">Third-party</b><small data-i18n="p.support.thirdPartyHint">KFGQPC Hafs font (King Fahd Glorious Quran Printing Complex), Electron, node-ical, Open-Meteo, PrayTimes method</small></div></div>
           </div>
         </div>
       </section>

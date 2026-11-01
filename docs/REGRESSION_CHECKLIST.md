@@ -15,11 +15,11 @@ applicable on this machine (note why).
 | S7 | Hide in fullscreen; Show/Hide menu | Fullscreen video; toggle menu | ⏳ | | |
 | S8 | Live glass backdrop | Move island over coloured window | ⏳ | | |
 | S9 | Ctrl+Alt+I toggles; pin | Press shortcut | ⏳ | | |
-| S10 | Tray menu items | Click tray | ⏳ | | |
+| S10 | Tray menu items | Click tray | ⏳ | | ⏳ icon not reachable via UI Automation in this session; same menu tested via island right-click (Stage 11) |
 | S11 | Single instance | Launch twice | ⏳ | ⏳ (launch reached island-ready) | |
 | S12 | Reduced motion | Windows Settings → Animation effects off | ⏳ | | 🤖 CSS rule present; Soqi Movement switch |
 | S13 | Input focus only while typing | Apps → Add → type | ⏳ | | |
-| M1 | SMTC now playing | Play in Spotify/YouTube | ⏳ | | |
+| M1 | SMTC now playing | Play in Spotify/YouTube | ⏳ | | ✅ real Chrome session: title, artwork, duration, volume shown (Stage 10) |
 | M2 | Transport controls | Buttons | ⏳ | | |
 | M3 | Volume / mute / wheel / HUD | Slider, wheel on pill | ⏳ | | |
 | M4 | Brightness | Laptop only | ➖ desktop? check | | |
@@ -34,14 +34,14 @@ applicable on this machine (note why).
 | T2 | Focus sessions + scenes | Focus button | ⏳ | | |
 | Y1 | CPU/RAM | Idle slide | ⏳ | | |
 | Y2 | Weather + location fallbacks | System tab; set manual city | ⏳ | | |
-| Y3 | Clipboard history + private skip | Copy text; copy from password manager | ⏳ | | |
+| Y3 | Clipboard history + private skip | Copy text; copy from password manager | ⏳ | | ✅ two copies listed (Stage 11); private-copy skip ⏳ |
 | Y4 | Smart clipboard | Copy URL / `#ff0` / `2*(3+4)` / long text | 🤖 unit tests | | |
 | Y5 | Screenshot toast + auto-shelf | Win+Shift+S | ⏳ | | |
 | Y6 | Network toasts | Toggle Wi-Fi | ⏳ (linkKind 🤖) | | |
 | Y7 | Battery toasts | Unplug | ➖ if desktop | | |
 | Y8 | Keyboard language / Caps Lock | Alt+Shift, Caps | ⏳ | | |
 | D1 | IDM Nova bridge | Needs IDM Nova installed | ➖ not installed | | |
-| D2 | Browser download detection | Download a file in Chrome | 🤖 temp-dir simulation | | |
+| D2 | Browser download detection | Download a file in Chrome | 🤖 temp-dir simulation | | ✅ real Downloads folder: completion toast, list row, Soqi download mood (Stage 11) |
 | D3 | Download folders in Settings | Add/remove | ⏳ | | |
 | D4 | Downloads tab/pill/toasts | During a download | ⏳ | | |
 | P1 | Prayer-time maths | Compare with AlAdhan for Cairo/Makkah | 🤖 golden values | | |
@@ -59,9 +59,9 @@ applicable on this machine (note why).
 | C7 | Privacy dots | Open Camera app | 🤖 parser; ⏳ manual | | |
 | G1 | Settings window pages/search | Open Settings | ⏳ | ✅ opened via IPC, Companion + Support screenshotted | |
 | G2 | Feature validation | Unit test | 🤖 | | |
-| G3 | Start with Windows | Toggle; check Startup folder / Task Manager | ⏳ | | |
+| G3 | Launch at Windows startup | Toggle; check Startup folder / Run key | ⏳ | | ✅ dev: Startup .lnk created/removed; installed: HKCU Run value set/cleared via Settings (Stage 11) |
 | G4 | Startup/data migration | Create old folder, launch | ⏳ | 🤖 unit (copy once, never overwrite, key map) | |
 | G5 | Auto-update | Needs a published release | ➖ until release | | |
 | G6 | Log rotation / report | Unit test; Copy report | 🤖 | | |
 | G7 | Support links | Settings → Support | ⏳ owner decision | | |
-| G8 | Installer / portable build | `npm run dist` | ⏳ | | ✅ NSIS built (Stage 8), fuses verified, not installed |
+| G8 | Installer / uninstaller | `npm run dist`, silent install | ⏳ | | ✅ silent install 22 s to %LOCALAPPDATA%\Programs, shortcuts, GUI subsystem, uninstall removes exe/shortcuts/Run value (Stage 11) |

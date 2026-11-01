@@ -191,3 +191,29 @@ tray icon's look on a light taskbar; multi-monitor.
 **Not run**: packaged build (`npm run dist`) with the new layout — scheduled for Stage 8
 together with CI; `files` globs were kept broad (`**/*`) so the layout change needs no
 packaging change.
+
+## Stage 4 — Security hardening (2026-11-01) ✅
+Findings and their status live in `SECURITY_AUDIT.md` (status column). Done in this stage:
+- `sandbox: true` on the island window and the mini player (the settings window already had
+  it); all three renderers are now sandboxed with context isolation.
+- Island CSP without `unsafe-inline` (no inline styles exist; styling goes through the
+  CSSOM) plus `script-src 'self'`, `object-src 'none'`, `base-uri 'none'`.
+- Electron fuses in the electron-builder config: RunAsNode, NODE_OPTIONS and Node CLI
+  inspect arguments off; cookie encryption, embedded ASAR integrity validation and
+  only-load-from-ASAR on (packaged builds).
+- Deny-all permission request/check handlers on the default session; `<webview>` attach
+  prevented for every web contents.
+- Type and length guards on every IPC argument coming from a renderer (`isStr`, `isInt`,
+  `isObj`): apps, shelf, clipboard, downloads, features, general, location, calendar,
+  support links, media commands, meeting links, mini player requests, island rect, focus.
+- Mini player's loopback server serves its three files only under a random 32-hex path and
+  only for GET; `startServer`/`stopServer`/`baseUrl` exported and unit-tested.
+- Test stub gained minimal `ipcMain`/`BrowserWindow`/`screen` so window modules load.
+
+**Checks ran**: `npm run verify` (59 parse, lint clean, tsc 0, 35/35 tests incl. the new
+mini-server test); Electron launch with the sandboxed island: bridge present, sprites and
+Qur'an font load, settings window works, log shows no CSP or preload errors.
+
+**Still open** (see audit): code signing (owner), shelf drop nonce, static-glass privacy
+switch + PRIVACY.md, geolocation vendor consolidation, `reg.exe` polling in the helper, CI
+`npm audit`.

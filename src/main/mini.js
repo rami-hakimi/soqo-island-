@@ -2,6 +2,7 @@
 // The page is served from a local http server so the YouTube embed gets a real origin
 // and referrer (embeds refuse to play from file://).
 const http = require('http');
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { BrowserWindow, screen, ipcMain, shell } = require('electron');
@@ -18,6 +19,7 @@ const EDGE_GAP = 16;
 
 let server = null;
 let port = 0;
+let token = ''; // random path prefix: other local processes cannot guess the page's URL
 let win = null;
 let current = null;      // { id, t, appId, title, onClose }
 let lastTime = 0;
@@ -34,12 +36,12 @@ function startServer() {
   return new Promise((resolve) => {
     server = http.createServer((req, res) => {
       const { pathname } = new URL(req.url, 'http://localhost');
-      const type = FILES[pathname];
+      const type = pathname.startsWith(`/${token}/`) ? FILES[pathname.slice(token.length + 1)] : undefined;
       if (req.method !== 'GET' || !type) {
         res.writeHead(404);
         return res.end();
       }
-      fs.readFile(path.join(ROOT, pathname), (err, data) => {
+      fs.readFile(path.join(ROOT, pathname.slice(token.length + 1)), (err, data) => {
         if (err) {
           res.writeHead(500);
           return res.end();
@@ -48,8 +50,9 @@ function startServer() {
         res.end(data);
       });
     });
+    token = crypto.randomBytes(16).toString('hex');
     server.listen(0, '127.0.0.1', () => {
-      port = server.address().port;
+      port = /** @type {import('net').AddressInfo} */ (server.address()).port;
       resolve();
     });
   });
@@ -118,11 +121,12 @@ function createWindow() {
       preload: PRELOAD,
       contextIsolation: true,
       nodeIntegration: false,
+      sandbox: true,
       autoplayPolicy: 'no-user-gesture-required',
     },
   });
   // links in the embed (video title, logo) open in the default browser, not an app window
-  const own = (url) => url.startsWith(`http://127.0.0.1:${port}/`);
+  const own = (url) => url.startsWith(baseUrl());
   const external = (url) => { if (/^https:\/\//i.test(url)) shell.openExternal(url); };
   win.webContents.setWindowOpenHandler(({ url }) => {
     external(url);
@@ -160,7 +164,7 @@ async function open(opts) {
   lastTime = opts.t;
   if (!win) createWindow();
   const q = new URLSearchParams({ v: opts.id, t: opts.t.toFixed(2), title: opts.title || '' });
-  await win.loadURL(`http://127.0.0.1:${port}/index.html?${q}`);
+  await win.loadURL(`${baseUrl()}/index.html?${q}`);
   win.show();
 }
 
@@ -203,4 +207,14 @@ ipcMain.on('mini-resize-end', () => {
   snap();
 });
 
-module.exports = { open, close, isOpen: () => !!win };
+const baseUrl = () => `http://127.0.0.1:${port}/${token}`;
+
+function stopServer() {
+  return new Promise((resolve) => {
+    if (!server) return resolve();
+    server.close(() => resolve());
+    server = null;
+  });
+}
+
+module.exports = { open, close, isOpen: () => !!win, startServer, stopServer, baseUrl };

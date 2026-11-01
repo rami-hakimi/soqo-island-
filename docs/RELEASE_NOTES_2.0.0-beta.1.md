@@ -41,4 +41,4 @@ them.
 Nova Island by AmerTech (GPL-3.0) for the foundation; the King Fahd Glorious Quran Printing
 Complex for the Hafs font; Open-Meteo for weather data.
 
-Developed by Rami Al-Hakimi — https://github.com/rami-hakimi
+Developed by Rami al-Hakimi — https://github.com/rami-hakimi

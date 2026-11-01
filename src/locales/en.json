@@ -448,7 +448,7 @@
   "p.privacy.liveGlass": "Live glass backdrop",
   "p.privacy.liveGlassHint": "Captures the screen area under the island to blur it; the capture never leaves the app. Off: a plain dark pane and no capture",
   "p.general.startWithWindowsHint": "Starts quietly as the floating island when you sign in. Also listed under Windows Settings › Apps › Startup.",
-  "p.support.developer": "Developed by Rami Al-Hakimi",
+  "p.support.developer": "Developed by Rami al-Hakimi",
   "p.support.developerHint": "Netherlands · free and open source",
   "p.support.license": "License",
   "p.support.thirdParty": "Third-party",

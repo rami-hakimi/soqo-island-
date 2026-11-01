@@ -28,7 +28,9 @@ function scanOnce() {
     ps.stderr.setEncoding('utf8');
     ps.stdout.on('data', (d) => (out += d));
     ps.stderr.on('data', (d) => (errOut += d));
-    ps.on('exit', (code) => {
+    // 'close', not 'exit': exit can fire before the last stdout chunk has been read, which
+    // showed up as an empty catalogue on the first try (the retry then succeeded)
+    ps.on('close', (code) => {
       try {
         const list = JSON.parse(out.replace(/^\uFEFF/, '').trim());
         const items = (Array.isArray(list) ? list : [list]).filter((a) => a && a.name && a.id);

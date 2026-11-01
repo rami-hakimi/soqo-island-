@@ -21,7 +21,7 @@ using Windows.Storage.Streams;
 [assembly: AssemblyTitle("Soqo Island Helper")]
 [assembly: AssemblyDescription("System bridge for Soqo Island (media, volume, brightness, clipboard, windows)")]
 [assembly: AssemblyProduct("Soqo Island")]
-[assembly: AssemblyCopyright("Rami Al-Hakimi and contributors, GPL-3.0. Based on Nova Island by AmerTech.")]
+[assembly: AssemblyCopyright("Rami al-Hakimi and contributors, GPL-3.0. Based on Nova Island by AmerTech.")]
 [assembly: AssemblyVersion("2.0.0.0")]
 [assembly: AssemblyFileVersion("2.0.0.0")]
 

@@ -345,8 +345,8 @@ upstream); the helper's Start-menu scan logged one empty first answer and succee
 
 ## Stage 11 — Attribution, release documents, installed-app tests (2026-11-01) ✅
 **Changes**
-- Developer attribution **Rami Al-Hakimi / رامي الحكيمي** in Settings › Support › About
-  ("Developed by Rami Al-Hakimi", GitHub button), `package.json` author, product copyright,
+- Developer attribution **Rami al-Hakimi / رامي الحكيمي** in Settings › Support › About
+  ("Developed by Rami al-Hakimi", GitHub button), `package.json` author, product copyright,
   helper version resource, README, release notes. Upstream (Nova Island / AmerTech, GPL-3.0)
   and third-party credits kept in About › Credits, `NOTICE.md`, README and the copyright line.
 - Version `2.0.0-beta.1`. NSIS installer in English and Arabic with a language selector;
@@ -370,7 +370,7 @@ upstream); the helper's Start-menu scan logged one empty first answer and succee
   in dev mode created and removed `Startup\Soqo Island.lnk`.
 - **Installer**: `dist\Soqo-Island-Setup-2.0.0-beta.1.exe` (113 MB), silent install in 22 s
   to `%LOCALAPPDATA%\Programs\Soqo Island`, Start-menu and desktop shortcuts, Apps & features
-  entry "Soqo Island 2.0.0-beta.1" publisher Rami Al-Hakimi, GUI subsystem (no console),
+  entry "Soqo Island 2.0.0-beta.1" publisher Rami al-Hakimi, GUI subsystem (no console),
   launched from the user profile independent of the dev folder, `island ready` logged.
 - **Launch at startup** from Settings on the installed app: HKCU `Run` value
   `electron.app.Soqo Island` = installed exe path written, removed, written again; no
@@ -445,13 +445,13 @@ real uninstall → exe, shortcuts and value gone; final reinstall → startup on
   upgrade and after launch; exe and helper timestamps updated; launched from the user profile,
   `island ready`.
 - **Branding of installed artefacts**: exe ProductName/FileDescription "Soqo Island", company
-  "Rami Al-Hakimi", copyright with the upstream notice; helper "Soqo Island Helper"; installer
+  "Rami al-Hakimi", copyright with the upstream notice; helper "Soqo Island Helper"; installer
   ProductName "Soqo Island"; Start-menu and desktop shortcuts named "Soqo Island" pointing at
   the installed exe (description "Soqo Island — A Living Island for Windows (سوكو آيلاند)",
   shown as `?` by the ASCII console only); Apps & features "Soqo Island 2.0.0-beta.1",
-  publisher Rami Al-Hakimi; tray registration for the installed exe. DOM scan of the island
+  publisher Rami al-Hakimi; tray registration for the installed exe. DOM scan of the island
   and every settings page in English and Arabic: zero old-brand tokens; About shows
-  "Developed by Rami Al-Hakimi" / "تطوير رامي الحكيمي".
+  "Developed by Rami al-Hakimi" / "تطوير رامي الحكيمي".
 - **Timer sizes on the installed build**: identical results to the dev run (Small 300×32,
   Medium 250×44 → 322 on hover with controls, Large 310×60 → 394 on hover, 24/44 px digits,
   pause froze the countdown at 589 s and resume continued, click opened the island, Arabic
@@ -471,9 +471,29 @@ real uninstall → exe, shortcuts and value gone; final reinstall → startup on
 - Known, pre-existing: the helper's first `apps` catalogue answer is sometimes empty and is
   logged as an error before the retry succeeds.
 
+## Stage 14 — Final polish: name spelling, logo, scan reliability (2026-11-02) ✅
+- Developer name spelled **Rami al-Hakimi** (lower-case "al") everywhere: package author and
+  copyright, helper version resource, About, README, release notes. The Arabic credit
+  «تطوير رامي الحكيمي» was already stored in correct logical order (checked code point by
+  code point: ت ط و ي ر ␠ ر ا م ي ␠ ا ل ح ك ي م ي); the apparent reversal was the terminal
+  rendering of right-to-left text in a report, not the data.
+- Settings title bar and About row now show the approved Soqo Island dolphin icon
+  (`build/icon.png`, derived from the approved splash artwork) instead of the former CSS
+  pill; Windows icons (`icon.ico`) and the tray silhouette already came from the same source.
+- **Start-menu scan**: root cause found. `apps.js` parsed the helper's output on the child
+  process's `exit` event, which can fire before the last stdout chunk has been read; a ~40 KB
+  catalogue therefore arrived truncated or empty on the first try and the retry masked it.
+  Both spawn sites now wait for `close` (the mini player's `yturl` lookup had the same
+  pattern). Retry logic unchanged. Three dev launches: 184 entries each, zero failures logged.
+- Islamic Features: new test for existing Soqo Island profiles (explicit true/false kept,
+  pre-switch profile without the key defaults to off, no re-derivation without the import
+  marker) next to the fresh-install and imported-profile tests → 48 tests. The installed
+  profile on this machine kept `islamic=true` through the last upgrade (its own setting).
+- `npm run verify` green (69 scripts, lint, tsc, i18n 468/475, 48 tests).
+
 **Installed-app branding scan** (DevTools DOM walk of the island and all settings pages in
 English and Arabic, after the final build): zero matches for the old names; Downloads rows
-read "IDM downloads / Browser downloads …", About reads "Developed by Rami Al-Hakimi" /
+read "IDM downloads / Browser downloads …", About reads "Developed by Rami al-Hakimi" /
 "تطوير رامي الحكيمي". The only remaining upstream mention in the interface is the
 attribution behind About › Credits (GPL notice), plus `NOTICE.md`, README licence section
 and the copyright line.

@@ -16,7 +16,7 @@
     "i18n:check": "node scripts/i18n-check.js"
   },
   "author": {
-    "name": "Rami Al-Hakimi",
+    "name": "Rami al-Hakimi",
     "url": "https://github.com/rami-hakimi"
   },
   "license": "GPL-3.0-only",
@@ -32,7 +32,7 @@
   "build": {
     "appId": "com.soqoisland.app",
     "productName": "Soqo Island",
-    "copyright": "Copyright © 2026 Rami Al-Hakimi and Soqo Island contributors. Based on Nova Island © 2026 AmerTech (GPL-3.0).",
+    "copyright": "Copyright © 2026 Rami al-Hakimi and Soqo Island contributors. Based on Nova Island © 2026 AmerTech (GPL-3.0).",
     "electronLanguages": [
       "en-US",
       "ar"

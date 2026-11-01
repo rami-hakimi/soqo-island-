@@ -1,0 +1,86 @@
+{
+  "name": "nova-island",
+  "version": "1.4.0",
+  "description": "A living island for your Windows desktop",
+  "main": "nova.js",
+  "scripts": {
+    "start": "electron .",
+    "check": "node scripts/check-syntax.js",
+    "lint": "eslint .",
+    "test": "node --require ./test/helpers/setup.js --test \"test/*.test.js\"",
+    "verify": "npm run check && npm run lint && npm test",
+    "helper:build": "cmd /c helper\build.cmd",
+    "dist": "electron-builder --win nsis",
+    "dist:portable": "electron-builder --win portable"
+  },
+  "author": "AmerTech",
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "electron": "^44.7.2",
+    "electron-builder": "^26.17.0",
+    "eslint": "^9.39.5",
+    "globals": "^15.15.0"
+  },
+  "build": {
+    "appId": "com.dynamicnova.app",
+    "productName": "Nova Island",
+    "copyright": "Copyright © 2026 Nova Island by AmerTech",
+    "electronLanguages": [
+      "en-US",
+      "ar"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "**/*",
+      "build/icon.png",
+      "build/icon.ico",
+      "!promo/**",
+      "!dist/**",
+      "!*.cmd",
+      "!setup-log.txt",
+      "!**/*.map",
+      "!helper/*.cs",
+      "!helper/*.cmd"
+    ],
+    "publish": {
+      "provider": "github",
+      "owner": "NOVA-TECH-KIT",
+      "repo": "nova-island"
+    },
+    "asarUnpack": [
+      "helper/nova-helper.exe"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico",
+      "executableName": "Nova Island"
+    },
+    "nsis": {
+      "oneClick": false,
+      "artifactName": "Nova-Island-Setup-${version}.${ext}",
+      "license": "LICENSE",
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Nova Island",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "portable": {
+      "artifactName": "Nova Island ${version} portable.exe"
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11",
+    "node-ical": "^0.27.3"
+  }
+}

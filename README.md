@@ -63,7 +63,12 @@ Press **Ctrl + Alt + I** to open the island. Right-click it (or the tray icon) f
   the stage plan
 - [`docs/MIGRATION_STATUS.md`](docs/MIGRATION_STATUS.md) — what has been done and verified
 - [`docs/REGRESSION_CHECKLIST.md`](docs/REGRESSION_CHECKLIST.md) — feature-by-feature checks
-- [`docs/SECURITY_AUDIT.md`](docs/SECURITY_AUDIT.md) — security findings and the privacy map
+- [`docs/SECURITY_AUDIT.md`](docs/SECURITY_AUDIT.md) — security findings and their status
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — processes, modules, trust boundaries
+- [`docs/LOCALIZATION.md`](docs/LOCALIZATION.md) — English / Arabic, RTL, adding a language
+- [`docs/PRIVACY.md`](docs/PRIVACY.md) — what is read, stored and sent (nothing is tracked)
+- [`docs/RELEASING.md`](docs/RELEASING.md) — build, sign, publish (owner-approved only)
+- [`SECURITY.md`](SECURITY.md) — reporting vulnerabilities
 - [`NOTICE.md`](NOTICE.md) — attribution and third-party licences
 
 ## Coming from Nova Island

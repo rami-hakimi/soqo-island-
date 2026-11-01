@@ -188,7 +188,7 @@ step, then preloads, then main. Renderers stay plain scripts until a bundler is 
 | 7 | Visual refresh: ocean dark-glass tokens (turquoise/cyan/blue accents), new app icon, animation polish, DPI/multi-monitor checks, reduced motion audit | Screenshots reviewed by owner |
 | 8 | Docs & release engineering: README (EN/AR), ARCHITECTURE, LOCALIZATION, PRIVACY, SECURITY.md, RELEASING; GitHub Actions Windows build (no publish); updater pointed at new repo | Owner authorises first release |
 
-Stages 1–3 are executed first. Later stages each produce their own status entry.
+Status per stage lives in `MIGRATION_STATUS.md` (stages 0–5 complete, 7 and 8 first passes done on 2026-11-01).
 
 ---
 

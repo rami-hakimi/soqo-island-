@@ -7,7 +7,7 @@
     window.soqi?.react('notification');
     const portrait = s.height > s.width;
     if (s.auto) {
-      showToast('shot-auto', portrait ? 'Image saved' : 'Screenshot saved', 'Added to Shelf ✓', 0, 4500);
+      showToast('shot-auto', portrait ? t('shot.imageSaved') : t('shot.saved'), t('shot.addedToShelf'), 0, 4500);
       state.toastAction = () => {
         selectTab('shelf');
         state.hover = true;
@@ -15,8 +15,8 @@
       };
       return;
     }
-    showToast('shot', portrait ? 'Image copied' : 'Screenshot copied', feat('tabShelf') ? 'Add to Shelf' : '', 0, 6000);
+    showToast('shot', portrait ? t('shot.imageCopied') : t('shot.copied'), feat('tabShelf') ? t('shot.addToShelf') : '', 0, 6000);
     if (feat('tabShelf')) state.toastAction = () => bridge.shotToShelf();
   });
-  bridge.onShotSaved((s) => showToast('shot-saved', s.name, 'On the Shelf', 0, 2600));
+  bridge.onShotSaved((s) => showToast('shot-saved', s.name, t('shot.onShelf'), 0, 2600));
 })();

@@ -35,6 +35,9 @@ const calendar = require('./calendar');
 const network = require('./network');
 const prefsWindow = require('./prefs-window');
 const updater = require('./updater');
+const i18n = require('./i18n');
+i18n.setSetting(features.get().lang);
+const t = (key, params) => i18n.t(key, params);
 
 // Keep our own windows (the mini player) out of Windows' media sessions, so the island and
 // the per-app commands keep targeting the browser tab rather than the mini player.
@@ -800,31 +803,31 @@ app.on('second-instance', (_e, argv) => {
 // --- menus ---
 function appMenu() {
   return Menu.buildFromTemplate([
-    { label: 'Soqo Island', enabled: false },
+    { label: t('app.name'), enabled: false },
     { type: 'separator' },
     {
-      label: 'Show island',
+      label: t('menu.show'),
       type: 'checkbox',
       checked: !userHidden,
       click: (item) => { userHidden = !item.checked; updateVisibility(); notifyGeneral(); },
     },
     {
-      label: 'Vertical (dock left / right)',
+      label: t('menu.vertical'),
       type: 'checkbox',
       checked: prefs.vertical,
       click: (item) => setVertical(item.checked),
     },
-    { label: 'Reset position', click: resetPosition },
+    { label: t('menu.resetPosition'), click: resetPosition },
     {
-      label: 'Start with Windows',
+      label: t('menu.startWithWindows'),
       type: 'checkbox',
       checked: startsWithWindows(),
       click: (item) => { setStartWithWindows(item.checked); notifyGeneral(); },
     },
-    { label: 'Expand / collapse   Ctrl+Alt+I', click: () => send('toggle') },
-    { label: 'Settings…', click: () => prefsWindow.open() },
+    { label: t('menu.toggle'), click: () => send('toggle') },
+    { label: t('menu.settings'), click: () => prefsWindow.open() },
     { type: 'separator' },
-    { label: 'Quit', click: () => app.quit() },
+    { label: t('menu.quit'), click: () => app.quit() },
   ]);
 }
 
@@ -847,6 +850,8 @@ ipcMain.on('features-set', (_e, patch) => { if (isObj(patch)) features.set(patch
 ipcMain.on('features-reset', () => features.reset());
 ipcMain.on('reminder-preview', () => send('reminder-now'));
 ipcMain.handle('general-get', () => generalState());
+ipcMain.on('i18n-get-sync', (e) => { e.returnValue = i18n.payload(); });
+ipcMain.handle('i18n-get', () => i18n.payload());
 // Settings > Support: the page names a link, main holds the addresses
 const SUPPORT_LINKS = {
   github: 'https://github.com/rami-hakimi/soqo-island-',
@@ -901,7 +906,7 @@ const folderDownloads = require('./browser-downloads');
 ipcMain.handle('dl-folders', () => folderDownloads.folderList());
 ipcMain.handle('dl-folder-add', async (e) => {
   const win = BrowserWindow.fromWebContents(e.sender);
-  const r = await dialog.showOpenDialog(win, { title: 'Add a download folder', properties: ['openDirectory'] });
+  const r = await dialog.showOpenDialog(win, { title: t('dialog.addFolder'), properties: ['openDirectory'] });
   return r.canceled || !r.filePaths[0] ? folderDownloads.folderList() : folderDownloads.addFolder(r.filePaths[0]);
 });
 ipcMain.handle('dl-folder-remove', (_e, p) => (isStr(p, 1024) ? folderDownloads.removeFolder(p) : folderDownloads.folderList()));
@@ -938,6 +943,12 @@ ipcMain.on('general-set', (_e, key, value) => {
 let prayerCalc = `${features.get().asrHanafi}|${features.get().hijriAdjust}`;
 let autoUpdate = features.get().autoUpdate;
 features.onChange((f) => {
+  if (i18n.setSetting(f.lang)) {
+    const payload = i18n.payload();
+    send('i18n', payload);
+    prefsWindow.send('i18n', payload);
+    if (tray) tray.setToolTip(t('app.name'));
+  }
   if (!f.addrIsland && omni) {
     omni = null;
     omniKey = '';
@@ -983,7 +994,7 @@ function trayIcon() {
 
 function buildTray() {
   tray = new Tray(trayIcon());
-  tray.setToolTip('Soqo Island');
+  tray.setToolTip(t('app.name'));
   tray.on('click', () => tray.popUpContextMenu(appMenu()));
   tray.on('right-click', () => tray.popUpContextMenu(appMenu()));
 }

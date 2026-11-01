@@ -19,13 +19,13 @@
   const iconHtml = (a) => (a.icon ? `<img src="${a.icon}" alt="" draggable="false">` : esc((a.name || '?').trim()[0] || '?'));
 
   function updateBar() {
-    editBtn.textContent = editing ? 'Done' : 'Edit';
+    editBtn.textContent = editing ? t('apps.done') : t('apps.edit');
     editBtn.classList.toggle('on', editing);
     editBtn.disabled = !pinned.length && !editing;
     addBtn.disabled = pinned.length >= MAX_PINNED;
     hint.textContent = editing
-      ? 'Drag to reorder · × to remove'
-      : `${pinned.length}/${MAX_PINNED} · Click to open`;
+      ? t('apps.reorderHint')
+      : t('apps.countHint', { n: pinned.length, max: MAX_PINNED });
   }
 
   function setEditing(on) {
@@ -37,7 +37,7 @@
   function renderGrid() {
     grid.innerHTML = '';
     if (!pinned.length) {
-      grid.innerHTML = '<div class="apps-empty">No apps yet. Use Add to pin your favourites.</div>';
+      grid.innerHTML = `<div class="apps-empty">${esc(t('apps.empty'))}</div>`;
     }
     for (const a of pinned) {
       const b = document.createElement('button');
@@ -47,7 +47,7 @@
       b.innerHTML =
         `<span class="app-ico ${a.icon ? '' : 'letter'}">${iconHtml(a)}</span>` +
         `<span class="app-name">${esc(a.name)}</span>` +
-        `<span class="x" role="button" aria-label="Remove ${esc(a.name)}">${ICON_X}</span>`;
+        `<span class="x" role="button" aria-label="${esc(t('apps.remove', { name: a.name }))}">${ICON_X}</span>`;
       b.addEventListener('click', (e) => {
         if (editing) {
           if (e.target.closest('.x')) bridge.apps.remove(a.id);
@@ -130,19 +130,19 @@
   // ---------- picker ----------
   function renderList() {
     if (!catalog) {
-      listEl.innerHTML = '<div class="clip-empty">Loading apps…</div>';
+      listEl.innerHTML = `<div class="clip-empty">${esc(t('apps.loading'))}</div>`;
       return;
     }
     const q = search.value.trim().toLowerCase();
     const ids = new Set(pinned.map((p) => p.id));
     const items = catalog.filter((a) => !q || a.name.toLowerCase().includes(q)).slice(0, 150);
     listEl.innerHTML = '';
-    if (!items.length) listEl.innerHTML = '<div class="clip-empty">No apps found</div>';
+    if (!items.length) listEl.innerHTML = `<div class="clip-empty">${esc(t('apps.none'))}</div>`;
     for (const a of items) {
       const b = document.createElement('button');
       const on = ids.has(a.id);
       b.className = `pick${on ? ' on' : ''}`;
-      b.title = on ? `Remove ${a.name}` : `Add ${a.name}`;
+      b.title = on ? t('apps.remove', { name: a.name }) : t('apps.addName', { name: a.name });
       b.innerHTML = `${a.icon ? `<img src="${a.icon}" alt="">` : `<span class="ph">${esc(a.name[0] || '?')}</span>`}<span>${esc(a.name)}</span>`;
       b.disabled = !on && pinned.length >= MAX_PINNED;
       b.addEventListener('click', () => (on ? bridge.apps.remove(a.id) : bridge.apps.add(a.id)));
@@ -201,6 +201,7 @@
     if (!drag) renderGrid();
     if (!picker.hidden) renderList();
   };
+  window.addEventListener('island:i18n', () => { updateBar(); if (!picker.hidden) renderList(); });
   bridge.onApps(apply);
   bridge.apps.list().then(apply);
 })();

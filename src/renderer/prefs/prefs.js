@@ -1,12 +1,18 @@
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
 const api = window.prefs;
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+let I18N = I18n.create(api.i18n);
+const t = (key, params) => I18N.t(key, params);
+const LOCALE = () => I18N.locale || 'en-US';
+I18n.applyDom(I18N);
+document.title = t('prefs.windowTitle');
 
 let features = {};
 
 // ---- saved hint ----
 let savedTimer = null;
-function saved(text = 'Saved') {
+function saved(text = t('p.saved')) {
   $('#saved').textContent = text;
   $('#saved').classList.add('on');
   clearTimeout(savedTimer);
@@ -23,6 +29,7 @@ function nope(el) {
 function showFeatures(f) {
   features = f;
   $$('[data-feature]').forEach((el) => { el.checked = !!f[el.dataset.feature]; });
+  $$('[data-lang]').forEach((b) => b.setAttribute('aria-checked', String((f.lang || 'auto') === b.dataset.lang)));
   // child settings show only while every switch they depend on is on
   $$('[data-needs]').forEach((el) => el.classList.toggle('off', !el.dataset.needs.split(' ').every((k) => f[k])));
   showSteppers();
@@ -51,14 +58,18 @@ $$('[data-feature]').forEach((el) => el.addEventListener('change', () => {
 const TIME_STEPS = Array.from({ length: 48 }, (_, i) => i * 30);
 const stepsOf = (st) => (st.dataset.steps === 'time' ? TIME_STEPS : st.dataset.steps.split(',').map(Number));
 function unitText(n, unit) {
-  if (unit === 'glass') return `${n} glasses`;
-  if (unit === 'day') return n === 0 ? 'None' : `${n > 0 ? '+' : '−'}${Math.abs(n)} day${Math.abs(n) === 1 ? '' : 's'}`;
+  if (unit === 'glass') return t('unit.glasses', { n });
+  if (unit === 'day') {
+    if (n === 0) return t('unit.none');
+    const a = Math.abs(n);
+    return t(n > 0 ? (a === 1 ? 'unit.dayPlus' : 'unit.daysPlus') : (a === 1 ? 'unit.dayMinus' : 'unit.daysMinus'), { n: a });
+  }
   if (unit === 'time') {
     const d = new Date(2000, 0, 1, Math.floor(n / 60), n % 60);
-    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    return d.toLocaleTimeString(LOCALE(), { hour: 'numeric', minute: '2-digit' });
   }
-  if (unit === 'min') return n >= 60 && n % 60 === 0 ? `${n / 60} h` : `${n} min`;
-  return `${n} s`;
+  if (unit === 'min') return n >= 60 && n % 60 === 0 ? t('unit.h', { n: n / 60 }) : t('unit.min', { n });
+  return t('unit.s', { n });
 }
 function showSteppers() {
   $$('.stepper').forEach((st) => {
@@ -90,8 +101,11 @@ $('#rm-preview').addEventListener('click', () => api.previewReminder());
 function showGeneral(g) {
   $$('[data-general]').forEach((el) => { el.checked = !!g[el.dataset.general]; });
   $$('[data-orient]').forEach((b) => b.setAttribute('aria-checked', String((b.dataset.orient === 'v') === !!g.vertical)));
-  if (g.version) $('#version').textContent = `Version ${g.version}`;
+  // the version is isolated (LRI … PDI) so it keeps its order inside Arabic text
+  if (g.version) $('#version').textContent = t('p.nav.version', { v: `⁦${g.version}⁩` });
+  lastGeneral = g;
 }
+let lastGeneral = null;
 $$('[data-support]').forEach((b) => b.addEventListener('click', () => api.openSupport(b.dataset.support)));
 $$('[data-general]').forEach((el) => el.addEventListener('change', () => {
   api.setGeneral(el.dataset.general, el.checked);
@@ -103,15 +117,21 @@ $$('[data-orient]').forEach((b) => b.addEventListener('click', () => {
 }));
 $$('[data-general-action]').forEach((b) => b.addEventListener('click', () => {
   api.setGeneral(b.dataset.generalAction, true);
-  saved('Done');
+  saved(t('p.savedDone'));
+}));
+$$('[data-lang]').forEach((b) => b.addEventListener('click', () => {
+  api.setFeatures({ lang: b.dataset.lang });
+  saved();
 }));
 
 // ---- location ----
+let lastLocation = null;
 function showLocation(info) {
+  lastLocation = info;
   const manual = info?.mode === 'manual';
   $('#loc-now').textContent = manual
     ? `${info.name}${info.country ? `, ${info.country}` : ''}`
-    : `Auto${info?.name ? ` · ${info.name}` : ''}`;
+    : info?.name ? t('p.location.autoWith', { name: info.name }) : t('p.location.auto');
   $('#loc-auto').hidden = !manual;
 }
 async function searchCity() {
@@ -119,14 +139,14 @@ async function searchCity() {
   const box = $('#loc-results');
   if (q.length < 2) return;
   box.hidden = false;
-  box.innerHTML = '<div class="none">Searching…</div>';
+  box.innerHTML = `<div class="none">${esc(t('p.location.searching'))}</div>`;
   const res = await api.searchCity(q);
   if (!res) {
-    box.innerHTML = '<div class="none">Search failed. Check your connection.</div>';
+    box.innerHTML = `<div class="none">${esc(t('p.location.failed'))}</div>`;
     return;
   }
   if (!res.length) {
-    box.innerHTML = '<div class="none">No results</div>';
+    box.innerHTML = `<div class="none">${esc(t('p.location.none'))}</div>`;
     return;
   }
   box.innerHTML = '';
@@ -154,40 +174,43 @@ api.onLocation(showLocation);
 api.location().then(showLocation);
 
 // ---- calendar ----
+let lastCalendar = null;
 function showCalendar(c) {
+  lastCalendar = c;
   const el = $('#cal-status');
   if (!c?.hasUrl && !c?.updated && !c?.error) {
-    el.textContent = 'Not linked';
+    el.textContent = t('p.cal.notLinked');
     return;
   }
   if (c.error) {
-    el.textContent = `Can't read it (${c.error})`;
+    el.textContent = t('p.cal.cantRead', { error: c.error });
     return;
   }
   const next = c.events?.find((e) => e.end > Date.now());
   el.textContent = next
-    ? `Linked · next: ${next.title} ${new Date(next.start).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`
-    : 'Linked · nothing in the next 24 h';
+    ? t('p.cal.linkedNext', { title: next.title, time: new Date(next.start).toLocaleTimeString(LOCALE(), { hour: 'numeric', minute: '2-digit' }) })
+    : t('p.cal.linkedNone');
 }
 $('#cal-save').addEventListener('click', async () => {
   const res = await api.setCalendar($('#cal-url').value);
   if (!res?.ok) {
-    $('#cal-status').textContent = 'Use an https:// or webcal:// link';
+    $('#cal-status').textContent = t('p.cal.badLink');
     return;
   }
   $('#cal-url').value = '';
-  $('#cal-status').textContent = 'Connecting…';
+  $('#cal-status').textContent = t('p.cal.connecting');
   saved();
 });
 api.onCalendar((c) => showCalendar({ ...c, hasUrl: true }));
 api.calendar().then(showCalendar);
 
 // ---- download folders (browser downloads) ----
-const esc = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+let lastFolders = null;
 function showFolders(list) {
+  lastFolders = list;
   $('#dl-folders').innerHTML = (list || []).map((f) => `<div class="row folder"><small class="path" title="${esc(f.path)}">${esc(f.path)}</small>${f.fixed
-    ? '<small class="val">Windows Downloads</small>'
-    : `<button class="btn" data-folder="${esc(f.path)}" aria-label="Remove folder">✕</button>`}</div>`).join('');
+    ? `<small class="val">${esc(t('p.dl.windowsDownloads'))}</small>`
+    : `<button class="btn" data-folder="${esc(f.path)}" aria-label="${esc(t('p.dl.removeFolder'))}">✕</button>`}</div>`).join('');
 }
 $('#dl-folders').addEventListener('click', async (e) => {
   const b = e.target.closest('[data-folder]');
@@ -205,10 +228,10 @@ async function showBridge() {
   const s = await api.bridgeStatus();
   const el = $('#bridge-state');
   el.className = `status ${s.state}`;
-  el.textContent = s.state === 'ok' ? 'Running' : s.state === 'starting' ? 'Starting…' : 'Stopped';
+  el.textContent = s.state === 'ok' ? t('p.trouble.helperRunning') : s.state === 'starting' ? t('p.trouble.helperStarting') : t('p.trouble.helperStopped');
   const detail = $('#bridge-detail');
   detail.hidden = s.state !== 'failed';
-  detail.textContent = 'Allow Soqo Island in your antivirus, then restart it';
+  detail.textContent = t('p.trouble.helperHint');
 }
 showBridge();
 setInterval(showBridge, 4000);
@@ -216,12 +239,12 @@ setInterval(showBridge, 4000);
 $('#open-log').addEventListener('click', () => api.openLog());
 $('#copy-report').addEventListener('click', async () => {
   await api.copyReport();
-  saved('Report copied');
+  saved(t('p.savedReport'));
 });
 
 $('#reset-all').addEventListener('click', () => {
   api.resetFeatures();
-  saved('Reset to defaults');
+  saved(t('p.savedReset'));
 });
 
 // ---- window buttons ----
@@ -288,6 +311,17 @@ function clearSearch() {
 }
 $('#find').addEventListener('input', (e) => search(e.target.value));
 
+api.onI18n((payload) => {
+  I18N = I18n.create(payload);
+  I18n.applyDom(I18N);
+  document.title = t('prefs.windowTitle');
+  showSteppers();
+  if (lastGeneral) showGeneral(lastGeneral);
+  showLocation(lastLocation);
+  if (lastCalendar) showCalendar(lastCalendar);
+  showFolders(lastFolders);
+  showBridge();
+});
 api.onFeatures(showFeatures);
 api.onGeneral(showGeneral);
 api.features().then(showFeatures);

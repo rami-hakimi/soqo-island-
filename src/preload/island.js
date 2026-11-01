@@ -3,6 +3,9 @@ const { contextBridge, ipcRenderer, webUtils } = require('electron');
 const on = (channel) => (cb) => ipcRenderer.on(channel, (_e, data) => cb(data));
 
 contextBridge.exposeInMainWorld('soqo', {
+  // language + dictionary, fetched before the page's scripts run so nothing flashes in English
+  i18n: ipcRenderer.sendSync('i18n-get-sync'),
+  onI18n: on('i18n'),
   onMedia: on('media'),
   onToggle: on('toggle'),
   onHover: on('hover'),

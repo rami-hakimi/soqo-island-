@@ -217,3 +217,38 @@ Qur'an font load, settings window works, log shows no CSP or preload errors.
 **Still open** (see audit): code signing (owner), shelf drop nonce, static-glass privacy
 switch + PRIVACY.md, geolocation vendor consolidation, `reg.exe` polling in the helper, CI
 `npm audit`.
+
+## Stage 5 — English and Arabic (2026-11-01) ✅
+**Changes**
+- `src/shared/i18n.js` (UMD core: lookup with English fallback, `{param}` interpolation,
+  plural categories via `Intl.PluralRules` incl. Arabic zero/one/two/few/many/other,
+  `applyDom` for `data-i18n`, `-title`, `-placeholder`, `-aria`, `-alt`, `-html`).
+- `src/locales/en.json` (397 keys) and `ar.json` (404 keys incl. plural forms) covering the
+  island, settings, mini player, tray menu and dialogs. Arabic keeps Latin digits
+  (`ar-u-nu-latn`) so numbers read the same across the UI.
+- Language setting `lang: auto | en | ar` (`features.js` gained string enums); main resolves
+  `auto` against Windows' display language (`src/main/i18n.js`), hands renderers the
+  dictionary synchronously at preload time (no English flash) and broadcasts changes; the
+  tray menu, tooltip and dialog titles are translated.
+- Every page tagged with `data-i18n*`; every JavaScript string moved to `t()`. Prayer names,
+  Hijri months (English form computed in main next to the Arabic one), weather labels,
+  durations, download states, companion cards, toasts, the mini player and the settings
+  window follow the language live; views re-render on `island:i18n`.
+- Preserved: Qur'an verses, du'as and adhkar (unchanged data file, checksum test), the
+  Qur'anic scene title «أَقِمْ صَلَاتَكَ» (shown in Arabic in both languages), the KFGQPC font.
+- RTL: `dir` set on each document; layouts already used flex/logical properties in most
+  places; fixed the sidebar indicator, bidi-isolated the version string and the shortcut.
+- Settings › General › Language selector (Auto / English / العربية).
+- `scripts/i18n-check.js` (part of `npm run verify`): dictionary parity, unknown keys used in
+  code, unused keys (warning), hardcoded text or attributes in pages. 4 new unit tests.
+
+**Checks ran**: `npm run verify` green (60 parse, lint 0, tsc 0, i18n 0 problems, 39/39
+tests). Live run on Windows: switched to Arabic over the DevTools protocol — island
+`lang=ar dir=rtl`, tabs/chip/toasts/prayer tab/timer/system/shelf/scenes/companion card all
+Arabic and mirrored (21 screenshots reviewed), settings window title and all seven pages in
+Arabic, switch back to English from the settings page, zero page errors.
+
+**Not run / open**: Arabic review by a native speaker of the 404 strings (written by the
+migration, natural but unreviewed); city search now asks Open-Meteo in the UI language;
+Windows' own dialogs and
+the installer UI remain in Windows' language (NSIS multilanguage planned for Stage 8).

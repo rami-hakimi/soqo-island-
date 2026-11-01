@@ -61,7 +61,7 @@ input { font: inherit; color: inherit; }
 .side a svg { width: 17px; height: 17px; flex: none; }
 .side a:hover { background: rgba(255, 255, 255, .05); color: #fff; }
 .side a.on { background: rgba(255, 255, 255, .09); color: #fff; }
-.side a.on::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 2px; background: linear-gradient(var(--accent), var(--accent-2)); }
+.side a.on::before { content: ""; position: absolute; inset-inline-start: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 2px; background: linear-gradient(var(--accent), var(--accent-2)); }
 .side-foot { margin: auto 6px 0; color: var(--text-3); font-size: 11.5px; line-height: 1.8; }
 kbd { display: inline-block; padding: 0 5px; border-radius: 4px; background: rgba(255, 255, 255, .08); font: 600 10.5px var(--font); color: var(--text-2); }
 

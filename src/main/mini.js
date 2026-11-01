@@ -10,7 +10,8 @@ const settings = require('./settings');
 
 const ROOT = path.join(__dirname, '..', 'renderer', 'mini');
 const PRELOAD = path.join(__dirname, '..', 'preload', 'mini.js');
-const FILES = { '/index.html': 'text/html', '/mini.css': 'text/css', '/mini.js': 'text/javascript' };
+const FILES = { '/index.html': 'text/html', '/mini.css': 'text/css', '/mini.js': 'text/javascript', '/../../shared/i18n.js': 'text/javascript' };
+const SHARED = path.join(__dirname, '..', 'shared');
 const PAD = 10;          // transparent margin around the card (room for its shadow)
 const MIN_W = 280;
 const MAX_W = 960;
@@ -36,12 +37,16 @@ function startServer() {
   return new Promise((resolve) => {
     server = http.createServer((req, res) => {
       const { pathname } = new URL(req.url, 'http://localhost');
-      const type = pathname.startsWith(`/${token}/`) ? FILES[pathname.slice(token.length + 1)] : undefined;
+      // the page's own three files plus the shared translation core (served at /<token>/shared/i18n.js)
+      let rel = pathname.startsWith(`/${token}/`) ? pathname.slice(token.length + 1) : '';
+      if (rel === '/shared/i18n.js') rel = '/../../shared/i18n.js';
+      const type = rel ? FILES[rel] : undefined;
       if (req.method !== 'GET' || !type) {
         res.writeHead(404);
         return res.end();
       }
-      fs.readFile(path.join(ROOT, pathname.slice(token.length + 1)), (err, data) => {
+      const file = rel === '/../../shared/i18n.js' ? path.join(SHARED, 'i18n.js') : path.join(ROOT, rel);
+      fs.readFile(file, (err, data) => {
         if (err) {
           res.writeHead(500);
           return res.end();

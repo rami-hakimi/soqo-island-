@@ -2,7 +2,8 @@
 // (10 minutes before and at the time). Also feeds the idle pill and the vertical pill.
 (() => {
   const ORDER = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
-  const NAMES = { imsak: 'الإمساك', fajr: 'الفجر', sunrise: 'الشروق', dhuhr: 'الظهر', asr: 'العصر', maghrib: 'المغرب', isha: 'العشاء' };
+  // prayer names follow the interface language (Arabic names in Arabic, transliterations in English)
+  const NAMES = new Proxy({}, { get: (_o, k) => t(`prayer.${String(k)}`) });
   const PRAYERS = ORDER.filter((k) => k !== 'sunrise');
   const isRamadan = (d) => d?.today?.hijriMonth === 9;
   const SOON_MIN = 10;
@@ -50,9 +51,9 @@
   // shown in the location's own time, like a mosque timetable
   const clock = (d) => {
     try {
-      return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', ...(zone ? { timeZone: zone } : {}) });
+      return d.toLocaleTimeString(LOCALE(), { hour: 'numeric', minute: '2-digit', ...(zone ? { timeZone: zone } : {}) });
     } catch {
-      return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      return d.toLocaleTimeString(LOCALE(), { hour: 'numeric', minute: '2-digit' });
     }
   };
   const left = (ms) => {
@@ -77,8 +78,8 @@
 
   function nextPrayer(d, now) {
     for (const k of PRAYERS) {
-      const t = at(d.today.date, d.today.times[k]);
-      if (t > now) return { key: k, time: t };
+      const at_ = at(d.today.date, d.today.times[k]);
+      if (at_ > now) return { key: k, time: at_ };
     }
     if (d.tomorrow) return { key: 'fajr', time: at(d.tomorrow.date, d.tomorrow.times.fajr) };
     return null;
@@ -89,14 +90,14 @@
     // in Ramadan the list starts with imsak (cached data from before may lack it)
     const order = isRamadan(d) && d.today.times.imsak ? ['imsak', ...ORDER] : ORDER;
     for (const k of order) {
-      const t = at(d.today.date, d.today.times[k]);
+      const at_ = at(d.today.date, d.today.times[k]);
       const row = document.createElement('div');
       row.className = 'pr-row';
       if (k === 'sunrise' || k === 'imsak') row.classList.add('sunrise');
       if (k === 'maghrib' && isRamadan(d)) row.classList.add('iftar');
-      if (next && next.key === k && next.time.toDateString() === t.toDateString()) row.classList.add('next');
-      else if (t <= now) row.classList.add('past');
-      row.innerHTML = `<b>${NAMES[k]}</b><span dir="ltr">${clock(t)}</span>`;
+      if (next && next.key === k && next.time.toDateString() === at_.toDateString()) row.classList.add('next');
+      else if (at_ <= now) row.classList.add('past');
+      row.innerHTML = `<b>${esc(NAMES[k])}</b><span dir="ltr">${clock(at_)}</span>`;
       listEl.append(row);
     }
   }
@@ -104,29 +105,30 @@
   function remind(d, now) {
     if (!alertsOn) return;
     for (const k of PRAYERS) {
-      const t = at(d.today.date, d.today.times[k]);
-      const diff = t - now;
+      const at_ = at(d.today.date, d.today.times[k]);
+      const diff = at_ - now;
       const id = `${d.today.date}-${k}`;
       if (diff <= 0 && diff > -60000 && !fired.has(`${id}-now`)) {
         fired.add(`${id}-now`);
-        note('🕌', `أذان ${NAMES[k]} ${clock(t)}`);
+        note('🕌', t('prayer.adhanNote', { name: NAMES[k], time: clock(at_) }));
         chime();
         // Soqi announces the adhan beside the card; the plain toast when that is off or there's no room
-        const iftar = k === 'maghrib' && isRamadan(d) ? ' · تقبّل الله صيامك' : '';
+        const iftar = k === 'maghrib' && isRamadan(d) ? t('prayer.iftarWish') : '';
+        // the title is Qur'anic (Ta-Ha 20:14) and stays in Arabic in every language
         const shown = feat('soqiPrayer') && window.playScene?.({
-          mood: 'notification', tone: 'gold', badge: '☾ الأذان', lang: 'ar',
+          mood: 'notification', tone: 'gold', badge: t('prayer.adhanBadge'), lang: I18N.lang,
           title: 'أَقِمْ صَلَاتَكَ', quran: true,
-          sub: `حان الآن وقت صلاة <b>${NAMES[k]}</b><bdi dir="ltr">${clock(t)}</bdi>${iftar}`,
+          sub: `${t('prayer.nowSub', { name: NAMES[k] })}<bdi dir="ltr">${clock(at_)}</bdi>${iftar}`,
           ms: 45000,
         });
         if (!shown) {
           island.classList.add('prayer-alert');
-          showToast('prayer', `حان الآن موعد صلاة ${NAMES[k]}`, clock(t), 0, 9000);
+          showToast('prayer', t('prayer.nowToast', { name: NAMES[k] }), clock(at_), 0, 9000);
           setTimeout(() => island.classList.remove('prayer-alert'), 9200);
         }
       } else if (diff > 0 && diff <= SOON_MIN * 60000 && diff > (SOON_MIN - 1) * 60000 && !fired.has(`${id}-soon`)) {
         fired.add(`${id}-soon`);
-        showToast('prayer-soon', `${NAMES[k]} بعد ${SOON_MIN} دقائق`, clock(t), 0, 5000);
+        showToast('prayer-soon', t('prayer.soonToast', { name: NAMES[k], min: SOON_MIN }), clock(at_), 0, 5000);
         window.soqi?.react('notification');
       }
     }
@@ -144,10 +146,10 @@
     let label;
     let target;
     if (now >= imsak && now < iftar) {
-      label = 'الإفطار';
+      label = t('prayer.iftar');
       target = iftar;
     } else {
-      label = 'الإمساك';
+      label = t('prayer.imsak');
       target = now < imsak ? imsak : d.tomorrow?.times?.imsak ? at(d.tomorrow.date, d.tomorrow.times.imsak) : null;
     }
     if (!target) return;
@@ -155,7 +157,7 @@
     $('#i-rmd-time').textContent = clock(target);
     $('#i-rmd-left').textContent = left(target - now);
     const ltr = (t) => `⁦${t}⁩`;
-    $('#pr-ramadan').textContent = `رمضان كريم · ${label} ${ltr(clock(target))} · بعد ${ltr(left(target - now))}`;
+    $('#pr-ramadan').textContent = t('prayer.ramadan', { label, time: ltr(clock(target)), left: ltr(left(target - now)) });
   }
 
   // soft descending three-note bell (shared AudioContext, renderer.js playTones)
@@ -176,14 +178,14 @@
       const ms = next.time - now;
       $('#pr-next-name').textContent = NAMES[next.key];
       $('#pr-count').textContent = left(ms);
-      $('#pr-next-time').textContent = `${next.time.toDateString() === now.toDateString() ? 'اليوم' : 'غدًا'} ${clock(next.time)}`;
+      $('#pr-next-time').textContent = `${next.time.toDateString() === now.toDateString() ? t('prayer.today') : t('prayer.tomorrow')} ${clock(next.time)}`;
       $('#i-pr-name').textContent = NAMES[next.key];
       $('#i-pr-time').textContent = clock(next.time);
       $('#i-pr-left').textContent = left(ms);
       $('#v-pr-name').textContent = NAMES[next.key];
       $('#v-pr-left').textContent = shortLeft(ms);
     }
-    $('#pr-hijri').textContent = d.today.hijri || '';
+    $('#pr-hijri').textContent = (I18N.lang === 'ar' ? d.today.hijri : d.today.hijriEn || d.today.hijri) || '';
     ramadan(d, now);
     $('#pr-city').textContent = [data.city, d.today.method].filter(Boolean).join(' · ');
 
@@ -205,6 +207,7 @@
     return n ? `${NAMES[n.key]} ${clock(n.time)}` : '';
   };
 
+  window.addEventListener('island:i18n', () => { lastListKey = ''; tick(); });
   bridge.onPrayer((p) => {
     data = p;
     lastListKey = '';

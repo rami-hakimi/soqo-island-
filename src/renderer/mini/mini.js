@@ -5,9 +5,11 @@ const q = new URLSearchParams(location.search);
 const id = q.get('v') || '';
 const start = Math.max(0, parseFloat(q.get('t') || '0') || 0);
 const frame = document.getElementById('yt');
+const I18N = I18n.create(mini.i18n);
+I18n.applyDom(I18N);
 
-document.getElementById('title').textContent = q.get('title') || 'Mini Player';
-document.title = q.get('title') || 'Mini Player';
+document.getElementById('title').textContent = q.get('title') || I18N.t('mini.title');
+document.title = q.get('title') || I18N.t('mini.title');
 
 let current = start;
 let ready = false;

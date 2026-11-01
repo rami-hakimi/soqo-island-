@@ -1,6 +1,11 @@
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
 const bridge = window.soqo;
+// language: dictionary handed over by the preload; re-created when the setting changes
+let I18N = I18n.create(bridge.i18n);
+const t = (key, params) => I18N.t(key, params);
+const LOCALE = () => I18N.locale; // undefined = the system's; Arabic keeps Latin digits
+I18n.applyDom(I18N);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const island = $('#island');
@@ -420,12 +425,12 @@ function selectTab(tab) {
 // ---------------- clock ----------------
 function tickClock() {
   const d = new Date();
-  const time = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-  const date = d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+  const time = d.toLocaleTimeString(LOCALE(), { hour: 'numeric', minute: '2-digit' });
+  const date = d.toLocaleDateString(LOCALE(), { weekday: 'short', month: 'short', day: 'numeric' });
   $('#x-clock').textContent = $('#i-time').textContent = time;
   $('#x-date').textContent = $('#i-date').textContent = date;
-  $('#v-time').textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-  $('#v-day').textContent = d.toLocaleDateString([], { weekday: 'short', day: 'numeric' });
+  $('#v-time').textContent = d.toLocaleTimeString(LOCALE(), { hour: '2-digit', minute: '2-digit', hour12: false });
+  $('#v-day').textContent = d.toLocaleDateString(LOCALE(), { weekday: 'short', day: 'numeric' });
 }
 tickClock();
 setInterval(tickClock, 5000);
@@ -632,12 +637,12 @@ bridge.onMedia((m) => {
   }
 
   if (m.has) {
-    $('#m-title').textContent = $('#p-title').textContent = m.title || 'Unknown';
+    $('#m-title').textContent = $('#p-title').textContent = m.title || t('media.unknown');
     const sub = m.artist || m.album || appName(m.app);
     $('#m-artist').textContent = $('#p-artist').textContent = sub;
-    $('#p-eyebrow').textContent = appName(m.app) ? `Now Playing · ${appName(m.app)}` : 'Now Playing';
+    $('#p-eyebrow').textContent = appName(m.app) ? t('media.nowPlayingIn', { app: appName(m.app) }) : t('media.nowPlaying');
   }
-  $('#x-app-name').textContent = m.has ? appName(m.app) || 'Media' : 'Idle';
+  $('#x-app-name').textContent = m.has ? appName(m.app) || t('chip.media') : t('chip.idle');
   $('#v-media').classList.toggle('browser-src', m.has && BROWSERS.some((b) => (m.app || '').toLowerCase().includes(b)) && !(m.app || '').toLowerCase().includes('firefox'));
   $('#v-media').classList.toggle('none', !m.has);
   setPlayingUI(!!m.playing);
@@ -711,7 +716,7 @@ pipBtn.addEventListener('click', async () => {
   const res = await bridge.miniOpen({ app: m.app, title: m.title, pos: mediaPos(), playing: !!m.playing });
   pipBtn.classList.remove('busy');
   if (!res?.ok) {
-    flashError(res?.error === 'no-url' ? "Couldn't find this video's YouTube link" : 'Works with YouTube in Chrome, Edge or Brave');
+    flashError(res?.error === 'no-url' ? t('media.pipNoUrl') : t('media.pipUnsupported'));
     return;
   }
   state.hover = false;
@@ -736,7 +741,7 @@ function setVolume(v) {
 }
 function showVolPct(vol, muted) {
   volIconClass($('.vol'), vol, muted);
-  $('#vol-pct').textContent = muted ? 'Muted' : `${Math.round(vol * 100)}%`;
+  $('#vol-pct').textContent = muted ? t('vol.muted') : `${Math.round(vol * 100)}%`;
 }
 const volSlider = makeSlider($('#vol-slider'), { onInput: setVolume });
 
@@ -816,7 +821,7 @@ function showToast(kind, label, value, pct, ms = 3200) {
 function showHud(kind, value, muted) {
   if (!feat(kind === 'vol' ? 'hudVolume' : 'hudBrightness')) return;
   const pct = muted ? 0 : value;
-  showToast(kind, '', muted ? 'Muted' : `${Math.round(value * 100)}%`, pct, 1600);
+  showToast(kind, '', muted ? t('vol.muted') : `${Math.round(value * 100)}%`, pct, 1600);
   if (kind === 'vol') {
     volIconClass($('.l-toast'), value, !!muted);
     volIconClass($('.l-vtoast'), value, !!muted);
@@ -830,14 +835,14 @@ if (navigator.getBattery) {
     const pct = () => `${Math.round(b.level * 100)}%`;
     b.addEventListener('chargingchange', () => {
       if (!feat('battery')) return;
-      if (b.charging) showToast('charging', 'Charging', pct(), b.level);
-      else showToast(b.level <= 0.2 ? 'low' : 'battery', 'On Battery', pct(), b.level);
+      if (b.charging) showToast('charging', t('battery.charging'), pct(), b.level);
+      else showToast(b.level <= 0.2 ? 'low' : 'battery', t('battery.onBattery'), pct(), b.level);
       if (!b.charging && b.level <= 0.2) window.soqi?.react('warning');
     });
     b.addEventListener('levelchange', () => {
       if (!b.charging && b.level <= 0.2 && !lowShown && feat('battery')) {
         lowShown = true;
-        showToast('low', 'Low Battery', pct(), b.level, 4500);
+        showToast('low', t('battery.low'), pct(), b.level, 4500);
         window.soqi?.react('warning');
       }
       if (b.level > 0.2) lowShown = false;
@@ -876,7 +881,7 @@ window.addEventListener('drop', (e) => {
   const files = Array.from(e.dataTransfer.files || []);
   endDrop();
   if (internalDrag || !files.length) return;
-  if (!bridge.shelf.addFiles(files)) showToast('dl-error', "Couldn't add these files to the shelf", '', 0, 3500);
+  if (!bridge.shelf.addFiles(files)) showToast('dl-error', t('shelf.addFailed'), '', 0, 3500);
 });
 document.addEventListener('pointermove', (e) => {
   if (internalDrag && e.buttons === 0) internalDrag = false;
@@ -895,18 +900,18 @@ function setTimer(min, phase = null) {
 }
 
 function drawTimer() {
-  const t = state.timer;
-  const rem = t.running ? Math.max(0, (t.endAt - Date.now()) / 1000) : t.remaining;
+  const tm = state.timer;
+  const rem = tm.running ? Math.max(0, (tm.endAt - Date.now()) / 1000) : tm.remaining;
   const text = fmt(Math.ceil(rem));
   $('#tm-digits').textContent = text;
   $('#c-time').textContent = $('#vc-time').textContent = text;
-  $('#tm-ring').style.strokeDashoffset = t.total ? RING * (1 - rem / t.total) : RING;
-  const started = t.remaining > 0 && t.remaining < t.total;
-  $('#tm-start').textContent = t.running ? 'Pause' : started ? 'Resume' : 'Start';
-  const label = t.phase === 'focus' ? `Focus ${focus.round + 1}` : t.phase === 'break' ? 'Break' : 'Running';
-  $('#tm-state').textContent = t.running ? label : started ? 'Paused' : t.total ? 'Ready' : 'Pick a time';
-  $('#tm-focus').classList.toggle('sel', !!t.phase);
-  $('#tm-reset').disabled = !t.total;
+  $('#tm-ring').style.strokeDashoffset = tm.total ? RING * (1 - rem / tm.total) : RING;
+  const started = tm.remaining > 0 && tm.remaining < tm.total;
+  $('#tm-start').textContent = tm.running ? t('timer.pause') : started ? t('timer.resume') : t('timer.start');
+  const label = tm.phase === 'focus' ? t('timer.focusN', { n: focus.round + 1 }) : tm.phase === 'break' ? t('timer.break') : t('timer.running');
+  $('#tm-state').textContent = tm.running ? label : started ? t('timer.paused') : tm.total ? t('timer.ready') : t('timer.pick');
+  $('#tm-focus').classList.toggle('sel', !!tm.phase);
+  $('#tm-reset').disabled = !tm.total;
   return rem;
 }
 
@@ -941,13 +946,13 @@ $$('[data-min]').forEach((b) => b.addEventListener('click', () => setTimer(Numbe
 
 $('#tm-start').addEventListener('click', () => {
   if (!state.timer.total) setTimer(5);
-  const t = state.timer;
-  if (t.running) {
-    t.remaining = Math.max(0, (t.endAt - Date.now()) / 1000);
-    t.running = false;
-  } else if (t.remaining > 0) {
-    t.endAt = Date.now() + t.remaining * 1000;
-    t.running = true;
+  const tm = state.timer;
+  if (tm.running) {
+    tm.remaining = Math.max(0, (tm.endAt - Date.now()) / 1000);
+    tm.running = false;
+  } else if (tm.remaining > 0) {
+    tm.endAt = Date.now() + tm.remaining * 1000;
+    tm.running = true;
   }
   drawTimer();
   render();
@@ -966,9 +971,9 @@ function startPhase(phase) {
   // Soqi puts the headphones on: focus time
   if (phase === 'focus' && feat('soqiFocus')) {
     window.playScene?.({
-      mood: 'listening', tone: 'focus', badge: '🎯 Focus',
-      title: 'Focus time',
-      sub: `<b>${min} min</b> of deep work — reminders stay quiet until it ends`,
+      mood: 'listening', tone: 'focus', badge: t('focus.badge'), lang: I18N.lang,
+      title: t('focus.title'),
+      sub: t('focus.sub', { min }),
       ms: 6000,
     });
   }
@@ -1002,18 +1007,18 @@ setInterval(() => {
       startPhase('break');
       const brk = Math.round(state.timer.total / 60);
       const shown = feat('soqiFocus') && window.playScene?.({
-        mood: 'excited', tone: 'focus', badge: '🎯 Focus',
-        title: 'Well done! 🎉',
-        sub: `Focus session <b>${focus.round}</b> done · <b>${brk} min</b> break`,
+        mood: 'excited', tone: 'focus', badge: t('focus.badge'), lang: I18N.lang,
+        title: t('focus.wellDone'),
+        sub: t('focus.doneSub', { n: focus.round, min: brk }),
         ms: 8000,
       });
-      if (!shown) showToast('done', `Focus ${focus.round} done`, `Break ${brk} min`, 0, 4500);
+      if (!shown) showToast('done', t('focus.doneToast', { n: focus.round }), t('focus.breakMin', { min: brk }), 0, 4500);
       celebrate(['#ff6b6b', '#ffd479', '#ff9f0a']);
       playTones([[0, 784], [0.2, 988]], { peak: 0.2, decay: 0.6 });
     } else {
       setTimer(state.features.focusMin || 25, null);
       island.classList.remove('focus-on', 'break-on');
-      showToast('done', 'Break over', 'Focus', 0, 9000);
+      showToast('done', t('focus.breakOver'), t('timer.focus'), 0, 9000);
       state.toastAction = () => startPhase('focus');
       beep();
     }
@@ -1023,7 +1028,7 @@ setInterval(() => {
     state.timer = { total: 0, remaining: 0, endAt: 0, running: false };
     $$('[data-min]').forEach((b) => b.classList.remove('sel'));
     drawTimer();
-    showToast('done', 'Timer Done', '', 0, 4000);
+    showToast('done', t('timer.done'), '', 0, 4000);
     island.classList.add('alert');
     setTimeout(() => island.classList.remove('alert'), 1000);
     beep();
@@ -1061,6 +1066,14 @@ function applyFeatures(f) {
   window.dispatchEvent(new CustomEvent('island:features', { detail: state.features }));
 }
 bridge.onFeatures(applyFeatures);
+bridge.onI18n((payload) => {
+  I18N = I18n.create(payload);
+  I18n.applyDom(I18N);
+  tickClock();
+  drawTimer();
+  window.dispatchEvent(new CustomEvent('island:i18n'));
+  render();
+});
 bridge.onVisibility((v) => { state.visible = !!v; });
 bridge.features().then(applyFeatures);
 $('#open-settings').addEventListener('click', () => bridge.openSettings());

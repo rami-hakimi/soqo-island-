@@ -3,16 +3,16 @@
 (() => {
   let downAt = 0;
 
-  const label = (n) => (n.link === 'wifi' ? 'Wi-Fi' : n.link === 'ethernet' ? 'Ethernet' : 'Offline');
+  const label = (n) => (n.link === 'wifi' ? t('net.wifi') : n.link === 'ethernet' ? t('net.ethernet') : t('net.offline'));
   const ago = (ms) => {
     const m = Math.round(ms / 60000);
-    return m < 1 ? 'after a few seconds' : m < 60 ? `after ${m} min` : `after ${Math.floor(m / 60)} h ${m % 60} min`;
+    return m < 1 ? t('net.afterSec') : m < 60 ? t('net.afterMin', { m }) : t('net.afterH', { h: Math.floor(m / 60), m: m % 60 });
   };
 
   function row(n) {
     const off = n.link === 'none' || n.internet === false;
     $('#net-row').classList.toggle('off', off);
-    $('#net-val').textContent = n.link !== 'none' && n.internet === false ? `${label(n)} · no internet` : label(n);
+    $('#net-val').textContent = n.link !== 'none' && n.internet === false ? t('net.noInternet', { link: label(n) }) : label(n);
   }
 
   function update(n) {
@@ -24,20 +24,22 @@
       downAt = Date.now();
       island.classList.add('net-down');
       setTimeout(() => island.classList.remove('net-down'), 4600);
-      showToast('net-off', n.link === 'none' ? 'No connection' : 'Internet lost', '', 0, 4500);
-      note('📡', 'Internet lost');
+      showToast('net-off', n.link === 'none' ? t('net.noConnection') : t('net.lost'), '', 0, 4500);
+      note('📡', t('net.lost'));
       window.soqi?.react('warning');
     } else if (p.internet === false && n.internet) {
       const gone = downAt ? Date.now() - downAt : 0;
-      showToast('net-on', 'Back online', gone ? ago(gone) : label(n), 0, 3500);
+      showToast('net-on', t('net.back'), gone ? ago(gone) : label(n), 0, 3500);
       window.soqi?.react('happy', 3500);
-      note('📶', `Back online ${gone ? ago(gone) : ''}`.trim());
+      note('📶', gone ? t('net.noteBack', { ago: ago(gone) }) : t('net.back'));
       downAt = 0;
     } else if (n.link === 'wifi' && p.link !== 'wifi' && n.internet) {
-      showToast('net-on', 'Connected to Wi-Fi', '', 0, 3000);
+      showToast('net-on', t('net.wifiConnected'), '', 0, 3000);
     }
   }
 
-  bridge.onNetwork(update);
-  bridge.network().then((n) => n && row(n));
+  let lastNet = null;
+  window.addEventListener('island:i18n', () => lastNet && row(lastNet));
+  bridge.onNetwork((n) => { lastNet = n; update(n); });
+  bridge.network().then((n) => { if (n) { lastNet = n; row(n); } });
 })();

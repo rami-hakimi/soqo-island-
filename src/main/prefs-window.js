@@ -1,6 +1,7 @@
 // The Settings window: a normal, focusable window (the island itself never takes focus).
 const path = require('path');
 const { BrowserWindow, ipcMain } = require('electron');
+const i18n = require('./i18n');
 
 let win = null;
 
@@ -19,7 +20,7 @@ function open() {
     frame: false,
     show: false,
     backgroundColor: '#0f0f15',
-    title: 'Soqo Island Settings',
+    title: i18n.t('prefs.windowTitle'),
     icon: path.join(__dirname, '..', '..', 'build', 'icon.ico'),
     webPreferences: {
       preload: path.join(__dirname, '..', 'preload', 'prefs.js'),

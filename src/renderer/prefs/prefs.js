@@ -103,7 +103,10 @@ function showGeneral(g) {
   $$('[data-general]').forEach((el) => { el.checked = !!g[el.dataset.general]; });
   $$('[data-orient]').forEach((b) => b.setAttribute('aria-checked', String((b.dataset.orient === 'v') === !!g.vertical)));
   // the version is isolated (LRI … PDI) so it keeps its order inside Arabic text
-  if (g.version) $('#version').textContent = t('p.nav.version', { v: `⁦${g.version}⁩` });
+  if (g.version) {
+    $('#version').textContent = t('p.nav.version', { v: `⁦${g.version}⁩` });
+    $('#about-version').textContent = `⁦${g.version}⁩`;
+  }
   lastGeneral = g;
 }
 let lastGeneral = null;

@@ -441,5 +441,10 @@
   "prayer.method.TUNISIA": "Tunisia",
   "prayer.method.ALGERIA": "Algeria",
   "prayer.method.MOROCCO": "Morocco",
-  "prayer.method.JORDAN": "Ministry of Awqaf, Jordan"
+  "prayer.method.JORDAN": "Ministry of Awqaf, Jordan",
+  "p.soqi.show": "Show Soqi",
+  "p.soqi.showHint": "Off: the island works exactly the same, without the companion",
+  "p.privacy.dotsHint": "Shows which app is using them; it does not block access",
+  "p.privacy.liveGlass": "Live glass backdrop",
+  "p.privacy.liveGlassHint": "Captures the screen area under the island to blur it; the capture never leaves the app. Off: a plain dark pane and no capture"
 }

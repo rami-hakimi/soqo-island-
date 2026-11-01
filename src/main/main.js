@@ -593,8 +593,9 @@ function scheduleCapture(ms) {
   }, ms);
 }
 async function captureBackdrop() {
-  // skipped while dragging: a capture blocks the main thread and makes the move stutter
-  if (capturing || drag || !win || win.isDestroyed() || !win.isVisible()) return;
+  // skipped while dragging: a capture blocks the main thread and makes the move stutter;
+  // never while the user turned the live glass off (Settings › Privacy)
+  if (!features.get().liveGlass || capturing || drag || !win || win.isDestroyed() || !win.isVisible()) return;
   capturing = true;
   try {
     const display = screen.getDisplayMatching(win.getBounds());
@@ -986,6 +987,10 @@ features.onChange((f) => {
     updater.setEnabled(autoUpdate);
   }
   if (!f.clipboardHistory) system.clearClips();
+  if (f.liveGlass) {
+    lastCaptureKey = '';
+    scheduleCapture(60);
+  }
   updateVisibility();
 });
 

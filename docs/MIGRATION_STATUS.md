@@ -325,3 +325,20 @@ complete but become opt-in.
 **Open**: a real adhan audio file is not shipped (the "adhan sound" is the soft chime, as
 upstream); the helper's Start-menu scan logged one empty first answer and succeeded on retry
 (pre-existing retry path).
+
+## Stage 10 — Music view, static glass, companion switch (2026-11-01) ✅
+- Music view after the "Ocean Breeze" reference within the island's 548×232 frame: 104 px
+  artwork with reflection glow, title/artist, a 28-bar waveform (decorative, played part in
+  the accent colour; the seek slider below stays the accessible control), centred transport
+  with a glowing play button, volume, and Soqi at the end of the row (music while playing,
+  headphones while paused). A slow caustic drift behind the player runs only while playing.
+  All motion stops with reduced motion or the Movement switch. The accent still follows the
+  artwork's colour (cyan when there is none), as upstream designed.
+- **Live glass switch** (Settings › Alerts & Privacy › Privacy, `liveGlass`): off = no
+  `desktopCapturer` capture at all and a solid navy pane; honest wording ("the capture never
+  leaves the app"). Mic & camera dots row now says it shows usage and does not block.
+- **Show Soqi** master switch (`companion`): off hides the peek, the player mascot and the
+  porthole dolphin; scenes keep their card.
+- Verified live with a real Chrome media session (paused, 1 h 09 min video, volume 95 %):
+  28 bars rendered, headphones pose, static-glass class applied, companion off hides Soqi,
+  zero page errors. `npm run verify` green (448 en / 455 ar keys).

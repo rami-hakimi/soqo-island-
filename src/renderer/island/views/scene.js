@@ -38,6 +38,7 @@
     const mood = SoqiState.STATES.includes(s.mood) ? s.mood : 'happy';
     pic.src = `../../../assets/soqi/${mood}.png`;
     pic.dataset.mood = mood;
+    pic.hidden = !feat('companion'); // the card still shows; the porthole stays an empty glass orb
     card.className = `scene-card ${s.tone || 'gold'}`;
     card.lang = s.lang || 'en';
     card.dir = s.lang === 'ar' ? 'rtl' : 'ltr';

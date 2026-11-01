@@ -30,7 +30,7 @@ const state = {
   toast: null,
   toastUntil: 0,
   timer: { total: 0, remaining: 0, endAt: 0, running: false },
-  dl: { active: false, title: '', tab: false }, // IDM Nova, filled by views/downloads.js
+  dl: { active: false, title: '', tab: false }, // IDM, filled by views/downloads.js
   features: {}, // switches from the Settings window; a missing key means on
   visible: true, // false while hidden (fullscreen app, or hidden from the menu)
   reminderUntil: 0, // a dhikr / du'a / verse card is on screen until then (views/reminders.js)

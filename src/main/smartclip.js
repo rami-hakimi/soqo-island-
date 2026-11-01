@@ -1,5 +1,5 @@
 // Smart clipboard: recognises what was just copied and offers the one useful thing to do.
-//   link  -> open it, or download it with IDM Nova when that is running
+//   link  -> open it, or download it with IDM when that is running
 //   color -> show the swatch
 //   math  -> the result (a click copies it)
 //   long text -> word count

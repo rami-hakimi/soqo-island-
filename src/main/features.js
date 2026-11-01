@@ -41,7 +41,7 @@ const DEFAULTS = {
   prayerAlerts: true,
   asrHanafi: false, // Asr by the Hanafi shadow rule
   hijriAdjust: 0, // days added to the Hijri date (local moon sighting)
-  // IDM Nova
+  // IDM
   downloads: true,
   dlToasts: true,
   folderDownloads: true, // browser downloads, seen in the download folders

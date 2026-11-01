@@ -1,4 +1,4 @@
-// IDM Nova downloads, plus browser downloads seen in the download folders (no size known, no
+// IDM downloads, plus browser downloads seen in the download folders (no size known, no
 // pause): compact pill (ring + name + speed + %), a liquid progress line on the idle pill,
 // start / done / failed toasts, and a live list with pause, resume, open and folder.
 (() => {
@@ -124,7 +124,7 @@
 
   // ---- toasts on transitions ----
   const known = new Map(); // id -> last status
-  let primed = false; // the first list (and IDM Nova's first after it comes online) is history, not news
+  let primed = false; // the first list (and IDM's first after it comes online) is history, not news
   let idmPrimed = false;
   function announce(items, idmOnline) {
     for (const d of items) {
@@ -187,7 +187,7 @@
     lastPayload = p;
     for (const [url, data] of Object.entries(p?.thumbs || {})) thumbs.set(url, data);
     const items = p?.items || [];
-    // IDM Nova went away: its downloads are forgotten, the folder ones stay
+    // IDM went away: its downloads are forgotten, the folder ones stay
     if (!p?.online) for (const id of known.keys()) if (!id.startsWith('f:')) known.delete(id);
     view.classList.toggle('dl-offline', !items.length);
     $('#dl-empty-title').textContent = p?.outdated ? t('dl.outdatedTitle') : p?.online ? t('dl.noneTitle') : t('dl.offlineTitle');

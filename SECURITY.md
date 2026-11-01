@@ -9,7 +9,7 @@ within a few days; fixes ship as a new release with credit if you want it.
 ## Scope
 - The Electron application (`src/`), the native helper (`helper/`), the installer and the
   update mechanism.
-- Out of scope: IDM Nova (a separate product), third-party services the app queries, issues
+- Out of scope: the IDM download manager (a separate product), third-party services the app queries, issues
   requiring a compromised Windows account.
 
 ## Design summary

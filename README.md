@@ -24,8 +24,8 @@ Free and open source (GPL-3.0) · Windows 10/11 (64-bit) · English · العر�
 - **Soqi** — an original dolphin companion with ten moods who peeks at the cursor, dances to
   your music, cheers finished downloads, warns when the internet drops and dozes off when you
   step away. Switchable off; respects Windows' reduced-motion setting.
-- **Downloads** — browser downloads at a glance (progress, speed, done) and IDM Nova
-  control when that app is installed.
+- **Downloads** — browser downloads at a glance (progress, speed, done) and live control of
+  the IDM download manager when it is installed.
 - **Apps & Shelf** — a pinned launcher and a shelf for files you are working with.
 - **Smart clipboard** — copy a link, a sum or a colour and get the one useful action.
   History stays in memory only.

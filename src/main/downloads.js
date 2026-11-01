@@ -1,5 +1,5 @@
-// Live downloads from IDM Nova through its local bridge (127.0.0.1:17890).
-// Polls fast while something is moving, slowly while IDM Nova is idle or closed.
+// Live downloads from IDM through its local bridge (127.0.0.1:17890).
+// Polls fast while something is moving, slowly while IDM is idle or closed.
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
@@ -7,7 +7,7 @@ const { shell } = require('electron');
 const folderDownloads = require('./browser-downloads');
 
 const BASE = 'http://127.0.0.1:17890';
-// IDM Nova only answers callers that know the secret it keeps in the user's profile.
+// IDM only answers callers that know the secret it keeps in the user's profile.
 const TOKEN_FILE = path.join(process.env.APPDATA || '', 'app.idmnova.desktop', 'bridge.token');
 let token = null;
 function idmHeaders(extra = {}) {
@@ -62,7 +62,7 @@ async function loadThumb(url) {
   } catch {}
 }
 
-// IDM Nova's downloads, then the ones seen in download folders (a file IDM Nova is fetching
+// IDM's downloads, then the ones seen in download folders (a file IDM is fetching
 // may also show up there: it is listed once)
 function allItems() {
   const names = new Set(items.map((d) => d.name));
@@ -98,7 +98,7 @@ async function poll() {
   try {
     const r = await fetch(`${BASE}/activity`, { headers: idmHeaders(), signal: AbortSignal.timeout(2000) });
     if (r.status === 403) forgetToken();
-    // an IDM Nova build from before /activity answers 404: running, but can't report
+    // an IDM build from before /activity answers 404: running, but can't report
     outdated = r.status === 404;
     const j = outdated ? {} : await r.json();
     items = Array.isArray(j.items) ? j.items : [];
@@ -120,7 +120,7 @@ async function poll() {
 async function control(id, action) {
   const d = allItems().find((x) => x.id === id);
   if (action === 'open' || action === 'reveal') {
-    // only paths IDM Nova or the folder watch itself reported
+    // only paths IDM or the folder watch itself reported
     if (!d?.path) return;
     if (action === 'open') shell.openPath(d.path);
     else shell.showItemInFolder(d.path);
@@ -143,7 +143,7 @@ async function control(id, action) {
   poll();
 }
 
-// Turned off in Settings: stop asking IDM Nova and clear the island.
+// Turned off in Settings: stop asking IDM and clear the island.
 function setEnabled(on) {
   if (on === enabled) return;
   enabled = on;

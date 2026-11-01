@@ -116,7 +116,7 @@ function queueScan() {
   setTimeout(scan, 200);
 }
 
-// the downloads in the same shape as IDM Nova's
+// the downloads in the same shape as IDM's
 function items() {
   if (!enabled) return [];
   const now = Date.now();

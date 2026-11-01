@@ -744,7 +744,7 @@ ipcMain.on('onboarding-done', () => {
   settings.save('settings.json', prefs);
 });
 
-// --- IDM Nova downloads ---
+// --- IDM (download manager) downloads ---
 ipcMain.handle('dl-snapshot', () => downloads.snapshot());
 ipcMain.on('dl-control', (_e, id, action) => { if (isStr(action, 32)) downloads.control(isStr(id, 2048) ? id : '', action); });
 
@@ -911,7 +911,7 @@ ipcMain.on('clip-action', async (_e, action) => {
         signal: AbortSignal.timeout(4000),
       });
       if (r.status === 403) downloads.forgetToken();
-      if (!r.ok) throw new Error(`IDM Nova answered ${r.status}`);
+      if (!r.ok) throw new Error(`IDM answered ${r.status}`);
     } catch {
       shell.openExternal(s.url);
     }

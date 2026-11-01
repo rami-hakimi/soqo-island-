@@ -21,6 +21,6 @@ The upstream Git history is preserved in this repository.
 | Qur'an text | Quran.com API (`text_qpc_hafs`), KFGQPC script | `views/reminders-data.js`, unchanged from upstream |
 
 ## Integrations
-"IDM Nova" is a separate download manager by the upstream author. Soqo Island talks to it
-over its local bridge when it is installed; the name refers to that product and is not part
-of this project's branding.
+The download manager shown as "IDM" in the interface is the upstream author's separate
+product (installed as "IDM Nova", bridge on 127.0.0.1:17890). Soqo Island talks to it over
+that local bridge when it is installed; the product is not part of this project's branding.

@@ -47,4 +47,4 @@ First Soqo Island build, a rebrand and rebuild of Nova Island 1.4.0 (GPL-3.0, by
 - Builds are not code-signed (SmartScreen warning on first run).
 - Arabic strings await a native-speaker review (`docs/TRANSLATION_REVIEW.md`).
 - The "adhan sound" is a soft chime, not a recorded adhan.
-- IDM Nova integration is kept as an optional third-party bridge.
+- The IDM download-manager bridge is kept as an optional third-party integration.

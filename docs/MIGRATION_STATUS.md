@@ -342,3 +342,53 @@ upstream); the helper's Start-menu scan logged one empty first answer and succee
 - Verified live with a real Chrome media session (paused, 1 h 09 min video, volume 95 %):
   28 bars rendered, headphones pose, static-glass class applied, companion off hides Soqi,
   zero page errors. `npm run verify` green (448 en / 455 ar keys).
+
+## Stage 11 — Attribution, release documents, installed-app tests (2026-11-01) ✅
+**Changes**
+- Developer attribution **Rami Al-Hakimi / رامي الحكيمي** in Settings › Support › About
+  ("Developed by Rami Al-Hakimi", GitHub button), `package.json` author, product copyright,
+  helper version resource, README, release notes. Upstream (Nova Island / AmerTech, GPL-3.0)
+  and third-party credits kept in About › Credits, `NOTICE.md`, README and the copyright line.
+- Version `2.0.0-beta.1`. NSIS installer in English and Arabic with a language selector;
+  `build/installer.nsh` removes the startup registration on uninstall.
+- "Launch at Windows startup" toggle (Settings › General) with an explanatory hint.
+- `CHANGELOG.md`, `CONTRIBUTING.md`, `docs/TRANSLATION_REVIEW.md`,
+  `docs/RELEASE_NOTES_2.0.0-beta.1.md`, `docs/LAUNCH_ANNOUNCEMENT.md`, README rewritten with
+  real screenshots (`docs/screenshots/`, composited from DevTools captures on a plain
+  navy backdrop).
+- Final branding pass: the third-party download manager is called "IDM" in every
+  user-facing string (EN + AR), the import question no longer names the old app, About says
+  "based on an open-source upstream project (see Credits)". No old name is persisted
+  anywhere: labels come from the dictionaries at runtime; the installed profile's JSON files
+  contain no old-brand tokens.
+
+**Windows tests ran (this machine, Windows 11 24H2, one display 1536×864 @125 %)**
+- Dev build: clipboard history captured two copies; smart-clipboard toast suppressed while a
+  companion card was showing (by design) — history still recorded `2*(3+4)`; real Downloads
+  folder: a `.crdownload` that finished produced the "Done" toast, a list row and Soqi's
+  download mood (the in-progress state was not observed at the 2.9 s sample); startup toggle
+  in dev mode created and removed `Startup\Soqo Island.lnk`.
+- **Installer**: `dist\Soqo-Island-Setup-2.0.0-beta.1.exe` (113 MB), silent install in 22 s
+  to `%LOCALAPPDATA%\Programs\Soqo Island`, Start-menu and desktop shortcuts, Apps & features
+  entry "Soqo Island 2.0.0-beta.1" publisher Rami Al-Hakimi, GUI subsystem (no console),
+  launched from the user profile independent of the dev folder, `island ready` logged.
+- **Launch at startup** from Settings on the installed app: HKCU `Run` value
+  `electron.app.Soqo Island` = installed exe path written, removed, written again; no
+  StartupApproved override (Task Manager shows it enabled). Persistence across a reboot
+  relies on that Run value; a reboot was not performed in this session.
+- **Uninstall** (silent): exe, shortcuts, Apps entry and the Run value removed; the data
+  folder is kept by design (`deleteAppDataOnUninstall: false`).
+- Reinstalled the corrected build, startup on, app left running for the owner. Second launch
+  while running exited immediately (single instance).
+- Tray: Windows 11 registered the icon (`HKCU\Control Panel\NotifyIconSettings` entry for the
+  installed exe). Driving the tray/context menu through UI Automation did not succeed in this
+  unattended session (the menu was not exposed to UIA), so the menu items and Quit were not
+  exercised by automation; the menu template is unchanged upstream code apart from labels.
+- Idle resource use after launch: 5 processes, 540 MB working set / 322 MB private,
+  2.4 % of the 12-core machine (29 % of one core) over 30 s — higher than desired; the
+  backdrop capture (0.7–3 s) and the helper's 500 ms polling are the main consumers; the
+  Live glass switch removes the capture.
+
+**Not tested**: real music transport commands (a user session was playing; not interfered
+with), mini player, address-bar slot, multiple monitors (one display), camera/mic indicator
+trigger, reboot persistence, installer UI in Arabic (silent mode used).

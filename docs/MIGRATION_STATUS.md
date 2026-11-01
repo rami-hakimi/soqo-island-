@@ -392,3 +392,20 @@ upstream); the helper's Start-menu scan logged one empty first answer and succee
 **Not tested**: real music transport commands (a user session was playing; not interfered
 with), mini player, address-bar slot, multiple monitors (one display), camera/mic indicator
 trigger, reboot persistence, installer UI in Arabic (silent mode used).
+
+**Follow-up found and fixed in the same session**: reinstalling over an existing copy had
+cleared the startup registration, because NSIS runs the previous uninstaller during an
+upgrade and the uninstall macro removed the Run value. Now (a) the macro only acts when
+`isUpdated` is false and (b) the app keeps `startWithWindows` in `settings.json` and
+re-registers the login item at launch when the value is missing (`restoreStartup`; a value
+that Windows' own Startup settings disabled is left alone). Re-tested on the installed
+build: startup on → upgrade → value present right after the upgrade and after launch;
+value deleted by hand → back after relaunch (log "launch at startup registered again");
+real uninstall → exe, shortcuts and value gone; final reinstall → startup on, app running.
+
+**Installed-app branding scan** (DevTools DOM walk of the island and all settings pages in
+English and Arabic, after the final build): zero matches for the old names; Downloads rows
+read "IDM downloads / Browser downloads …", About reads "Developed by Rami Al-Hakimi" /
+"تطوير رامي الحكيمي". The only remaining upstream mention in the interface is the
+attribution behind About › Credits (GPL notice), plus `NOTICE.md`, README licence section
+and the copyright line.

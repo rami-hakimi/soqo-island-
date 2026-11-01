@@ -1,5 +1,5 @@
 // Loaded with `node --require` before every test file: routes require('electron') to the stub.
-const Module = require('module');
+const Module = /** @type {any} */ (require('module'));
 const stub = require('./electron-stub');
 const load = Module._load;
 Module._load = function (request, ...rest) {

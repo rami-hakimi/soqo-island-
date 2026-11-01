@@ -17,7 +17,7 @@ The upstream Git history is preserved in this repository.
 | node-ical | Apache-2.0 | iCal parsing for meeting reminders |
 | PrayTimes.org calculation method | LGPL-3.0 (algorithm reference; reimplemented in `prayer.js`) | Prayer-time maths |
 | Open-Meteo | CC BY 4.0 (data) | Weather and city search |
-| KFGQPC HAFS Uthmanic Script v3.0 | King Fahd Glorious Quran Printing Complex EULA (`fonts/KFGQPC-LICENSE.txt`) | Qur'an text rendering. Included unmodified; **not** covered by the GPL |
+| KFGQPC HAFS Uthmanic Script v3.0 | King Fahd Glorious Quran Printing Complex EULA (`assets/fonts/KFGQPC-LICENSE.txt`) | Qur'an text rendering. Included unmodified; **not** covered by the GPL |
 | Qur'an text | Quran.com API (`text_qpc_hafs`), KFGQPC script | `views/reminders-data.js`, unchanged from upstream |
 
 ## Integrations

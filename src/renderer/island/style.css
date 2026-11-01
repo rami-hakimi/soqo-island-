@@ -687,11 +687,11 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .gear:hover { color: var(--text-1); background: var(--fill-1); transform: rotate(60deg); }
 
 /* ============ reminders: dhikr / du'a / Qur'an ============ */
-/* KFGQPC Hafs (King Fahd Complex, unmodified; see fonts/KFGQPC-LICENSE.txt) for the texts and
+/* KFGQPC Hafs (King Fahd Complex, unmodified; see assets/fonts/KFGQPC-LICENSE.txt) for the texts and
    the verse-end ornament (U+06DD followed by the verse number) */
 @font-face {
   font-family: "Soqo Quran";
-  src: url("fonts/KFGQPC-Hafs-V30.ttf") format("truetype");
+  src: url("../../../assets/fonts/KFGQPC-Hafs-V30.ttf") format("truetype");
   font-display: block;
 }
 #island.reminder { --w: var(--rw, 500px); --h: var(--rh, 140px); --r: 30px; }

@@ -36,7 +36,7 @@
     current = s;
     classes(true, s);
     const mood = SoqiState.STATES.includes(s.mood) ? s.mood : 'happy';
-    pic.src = `assets/soqi/${mood}.png`;
+    pic.src = `../../../assets/soqi/${mood}.png`;
     pic.dataset.mood = mood;
     card.className = `scene-card ${s.tone || 'gold'}`;
     card.lang = s.lang || 'en';

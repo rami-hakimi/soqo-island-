@@ -161,3 +161,33 @@ tray icon's look on a light taskbar; multi-monitor.
   by the window bounds (she is pointer-transparent, so nothing breaks).
 - `playScene({ who, props, arms })` callers were updated; any external script still passing
   `who: 'drop'` gets the happy pose.
+
+## Stage 3 — Project structure and type checking (2026-11-01) ✅
+**Changes**
+- Files moved with `git mv` (history preserved) into the layout from MIGRATION_PLAN §3:
+  `src/main/` (entry `main.js`, formerly `nova.js`, plus 18 modules), `src/preload/`
+  (`island.js`, `prefs.js`, `mini.js`), `src/renderer/{island,prefs,mini}/`,
+  `src/shared/soqi-state.js`, `assets/fonts/` (KFGQPC font + licence). `package.json` `main`
+  → `src/main/main.js`.
+- Every path reference rewritten: main resolves the package root as `ROOT = src/main/../..`
+  for `build/`, `helper/`, preloads and pages; the mini server serves `src/renderer/mini`;
+  renderer pages reference `../../../assets/...` and `../../shared/soqi-state.js`; tests,
+  ESLint globs and docs updated.
+- TypeScript 5 `checkJs` gate (`tsconfig.json`, `npm run typecheck`, part of `npm run
+  verify`) over `src/main`, `src/preload`, `src/shared` and `test` (renderer scripts share
+  globals and stay outside the gate for now). The 37 initial findings were fixed with JSDoc
+  types and small refactors; one was a real bug: Electron's `getLoginItemSettings` has no
+  `name` option, so the one-time mirroring of Nova Island's start-with-Windows choice now
+  reads the user's `Run` registry key (read-only, `reg.exe query`) instead.
+- No behaviour change otherwise.
+
+**Checks ran**
+- `npm run verify` → 59/59 scripts parse, ESLint clean, `tsc` 0 errors, 34/34 tests.
+- Electron launch from the new layout on Windows 11 (DevTools protocol): island page at
+  `src/renderer/island/index.html`, `window.soqo` bridge present, `SoqiState` loaded, both
+  sprites loaded, the Qur'an font loads and resolves, 606 CSS rules, Settings window opens
+  from `src/renderer/prefs/index.html` with its API, hero image and feature switches.
+
+**Not run**: packaged build (`npm run dist`) with the new layout — scheduled for Stage 8
+together with CI; `files` globs were kept broad (`**/*`) so the layout change needs no
+packaging change.

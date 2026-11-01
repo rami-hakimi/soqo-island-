@@ -66,10 +66,13 @@ function finish(partial, d) {
   if (!st || !st.size) {
     const fresh = list(dir)
       .filter((p) => !PARTIAL.test(p))
-      .map((p) => [p, statOf(p)])
-      .filter(([, s]) => s && s.size > 0 && Date.now() - s.mtimeMs < 5000)
-      .sort((a, b) => b[1].mtimeMs - a[1].mtimeMs)[0];
-    if (/^unconfirmed \d+/i.test(path.basename(partial)) && fresh) [file, st] = fresh;
+      .map((p) => ({ p, s: statOf(p) }))
+      .filter(({ s }) => s && s.size > 0 && Date.now() - s.mtimeMs < 5000)
+      .sort((a, b) => b.s.mtimeMs - a.s.mtimeMs)[0];
+    if (/^unconfirmed \d+/i.test(path.basename(partial)) && fresh) {
+      file = fresh.p;
+      st = fresh.s;
+    }
   }
   if (!st || !st.size) return; // cancelled
   done = [{ ...d, id: `f:${file}`, name: path.basename(file), path: file, status: 'completed', downloaded: st.size, total: st.size, speed: 0, eta: null, finishedAt: Date.now() }, ...done.filter((x) => x.path !== file)].slice(0, MAX_DONE);

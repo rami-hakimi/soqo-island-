@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const os = require('os');
-const network = require('../network');
+const network = require('../src/main/network');
 
 function withInterfaces(map, fn) {
   const orig = os.networkInterfaces;

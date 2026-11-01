@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const log = require('../log');
+const log = require('../src/main/log');
 
 test('init writes a start line, rotates past 1 MB, report has versions and tail', () => {
   log.init();

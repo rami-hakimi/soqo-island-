@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const vm = require('vm');
 
 const ROOT = path.join(__dirname, '..');
-const FILE = path.join(ROOT, 'views', 'reminders-data.js');
+const FILE = path.join(ROOT, 'src', 'renderer', 'island', 'views', 'reminders-data.js');
 // sha256 of the file with LF line endings (what the repository stores; a Windows checkout with
 // autocrlf may present CRLF, which is not a content change)
 const EXPECTED_SHA256 = '0435d75c2891c32a28277acba979ebbf545779c2b102412b9ee899a5ec5eae09';
@@ -31,8 +31,8 @@ test('every reminder has a kind, text and source reference', () => {
 });
 
 test('KFGQPC font and its licence ship together', () => {
-  const font = path.join(ROOT, 'fonts', 'KFGQPC-Hafs-V30.ttf');
-  const lic = path.join(ROOT, 'fonts', 'KFGQPC-LICENSE.txt');
+  const font = path.join(ROOT, 'assets', 'fonts', 'KFGQPC-Hafs-V30.ttf');
+  const lic = path.join(ROOT, 'assets', 'fonts', 'KFGQPC-LICENSE.txt');
   assert.ok(fs.existsSync(font));
   assert.ok(fs.existsSync(lic));
   assert.match(fs.readFileSync(lic, 'utf8'), /King Fahd Glorious Quran Printing Complex/);

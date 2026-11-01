@@ -112,7 +112,7 @@ Each row: feature → implementing files → verification required after migrati
 | P3 | Prayer tab (RTL Arabic), next-prayer countdown, idle slide, vertical slide | `views/prayer.js`, `index.html` | Manual |
 | P4 | Alerts 10 min before + at adhan (chime, companion scene with prayer cap, Ramadan iftar greeting) | `views/prayer.js` remind | Manual (time-shift) |
 | P5 | Dhikr / du'a / Qur'an reminder cards (KFGQPC Hafs font, verse ornaments, shuffled bag, quiet hours, interval, duration, preview) | `views/reminders.js`, `views/reminders-data.js`, `style.css` | **Auto** (quiet-hours wrap logic, bag never repeats) + Manual |
-| P6 | Religious source text and attribution are preserved byte-for-byte | `views/reminders-data.js`, `fonts/` | **Auto** (checksum test of the reminders data) |
+| P6 | Religious source text and attribution are preserved byte-for-byte | `views/reminders-data.js`, `assets/fonts/` | **Auto** (checksum test of the reminders data) |
 
 ### 2.6 Companion (Nova → Soqi)
 | # | Feature | Files | Verify |
@@ -238,7 +238,7 @@ runner, or by extracting their pure parts into `src/shared`.
 
 - [x] GPL-3.0 `LICENSE` retained verbatim
 - [x] Upstream copyright preserved in `package.json` `copyright`, README and `NOTICE.md`
-- [x] `fonts/KFGQPC-LICENSE.txt` retained; font unmodified
+- [x] `assets/fonts/KFGQPC-LICENSE.txt` retained; font unmodified
 - [x] Qur'an text (`reminders-data.js`) unchanged — guarded by checksum test
 - [x] Nova name/logo removed from shipped artefacts (licence requirement from upstream); `promo/` imagery is excluded from the build and slated for replacement
 - [x] Third-party notices: Electron, electron-updater, node-ical, PrayTimes (LGPL algorithm

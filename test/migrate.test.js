@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const migrate = require('../migrate');
+const migrate = require('../src/main/migrate');
 
 function tmp() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'soqo-migrate-'));

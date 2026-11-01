@@ -3,7 +3,10 @@ const {
 } = require('electron');
 const fs = require('fs');
 const path = require('path');
-const { spawn } = require('child_process');
+const { spawn, execFile } = require('child_process');
+
+// the package root (package.json, build/, helper/, assets/); this file lives in src/main/
+const ROOT = path.join(__dirname, '..', '..');
 
 // Data folder: %APPDATA%\soqo-island, shared by the installed app and dev runs. The first run
 // copies the settings of a Nova Island installation (dynamic-nova) so nothing is lost; that
@@ -316,9 +319,9 @@ function createWindow() {
     hasShadow: false,
     show: false,
     backgroundColor: '#00000000',
-    icon: path.join(__dirname, 'build', 'icon.ico'),
+    icon: path.join(ROOT, 'build', 'icon.ico'),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(ROOT, 'src', 'preload', 'island.js'),
       contextIsolation: true,
       nodeIntegration: false,
     },
@@ -336,11 +339,11 @@ function createWindow() {
     const msg = e.message ?? message;
     const src = e.sourceId ?? source;
     const ln = e.lineNumber ?? line;
-    if (lv === 'warning' || lv === 'error' || lv >= 2) console.error('[renderer]', msg, src ? `(${path.basename(src)}:${ln})` : '');
+    if (lv === 'warning' || lv === 'error' || (typeof lv === 'number' && lv >= 2)) console.error('[renderer]', msg, src ? `(${path.basename(src)}:${ln})` : '');
   });
   // absolute: when started through the resources/app stub the app root isn't this folder
   lockNavigation(win.webContents, (url) => url.startsWith('file:'));
-  win.loadFile(path.join(__dirname, 'index.html'));
+  win.loadFile(path.join(ROOT, 'src', 'renderer', 'island', 'index.html'));
   win.webContents.on('did-finish-load', () => {
     lastLayout = '';
     layout();
@@ -351,7 +354,7 @@ function createWindow() {
 // --- system bridge: helper/soqo-helper.exe (SMTC media, volume, brightness, fullscreen,
 // window in front, keyboard, clipboard sequence, idle time). Compiled C#, no PowerShell. ---
 function scriptPath(name) {
-  return path.join(__dirname, name).replace('app.asar', 'app.asar.unpacked');
+  return path.join(ROOT, name).replace('app.asar', 'app.asar.unpacked');
 }
 const HELPER = () => scriptPath(path.join('helper', 'soqo-helper.exe'));
 
@@ -426,7 +429,7 @@ async function onClipboardSeq(seq, isPrivate) {
     for (const item of await clipboard.read()) {
       const type = item.types.find((t) => t.startsWith('image/'));
       if (!type) continue;
-      const blob = await item.getType(type);
+      const blob = /** @type {Blob} */ (await item.getType(type));
       img = nativeImage.createFromBuffer(Buffer.from(await blob.arrayBuffer()));
       break;
     }
@@ -452,10 +455,10 @@ async function windowsScreenshot(since) {
       const fresh = fs.readdirSync(dir)
         .filter((n) => /\.(png|jpe?g)$/i.test(n))
         .map((n) => path.join(dir, n))
-        .map((p) => [p, fs.statSync(p)])
-        .filter(([, s]) => s.size > 0 && s.mtimeMs >= since - 1500)
-        .sort((a, b) => b[1].mtimeMs - a[1].mtimeMs)[0];
-      if (fresh) return fresh[0];
+        .map((p) => ({ p, s: fs.statSync(p) }))
+        .filter(({ s }) => s.size > 0 && s.mtimeMs >= since - 1500)
+        .sort((a, b) => b.s.mtimeMs - a.s.mtimeMs)[0];
+      if (fresh) return fresh.p;
     } catch {}
     await new Promise((r) => setTimeout(r, 250));
   }
@@ -730,9 +733,9 @@ function startupLink() {
 function shortcutOptions() {
   return {
     target: process.execPath,
-    args: app.isPackaged ? '' : `"${__dirname}"`,
-    cwd: __dirname,
-    icon: path.join(__dirname, 'build', 'icon.ico'),
+    args: app.isPackaged ? '' : `"${ROOT}"`,
+    cwd: ROOT,
+    icon: path.join(ROOT, 'build', 'icon.ico'),
     iconIndex: 0,
     description: 'Soqo Island',
   };
@@ -774,8 +777,8 @@ function runSetup() {
   } catch (err) {
     lines.push(`FAIL start with Windows: ${err.message}`);
   }
-  lines.push(`app: ${process.execPath} ${__dirname}`);
-  const logDir = __dirname;
+  lines.push(`app: ${process.execPath} ${ROOT}`);
+  const logDir = ROOT;
   try {
     fs.writeFileSync(path.join(logDir, 'setup-log.txt'), lines.join('\r\n') + '\r\n');
   } catch {}
@@ -950,7 +953,7 @@ features.onChange((f) => {
 
 function trayIcon() {
   // the dolphin silhouette in brand cyan reads on both dark and light taskbars
-  const img = nativeImage.createFromPath(path.join(__dirname, 'build', 'tray-color.png'));
+  const img = nativeImage.createFromPath(path.join(ROOT, 'build', 'tray-color.png'));
   if (!img.isEmpty()) return img.resize({ width: 16, height: 16, quality: 'best' });
   // fallback: white pill
   const size = 16;
@@ -978,13 +981,20 @@ function buildTray() {
 // "Soqo Island.lnk" in the Startup folder. Nova Island's own entries are never touched: they
 // belong to that installation. On the first run with copied settings its start-with-Windows
 // choice is mirrored, so the preference carries over like the rest.
-function migrateStartup() {
+async function migrateStartup() {
   if (!migratedFrom) return;
   let wasOn = fs.existsSync(path.join(path.dirname(startupLink()), 'Nova Island.lnk'));
-  if (app.isPackaged) {
-    try { wasOn ||= !!app.getLoginItemSettings({ name: 'electron.app.Nova Island' }).openAtLogin; } catch {}
-  }
+  // the installed Nova Island registers under its own value in the user's Run key; Electron's
+  // API only reads this app's own entry, so look (read-only) with reg.exe
+  if (!wasOn && app.isPackaged) wasOn = await runKeyHas('electron.app.Nova Island');
   if (wasOn && !startsWithWindows()) setStartWithWindows(true);
+}
+
+function runKeyHas(valueName) {
+  return new Promise((resolve) => {
+    execFile('reg.exe', ['query', 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run', '/v', valueName],
+      { windowsHide: true, timeout: 5000 }, (err, stdout) => resolve(!err && String(stdout).includes(valueName)));
+  });
 }
 
 app.whenReady().then(() => {

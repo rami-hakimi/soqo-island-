@@ -7,7 +7,8 @@ const path = require('path');
 const { BrowserWindow, screen, ipcMain, shell } = require('electron');
 const settings = require('./settings');
 
-const ROOT = path.join(__dirname, 'mini');
+const ROOT = path.join(__dirname, '..', 'renderer', 'mini');
+const PRELOAD = path.join(__dirname, '..', 'preload', 'mini.js');
 const FILES = { '/index.html': 'text/html', '/mini.css': 'text/css', '/mini.js': 'text/javascript' };
 const PAD = 10;          // transparent margin around the card (room for its shadow)
 const MIN_W = 280;
@@ -114,7 +115,7 @@ function createWindow() {
     backgroundColor: '#00000000',
     title: 'Mini Player',
     webPreferences: {
-      preload: path.join(ROOT, 'preload.js'),
+      preload: PRELOAD,
       contextIsolation: true,
       nodeIntegration: false,
       autoplayPolicy: 'no-user-gesture-required',
@@ -177,7 +178,7 @@ ipcMain.on('mini-close', (_e, { time, resume }) => close(time, !!resume));
 
 ipcMain.on('mini-resize-start', (_e, corner) => {
   if (!win) return;
-  resize = { corner: corner === 'bl' ? 'bl' : 'br', start: screen.getCursorScreenPoint(), b: win.getBounds() };
+  resize = { corner: corner === 'bl' ? 'bl' : 'br', start: screen.getCursorScreenPoint(), b: win.getBounds(), timer: null };
   resize.timer = setInterval(() => {
     if (!win || !resize) return;
     const p = screen.getCursorScreenPoint();

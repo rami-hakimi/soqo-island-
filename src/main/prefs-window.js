@@ -20,16 +20,16 @@ function open() {
     show: false,
     backgroundColor: '#0f0f15',
     title: 'Soqo Island Settings',
-    icon: path.join(__dirname, 'build', 'icon.ico'),
+    icon: path.join(__dirname, '..', '..', 'build', 'icon.ico'),
     webPreferences: {
-      preload: path.join(__dirname, 'prefs', 'preload.js'),
+      preload: path.join(__dirname, '..', 'preload', 'prefs.js'),
       contextIsolation: true,
       sandbox: true,
     },
   });
   win.setMenu(null);
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
-  win.loadFile(path.join(__dirname, 'prefs', 'index.html'));
+  win.loadFile(path.join(__dirname, '..', 'renderer', 'prefs', 'index.html'));
   win.once('ready-to-show', () => win.show());
   win.on('closed', () => { win = null; });
 }

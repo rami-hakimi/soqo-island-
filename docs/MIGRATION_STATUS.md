@@ -490,6 +490,13 @@ real uninstall → exe, shortcuts and value gone; final reinstall → startup on
   marker) next to the fresh-install and imported-profile tests → 48 tests. The installed
   profile on this machine kept `islamic=true` through the last upgrade (its own setting).
 - `npm run verify` green (69 scripts, lint, tsc, i18n 468/475, 48 tests).
+- Installer rebuilt (`dist\Soqo-Island-Setup-2.0.0-beta.1.exe`, 113,386,778 bytes, 00:19) and
+  the installed copy upgraded in place (27 s): all data files byte-identical, `islamic=true`
+  (the profile's own choice) and all other preferences kept, `Run` value present before,
+  right after and after launch; exe/helper/installer/Apps & features/shortcuts show
+  "Rami al-Hakimi"; installed DOM scan in English and Arabic shows the correct credits and
+  zero old-brand tokens; both launches of the upgraded build logged no scan failure (the
+  last one in the log, 23:08, is from the previous build). App relaunched for the owner.
 
 **Installed-app branding scan** (DevTools DOM walk of the island and all settings pages in
 English and Arabic, after the final build): zero matches for the old names; Downloads rows

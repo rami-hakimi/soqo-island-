@@ -1,6 +1,6 @@
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
-const bridge = window.nova;
+const bridge = window.soqo;
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const island = $('#island');
@@ -64,6 +64,17 @@ function note(icon, text) {
   if (happenings.length > 40) happenings.shift();
 }
 let internalDrag = false; // set by the shelf while dragging a file out
+
+// localStorage keys renamed with the app: the old value is carried over once, never removed.
+function movedKey(newKey, oldKey) {
+  try {
+    if (localStorage.getItem(newKey) == null) {
+      const old = localStorage.getItem(oldKey);
+      if (old != null) localStorage.setItem(newKey, old);
+    }
+  } catch {}
+  return newKey;
+}
 
 const fmt = (sec) => {
   sec = Math.max(0, Math.floor(sec));
@@ -949,11 +960,11 @@ function startPhase(phase) {
   state.timer.running = true;
   drawTimer();
   render();
-  // Nova puts her headband on and opens her laptop
-  if (phase === 'focus' && feat('novaFocus')) {
+  // Soqi puts her headband on and opens her laptop
+  if (phase === 'focus' && feat('soqiFocus')) {
     $('.sc-laptop-time').textContent = `${min}:00`;
     window.playScene?.({
-      who: 'nova', props: ['band', 'laptop'], arms: 'type', tone: 'focus', badge: '🎯 Focus',
+      who: 'soqi', props: ['band', 'laptop'], arms: 'type', tone: 'focus', badge: '🎯 Focus',
       title: 'Focus time',
       sub: `<b>${min} min</b> of deep work — reminders stay quiet until it ends`,
       ms: 6000,
@@ -988,8 +999,8 @@ setInterval(() => {
       focus.round++;
       startPhase('break');
       const brk = Math.round(state.timer.total / 60);
-      const shown = feat('novaFocus') && window.playScene?.({
-        who: 'nova', props: ['band'], arms: 'rest', tone: 'focus', badge: '🎯 Focus',
+      const shown = feat('soqiFocus') && window.playScene?.({
+        who: 'soqi', props: ['band'], arms: 'rest', tone: 'focus', badge: '🎯 Focus',
         title: 'Well done! 🎉',
         sub: `Focus session <b>${focus.round}</b> done · <b>${brk} min</b> break`,
         ms: 8000,

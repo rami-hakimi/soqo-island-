@@ -94,7 +94,7 @@
   }
   let lastTick = Date.now();
 
-  const FONT = '26px "Nova Quran"';
+  const FONT = '26px "Soqo Quran"';
   const loadFonts = () => document.fonts.load(FONT);
   let fontReady = false;
   loadFonts().then(() => { fontReady = true; });

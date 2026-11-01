@@ -16,7 +16,7 @@ applicable on this machine (note why).
 | S8 | Live glass backdrop | Move island over coloured window | ⏳ | | |
 | S9 | Ctrl+Alt+I toggles; pin | Press shortcut | ⏳ | | |
 | S10 | Tray menu items | Click tray | ⏳ | | |
-| S11 | Single instance | Launch twice | ⏳ | | |
+| S11 | Single instance | Launch twice | ⏳ | ⏳ (launch reached island-ready) | |
 | S12 | Reduced motion | Windows Settings → Animation effects off | ⏳ | | |
 | S13 | Input focus only while typing | Apps → Add → type | ⏳ | | |
 | M1 | SMTC now playing | Play in Spotify/YouTube | ⏳ | | |
@@ -60,7 +60,7 @@ applicable on this machine (note why).
 | G1 | Settings window pages/search | Open Settings | ⏳ | | |
 | G2 | Feature validation | Unit test | 🤖 | | |
 | G3 | Start with Windows | Toggle; check Startup folder / Task Manager | ⏳ | | |
-| G4 | Startup/data migration | Create old folder, launch | 🤖 (stage 2) | | |
+| G4 | Startup/data migration | Create old folder, launch | ⏳ | 🤖 unit (copy once, never overwrite, key map) | |
 | G5 | Auto-update | Needs a published release | ➖ until release | | |
 | G6 | Log rotation / report | Unit test; Copy report | 🤖 | | |
 | G7 | Support links | Settings → Support | ⏳ owner decision | | |

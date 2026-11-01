@@ -237,12 +237,12 @@ runner, or by extracting their pure parts into `src/shared`.
 ## 7. Legal and attribution checklist
 
 - [x] GPL-3.0 `LICENSE` retained verbatim
-- [ ] Upstream copyright preserved in `package.json` `copyright`, README and `NOTICE.md`
+- [x] Upstream copyright preserved in `package.json` `copyright`, README and `NOTICE.md`
 - [x] `fonts/KFGQPC-LICENSE.txt` retained; font unmodified
-- [ ] Qur'an text (`reminders-data.js`) unchanged — guarded by checksum test
-- [ ] Nova name/logo removed from shipped artefacts (licence requirement from upstream)
-- [ ] Third-party notices: Electron, electron-updater, node-ical, PrayTimes (LGPL algorithm
-      reference), Open-Meteo attribution
+- [x] Qur'an text (`reminders-data.js`) unchanged — guarded by checksum test
+- [x] Nova name/logo removed from shipped artefacts (licence requirement from upstream); `promo/` imagery is excluded from the build and slated for replacement
+- [x] Third-party notices: Electron, electron-updater, node-ical, PrayTimes (LGPL algorithm
+      reference), Open-Meteo attribution (`NOTICE.md`)
 
 ---
 

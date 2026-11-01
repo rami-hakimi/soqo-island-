@@ -10,7 +10,7 @@ const BASE = 'http://127.0.0.1:17890';
 // IDM Nova only answers callers that know the secret it keeps in the user's profile.
 const TOKEN_FILE = path.join(process.env.APPDATA || '', 'app.idmnova.desktop', 'bridge.token');
 let token = null;
-function novaHeaders(extra = {}) {
+function idmHeaders(extra = {}) {
   if (token === null) {
     try {
       token = fs.readFileSync(TOKEN_FILE, 'utf8').trim();
@@ -95,7 +95,7 @@ async function poll() {
   if (!enabled) return;
   let next = OFFLINE_MS;
   try {
-    const r = await fetch(`${BASE}/activity`, { headers: novaHeaders(), signal: AbortSignal.timeout(2000) });
+    const r = await fetch(`${BASE}/activity`, { headers: idmHeaders(), signal: AbortSignal.timeout(2000) });
     if (r.status === 403) forgetToken();
     // an IDM Nova build from before /activity answers 404: running, but can't report
     outdated = r.status === 404;
@@ -134,7 +134,7 @@ async function control(id, action) {
   try {
     await fetch(`${BASE}/control`, {
       method: 'POST',
-      headers: novaHeaders({ 'content-type': 'application/json' }),
+      headers: idmHeaders({ 'content-type': 'application/json' }),
       body: JSON.stringify({ id: id || null, action }),
       signal: AbortSignal.timeout(3000),
     });
@@ -159,4 +159,4 @@ function start(sender, on = true, folders = true) {
   poll();
 }
 
-module.exports = { start, control, setEnabled, setFolders: folderDownloads.setEnabled, snapshot, novaHeaders, forgetToken };
+module.exports = { start, control, setEnabled, setFolders: folderDownloads.setEnabled, snapshot, idmHeaders, forgetToken };

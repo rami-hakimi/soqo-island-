@@ -1,8 +1,8 @@
-// Scenes: for a moment the island itself becomes a character (Nova, or the Drop) with a card
+// Scenes: for a moment the island itself becomes a character (Soqi, or the Drop) with a card
 // beside it — the adhan, a glass of water, a focus session. The island's own morph (size and
 // place) does the transformation; the skin, face, limbs and props fade in after it.
 //
-//   playScene({ who: 'nova' | 'drop', props: ['cap', 'rug', 'band', 'laptop', 'glass'],
+//   playScene({ who: 'soqi' | 'drop', props: ['cap', 'rug', 'band', 'laptop', 'glass'],
 //               arms: 'rest' | 'fold' | 'type' | 'hold', tone: 'gold' | 'water' | 'focus',
 //               badge, title, quran, sub (html), button: { label, onClick }, ms,
 //               lang: 'ar' (right-to-left card; English otherwise),
@@ -17,7 +17,7 @@
   let lastTick = Date.now();
 
   function classes(on, s) {
-    island.classList.toggle('sc-nova', on && s.who !== 'drop');
+    island.classList.toggle('sc-soqi', on && s.who !== 'drop');
     island.classList.toggle('sc-drop', on && s.who === 'drop');
     for (const p of PROPS) island.classList.toggle(`p-${p}`, on && s.props?.includes(p));
     for (const a of ['rest', 'fold', 'type', 'hold']) island.classList.toggle(`arms-${a}`, on && (s.arms || 'rest') === a);

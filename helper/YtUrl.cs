@@ -1,4 +1,4 @@
-// `nova-helper yturl <process> <title>`: the URL of the browser tab playing a video (was yturl.ps1).
+// `soqo-helper yturl <process> <title>`: the URL of the browser tab playing a video (was yturl.ps1).
 // Prints {"url":"...","how":"..."}.
 //   1) reads the address bar of each browser window (windows whose title matches first)
 //   2) if the playing tab isn't the active one, briefly selects it, reads the URL, then switches

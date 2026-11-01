@@ -1,5 +1,5 @@
 // Error log: console.error / console.warn of the main process (the island forwards its own
-// errors there too) plus crashes, appended to nova.log in the data folder. Kept under ~1 MB.
+// errors there too) plus crashes, appended to soqo.log in the data folder. Kept under ~1 MB.
 // Nothing private goes in: no clipboard text, no calendar link, no file contents.
 const fs = require('fs');
 const path = require('path');
@@ -19,7 +19,7 @@ function write(level, args) {
 }
 
 function init() {
-  file = path.join(app.getPath('userData'), 'nova.log');
+  file = path.join(app.getPath('userData'), 'soqo.log');
   for (const level of ['error', 'warn']) {
     const orig = console[level].bind(console);
     console[level] = (...args) => {
@@ -42,7 +42,7 @@ function report(extra = {}) {
     tail = fs.readFileSync(file, 'utf8').split('\n').slice(-60).join('\n');
   } catch {}
   return [
-    `Nova Island ${app.getVersion()} (${app.isPackaged ? 'installed' : 'dev'})`,
+    `Soqo Island ${app.getVersion()} (${app.isPackaged ? 'installed' : 'dev'})`,
     `Electron ${process.versions.electron} · Chrome ${process.versions.chrome}`,
     `Windows ${os.release()} · ${os.arch()} · ${Math.round(os.totalmem() / 1e9)} GB`,
     ...Object.entries(extra).map(([k, v]) => `${k}: ${typeof v === 'string' ? v : JSON.stringify(v)}`),

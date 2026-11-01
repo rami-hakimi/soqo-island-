@@ -10,6 +10,7 @@ const islandGlobals = {
   note: 'readonly', happenings: 'readonly', fmt: 'readonly', playTones: 'readonly', focusing: 'readonly',
   compactKind: 'readonly', internalDrag: 'writable', ICON_X: 'readonly', ICON_PLUS: 'readonly', REMINDERS: 'readonly',
   playScene: 'readonly', sceneShowing: 'readonly', endScene: 'readonly', cardShowing: 'readonly', showCard: 'readonly',
+  movedKey: 'readonly',
 };
 
 module.exports = [

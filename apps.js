@@ -1,4 +1,4 @@
-// App launcher: Start menu catalog (via `nova-helper apps`), pinned apps, icons, launching.
+// App launcher: Start menu catalog (via `soqo-helper apps`), pinned apps, icons, launching.
 const path = require('path');
 const { spawn } = require('child_process');
 const { app, nativeImage } = require('electron');
@@ -21,7 +21,7 @@ function scriptPath(name) {
 
 function scanOnce() {
   return new Promise((resolve) => {
-    const ps = spawn(scriptPath(path.join('helper', 'nova-helper.exe')), ['apps'], { windowsHide: true });
+    const ps = spawn(scriptPath(path.join('helper', 'soqo-helper.exe')), ['apps'], { windowsHide: true });
     let out = '';
     let errOut = '';
     ps.stdout.setEncoding('utf8');

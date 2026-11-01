@@ -1,4 +1,4 @@
-// Nova: two eyes in the idle pill that look at the cursor and blink. They appear only when the
+// Soqi: two eyes in the idle pill that look at the cursor and blink. They appear only when the
 // cursor lingers beside the island for a few seconds, and never stand in the way of opening it:
 // once the cursor is on the island (hover), the island opens as usual and the eyes are gone.
 (() => {
@@ -11,7 +11,7 @@
 
   function apply() {
     const lingered = near && Date.now() - nearSince >= DWELL_MS;
-    const show = feat('novaEyes') && !anchor.vertical && lingered && !state.hover && lastMode === 'idle';
+    const show = feat('soqiEyes') && !anchor.vertical && lingered && !state.hover && lastMode === 'idle';
     island.classList.toggle('eyes', !!show);
   }
 

@@ -10,11 +10,13 @@ const vm = require('vm');
 
 const ROOT = path.join(__dirname, '..');
 const FILE = path.join(ROOT, 'views', 'reminders-data.js');
-const EXPECTED_SHA256 = '357dd57992e43b480d5aa2bb19d6705551d30831893991701e3ba78a55178192';
+// sha256 of the file with LF line endings (what the repository stores; a Windows checkout with
+// autocrlf may present CRLF, which is not a content change)
+const EXPECTED_SHA256 = '0435d75c2891c32a28277acba979ebbf545779c2b102412b9ee899a5ec5eae09';
 
 test('reminders data is byte-identical to the reviewed version', () => {
-  const buf = fs.readFileSync(FILE);
-  assert.equal(crypto.createHash('sha256').update(buf).digest('hex'), EXPECTED_SHA256);
+  const text = fs.readFileSync(FILE, 'utf8').replace(/\r\n/g, '\n');
+  assert.equal(crypto.createHash('sha256').update(text, 'utf8').digest('hex'), EXPECTED_SHA256);
 });
 
 test('every reminder has a kind, text and source reference', () => {

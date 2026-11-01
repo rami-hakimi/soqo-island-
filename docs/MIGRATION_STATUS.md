@@ -436,6 +436,41 @@ real uninstall → exe, shortcuts and value gone; final reinstall → startup on
 - Not run: full-screen visibility with `timerOnTop` (needs a real full-screen app in the
   foreground); the installed build was not rebuilt for this stage (dev build verified).
 
+## Stage 13 — Upgrade of the installed app and installed-build tests (2026-11-02) ✅
+- `npm run verify` green (69 scripts, lint, tsc, i18n 468/475 keys, 47 tests); installer
+  rebuilt: `dist\Soqo-Island-Setup-2.0.0-beta.1.exe` (113,386,580 bytes, 00:06).
+- **In-place silent upgrade** over the running installed copy (27 s): all eight JSON files in
+  `%APPDATA%\soqo-island` byte-identical before and after (settings, features incl.
+  `islamic`, `lang`, Soqi switches, apps, shelf, caches); `Run` value present right after the
+  upgrade and after launch; exe and helper timestamps updated; launched from the user profile,
+  `island ready`.
+- **Branding of installed artefacts**: exe ProductName/FileDescription "Soqo Island", company
+  "Rami Al-Hakimi", copyright with the upstream notice; helper "Soqo Island Helper"; installer
+  ProductName "Soqo Island"; Start-menu and desktop shortcuts named "Soqo Island" pointing at
+  the installed exe (description "Soqo Island — A Living Island for Windows (سوكو آيلاند)",
+  shown as `?` by the ASCII console only); Apps & features "Soqo Island 2.0.0-beta.1",
+  publisher Rami Al-Hakimi; tray registration for the installed exe. DOM scan of the island
+  and every settings page in English and Arabic: zero old-brand tokens; About shows
+  "Developed by Rami Al-Hakimi" / "تطوير رامي الحكيمي".
+- **Timer sizes on the installed build**: identical results to the dev run (Small 300×32,
+  Medium 250×44 → 322 on hover with controls, Large 310×60 → 394 on hover, 24/44 px digits,
+  pause froze the countdown at 589 s and resume continued, click opened the island, Arabic
+  Large mirrored, choosing Medium in Settings re-shaped the pill at once, zero page errors).
+  `timerSize` and `timerOnTop` persisted in `features.json`.
+- **Chrome F11 full screen (real)**: with the default settings the island hid
+  (`visible:false`, helper reports Chrome in the foreground); turning on "Keep a running
+  timer visible in full screen" made it visible again **while Chrome stayed the foreground
+  window** (no focus stolen: the island window is non-focusable and shown inactive); turning
+  it off hid it again; leaving F11 showed the island; the test Chrome window was closed
+  (process count unchanged). No interference with Chrome observed; limitation: the island is
+  then drawn over the full-screen content by design, which is what the switch asks for.
+- **Tray / Quit**: Windows registered the tray icon; the native popup menu could not be
+  reached by UI Automation or by Win32 window lookup in this unattended session, so the
+  menu's Quit was not exercised by automation (manual check recommended: right-click the
+  tray icon or the island › Quit).
+- Known, pre-existing: the helper's first `apps` catalogue answer is sometimes empty and is
+  logged as an error before the retry succeeds.
+
 **Installed-app branding scan** (DevTools DOM walk of the island and all settings pages in
 English and Arabic, after the final build): zero matches for the old names; Downloads rows
 read "IDM downloads / Browser downloads …", About reads "Developed by Rami Al-Hakimi" /

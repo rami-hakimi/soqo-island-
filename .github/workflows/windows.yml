@@ -1,0 +1,57 @@
+name: Windows build
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-and-build:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Verify (syntax, lint, types, i18n, tests)
+        run: npm run verify
+
+      - name: Rebuild the native helper from source
+        shell: cmd
+        run: helper\build.cmd
+
+      - name: Helper answers
+        shell: pwsh
+        run: |
+          $json = & .\helper\soqo-helper.exe apps
+          $count = ($json | ConvertFrom-Json).Count
+          Write-Host "catalogue entries: $count"
+          if ($count -lt 1) { exit 1 }
+
+      - name: Build installer (unsigned, not published)
+        run: npm run dist
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+      - name: Dependency audit (informational)
+        run: npm audit --omit=dev || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: soqo-island-windows
+          path: |
+            dist/*.exe
+            dist/*.yml
+            dist/*.blockmap
+            helper/soqo-helper.exe
+          if-no-files-found: error

@@ -1,7 +1,7 @@
 :root {
   --font: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
-  --bg: #101016;
-  --side: #0b0b10;
+  --bg: #0b1420;
+  --side: #07101a;
   --panel: rgba(255, 255, 255, .045);
   --stroke: rgba(255, 255, 255, .075);
   --text-1: #fff;

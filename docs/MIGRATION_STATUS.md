@@ -252,3 +252,29 @@ Arabic, switch back to English from the settings page, zero page errors.
 migration, natural but unreviewed); city search now asks Open-Meteo in the UI language;
 Windows' own dialogs and
 the installer UI remain in Windows' language (NSIS multilanguage planned for Stage 8).
+
+## Stage 7 (first pass) — Ocean palette (2026-11-01) ✅
+Tokens only, no layout change: island glass tint moved to deep navy (`rgba(8,20,34,.54)` /
+`.66` when open), default accent to brand cyan `#00A8FF` (artwork still recolours it while
+music plays), download line to turquoise `#00C9BB`, scene card and pre-backdrop fill to
+navy; settings window background `#0b1420` / sidebar `#07101a` with the cyan/turquoise
+accents from Stage 2b. Reviewed in screenshots (idle, open island, prayer, scene, settings).
+Still to do in Stage 7 proper: music view layout after the "Ocean Breeze" reference,
+animation polish, a static-glass switch (SEC-11), DPI/multi-monitor pass.
+
+## Stage 8 (first pass) — Documentation and release engineering (2026-11-01) ✅
+- New docs: `ARCHITECTURE.md`, `LOCALIZATION.md`, `PRIVACY.md`, `RELEASING.md`,
+  root `SECURITY.md`; README links them. `NOTICE.md` from Stage 2.
+- `.github/workflows/windows.yml`: on push/PR → `npm ci`, `npm run verify`, rebuild the
+  helper with Windows' csc and run its `apps` subcommand, `npm run dist` (unsigned), `npm
+  audit` (informational), upload `dist/` + helper as a workflow artifact. **No publishing.**
+- **Packaged build ran locally**: `npm run dist` → `dist/Soqo-Island-Setup-2.0.0-alpha.1.exe`
+  (113 MB), `latest.yml`, blockmap. `@electron/fuses read` on the packaged exe confirms
+  RunAsNode/NODE_OPTIONS/inspect **disabled**, cookie encryption / ASAR integrity /
+  only-from-ASAR **enabled**. Version resource: ProductName "Soqo Island", copyright with the
+  upstream notice. `soqo-helper.exe` sits in `app.asar.unpacked/helper/`. Signing skipped
+  (no certificate). The installer itself was not executed (an install would register
+  shortcuts and a login item on this machine); the unpacked app under `dist/win-unpacked`
+  is the same code that was launched in the DevTools-driven checks.
+- Not done: tag/release (owner), code signing (owner), NSIS Arabic installer strings,
+  CHANGELOG.

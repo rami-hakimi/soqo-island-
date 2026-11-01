@@ -6,8 +6,10 @@
   --text-2: rgba(235, 235, 245, .70);
   --text-3: rgba(235, 235, 245, .45);
 
-  --glass-tint: rgba(14, 14, 20, .52);
-  --glass-tint-strong: rgba(10, 10, 16, .64);
+  /* Soqo Island palette: deep ocean navy glass with cyan / turquoise accents
+     (#0B1B2B #00C9BB #00A8FF #7FD7FF #F5FAFF) */
+  --glass-tint: rgba(8, 20, 34, .54);
+  --glass-tint-strong: rgba(6, 16, 28, .66);
   --glass-stroke: rgba(255, 255, 255, .15);
   --fill-1: rgba(255, 255, 255, .08);
   --fill-2: rgba(255, 255, 255, .14);
@@ -15,7 +17,8 @@
   --card: rgba(255, 255, 255, .06);
   --card-stroke: rgba(255, 255, 255, .08);
 
-  --accent-rgb: 140, 200, 255;
+  --accent-rgb: 0, 168, 255;
+  --ocean-rgb: 0, 201, 187;
   --orange: #ff9f0a;
   --green: #30d158;
   --red: #ff453a;
@@ -70,7 +73,7 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 #island.shrinking { transition-timing-function: var(--spring-soft); transition-duration: .4s; }
 /* while dragging the window follows the cursor; the island itself must not lag behind */
 #island.moving { transition: width .3s var(--spring-soft), height .3s var(--spring-soft); }
-#island.moving .tint { background: rgba(14, 14, 20, .82); }
+#island.moving .tint { background: rgba(8, 20, 34, .84); }
 
 #island.idle     { --w: 236px; --h: 32px;  --r: 16px; }
 #island.compact  { --w: 300px; --h: 32px;  --r: 16px; }
@@ -87,7 +90,7 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .clip {
   position: absolute; inset: 0; overflow: hidden; isolation: isolate;
   border-radius: var(--tl) var(--tr) var(--br) var(--bl);
-  background: rgba(20, 20, 26, .6); /* until the first backdrop frame */
+  background: rgba(10, 22, 36, .62); /* until the first backdrop frame */
   box-shadow: 0 6px 18px -6px rgba(0, 0, 0, .45);
   transition: border-radius var(--dur-morph) var(--spring), box-shadow .4s var(--ease-out), transform .25s var(--spring);
 }
@@ -562,7 +565,7 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .l-compact.timer .c-title { display: none; }
 
 /* ============ IDM Nova downloads ============ */
-:root { --dl-rgb: 64, 200, 255; }
+:root { --dl-rgb: 0, 201, 187; }
 
 /* progress ring with a bobbing arrow (compact + vertical compact) */
 .c-ring { --p: 0; display: none; width: 20px; height: 20px; flex: none; overflow: visible; }
@@ -929,7 +932,7 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .scene-card {
   position: absolute; z-index: 40; width: 430px; min-height: 140px; padding: 30px 24px 22px; border-radius: 30px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center;
-  background: rgba(14, 14, 22, .92); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 24px 60px -14px rgba(0,0,0,.7);
+  background: rgba(10, 20, 32, .94); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 24px 60px -14px rgba(0,0,0,.7);
   opacity: 0; transform: translateX(18px) scale(.94); filter: blur(4px); pointer-events: none; overflow: hidden;
   transition: opacity .25s ease, transform .3s var(--ease-out), filter .25s ease;
   --sc-rgb: 255, 212, 121;

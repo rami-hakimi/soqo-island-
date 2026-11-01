@@ -17,7 +17,7 @@ applicable on this machine (note why).
 | S9 | Ctrl+Alt+I toggles; pin | Press shortcut | ⏳ | | |
 | S10 | Tray menu items | Click tray | ⏳ | | |
 | S11 | Single instance | Launch twice | ⏳ | ⏳ (launch reached island-ready) | |
-| S12 | Reduced motion | Windows Settings → Animation effects off | ⏳ | | |
+| S12 | Reduced motion | Windows Settings → Animation effects off | ⏳ | | 🤖 CSS rule present; Soqi Movement switch |
 | S13 | Input focus only while typing | Apps → Add → type | ⏳ | | |
 | M1 | SMTC now playing | Play in Spotify/YouTube | ⏳ | | |
 | M2 | Transport controls | Buttons | ⏳ | | |
@@ -46,7 +46,7 @@ applicable on this machine (note why).
 | D4 | Downloads tab/pill/toasts | During a download | ⏳ | | |
 | P1 | Prayer-time maths | Compare with AlAdhan for Cairo/Makkah | 🤖 golden values | | |
 | P2 | Hijri date + adjust | Prayer tab | 🤖 | | |
-| P3 | Prayer tab RTL | Visual | ⏳ | | |
+| P3 | Prayer tab RTL / i18n | Visual | ⏳ | | ✅ CDP screenshots EN + AR (Stage 5) |
 | P4 | Adhan alerts + scene | Set PC clock near a prayer | ⏳ | | |
 | P5 | Reminders cards, quiet hours | Settings → Show one now | ⏳ (quiet hours 🤖) | | |
 | P6 | Religious text unchanged | Checksum test | 🤖 | | |
@@ -64,4 +64,4 @@ applicable on this machine (note why).
 | G5 | Auto-update | Needs a published release | ➖ until release | | |
 | G6 | Log rotation / report | Unit test; Copy report | 🤖 | | |
 | G7 | Support links | Settings → Support | ⏳ owner decision | | |
-| G8 | Installer / portable build | `npm run dist` | ⏳ | | |
+| G8 | Installer / portable build | `npm run dist` | ⏳ | | ✅ NSIS built (Stage 8), fuses verified, not installed |

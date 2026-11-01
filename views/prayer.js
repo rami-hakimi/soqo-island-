@@ -111,10 +111,10 @@
         fired.add(`${id}-now`);
         note('🕌', `أذان ${NAMES[k]} ${clock(t)}`);
         chime();
-        // Soqi in her prayer cap on the rug; the plain toast when she's off or there's no room
+        // Soqi announces the adhan beside the card; the plain toast when that is off or there's no room
         const iftar = k === 'maghrib' && isRamadan(d) ? ' · تقبّل الله صيامك' : '';
         const shown = feat('soqiPrayer') && window.playScene?.({
-          who: 'soqi', props: ['cap', 'rug'], arms: 'fold', tone: 'gold', badge: '☾ الأذان', lang: 'ar',
+          mood: 'notification', tone: 'gold', badge: '☾ الأذان', lang: 'ar',
           title: 'أَقِمْ صَلَاتَكَ', quran: true,
           sub: `حان الآن وقت صلاة <b>${NAMES[k]}</b><bdi dir="ltr">${clock(t)}</bdi>${iftar}`,
           ms: 45000,
@@ -127,6 +127,7 @@
       } else if (diff > 0 && diff <= SOON_MIN * 60000 && diff > (SOON_MIN - 1) * 60000 && !fired.has(`${id}-soon`)) {
         fired.add(`${id}-soon`);
         showToast('prayer-soon', `${NAMES[k]} بعد ${SOON_MIN} دقائق`, clock(t), 0, 5000);
+        window.soqi?.react('notification');
       }
     }
   }

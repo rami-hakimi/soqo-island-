@@ -4,6 +4,7 @@
 (() => {
   bridge.onScreenshot((s) => {
     $('.t-shot').src = s.thumb;
+    window.soqi?.react('notification');
     const portrait = s.height > s.width;
     if (s.auto) {
       showToast('shot-auto', portrait ? 'Image saved' : 'Screenshot saved', 'Added to Shelf ✓', 0, 4500);

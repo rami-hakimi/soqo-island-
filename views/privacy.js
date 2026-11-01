@@ -12,6 +12,7 @@
     const newMic = nextMic.filter((a) => !mic.includes(a));
     if (newCam.length) showToast('privacy-cam', `${newCam.join(', ')} is using the camera`, '', 0, 3200);
     else if (newMic.length) showToast('privacy-mic', `${newMic.join(', ')} is using the microphone`, '', 0, 3200);
+    if (newCam.length || newMic.length) window.soqi?.react('notification');
     mic = nextMic;
     cam = nextCam;
 

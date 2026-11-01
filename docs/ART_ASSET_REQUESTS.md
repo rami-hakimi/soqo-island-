@@ -1,49 +1,50 @@
-# Art Asset Requests
+# Art Assets — integrated and still needed
 
-Soqo Island ships only original artwork. Upstream's Nova logo (`build/icon.*`) and the Nova
-character imagery under `promo/` are the upstream project's marks and must not appear in any
-Soqo Island build or store listing. Status of each asset:
+Soqo Island ships only original artwork. Upstream's Nova logo and the Nova character imagery
+(`promo/`) have been removed from the tree (they remain in Git history under the upstream
+commits) and nothing in the app references them.
 
-| Asset | Status | Where |
+## Approved originals (kept untouched in `assets/`)
+| File | Size | Used for |
 |---|---|---|
-| App icon | **Development placeholder** generated in code by `scripts/make-icon.py` (dark-glass rounded square, ocean gradient, island pill, stylised leaping dolphin). Usable, not final. | `build/icon.png`, `build/icon.ico`, `build/icon-512.png` |
-| Soqi in-island eyes / face | Drawn in CSS/SVG (Stage 6) | `style.css`, `index.html` |
-| Soqi scene character (body, fins, props) | Drawn in SVG (Stage 6) | `index.html` `.sc` |
-| Store / README hero imagery | Not started — generation prompts below | `promo/` (to be replaced) |
+| `Cute Dolphin Splash App Icon.png` | 1254×1254 RGB | App icon, installer icon, tray silhouette |
+| `Cute Glossy Blue Dolphin Mascot.png` | 1254×1254 RGBA | Settings › Companion hero |
+| `Glossy Soqi Dolphin Emotion Sticker Sheet.png` | 1536×1024 RGB | Soqi's ten states |
+| `Soqo Island Dolphin Brand Sheet.png` | 1536×1024 RGBA | Reference: palette `#0B1B2B #00C9BB #00A8FF #7FD7FF #F5FAFF`, logo lockup, UI direction |
+| `Soqo Island Ocean Breeze Player.png` | 1672×941 RGB | Reference for the music view redesign (Stage 7) |
 
-## 1. Final application icon
-- **Prompt:** "Flat, modern app icon for a Windows desktop utility called Soqo Island. A
-  rounded square with a deep navy-to-teal ocean gradient and a subtle glass sheen. In the
-  lower half, a small dark pill-shaped 'island' with a glowing cyan dot. Leaping above it, a
-  friendly stylised dolphin named Soqi in light cyan with a white belly, anime-inspired but
-  simple, single curved silhouette, one bright eye. No text. Premium, minimal, crisp edges,
-  centred composition."
-- **Sizes:** master 1024×1024 PNG with transparency; exports 512, 256, 128, 64, 48, 32, 24,
-  16 (ICO must include 256 as PNG-compressed and 16–48 as hand-tuned if possible).
-- **Files:** `build/icon-master.png`, `build/icon.png` (256), `build/icon.ico`.
-- **Integration:** electron-builder reads `build/icon.ico`; the tray uses `build/icon.png`
-  resized to 16 px — a dedicated `build/tray.png` (monochrome white, 32×32) is welcome.
+The originals are excluded from the installer (`!assets/*.png`); only the derived files ship.
 
-## 2. Soqi expression sheet (only if the SVG rig is judged insufficient)
-- **Prompt:** "Character sheet of Soqi, an original fantasy-anime dolphin mascot, light cyan
-  body, white belly, large expressive eye, small rounded dorsal fin. Front-facing head and
-  shoulders inside a soft dark-glass pill. Expressions: idle neutral, sleeping (closed eyes,
-  'z'), happy (curved eyes, open smile), curious (tilted head, one raised brow-line),
-  listening to music (bobbing, small notes), notification (alert eyes, small bell), download
-  complete (holding a glowing package), warning (worried eyes, small exclamation). Flat
-  vector style, transparent background, consistent line weight, no text."
-- **Format:** SVG preferred (one file per state, 128×128 viewBox); PNG fallback 256×256 with
-  transparency, 2 frames minimum per animated state (sleep breathing, music bob).
-- **Filenames:** `assets/soqi/idle.svg`, `sleep.svg`, `happy.svg`, `curious.svg`, `music.svg`,
-  `notify.svg`, `download.svg`, `warning.svg`.
-- **Integration:** `views/soqi.js` state machine maps state → file; CSS crossfades 180 ms.
+## Derived, application-ready files (`python scripts/prepare-art.py`, reproducible)
+| Output | From | Notes |
+|---|---|---|
+| `build/icon-master.png` 1024, `build/icon-512.png`, `build/icon.png` 256, `build/icon.ico` (256…16) | icon original | Rounded navy square cropped out of its light backdrop, 22.5 % corner radius alpha |
+| `build/tray-color.png`, `build/tray.png` 32 px | icon original | Dolphin silhouette (largest bright blob), brand cyan / white; the tray uses the cyan one at 16 px |
+| `assets/soqi/{idle,happy,excited,curious,listening,music,sleeping,notification,download,warning}.png` 256 px | sticker sheet | Each character segmented by content (not a fixed grid), white backdrop removed by border flood-fill so the white belly survives, cut-edge slivers dropped, centred on a square |
+| `assets/soqi/soqi-full.png` 512 px | mascot original | Transparent, padded square |
+| `assets/soqi/sheet.json` | — | State → file map |
 
-## 3. README / store imagery
-Seven 1600×1000 PNG scenes mirroring `promo/en/*.png` (hero, Soqi, browser, downloads, smart,
-faith, settings) rendered from the real app once the visual refresh (Stage 7) lands. No
-generated image may be described as a 3D model; they are rendered screenshots or 2D art.
+These are **still images animated with CSS** (bob, breathe, wiggle, nod, shiver, lean toward the
+cursor). They are not rigged 3D models and are not described as such anywhere in the app.
+
+## Still needed (optional, improves quality)
+1. **Tray icon, hand-tuned** — `build/tray.png` is derived automatically. A hand-drawn 16×16 and
+   32×32 monochrome dolphin (white, transparent background, PNG) will read better on the
+   taskbar. Filenames: `build/tray-16.png`, `build/tray-32.png`.
+2. **Sleeping variant facing right** — the sleeping sticker is a curled-up pose that reads well;
+   no change needed unless you want a "dozing on the island" pose with the head on the pill's
+   edge (256×256, transparent, same style). Filename: `assets/soqi/sleeping-edge.png`.
+3. **Two-frame variants for subtle motion** (optional): `music-2.png` (head tilted the other way),
+   `idle-2.png` (blink). 256×256, transparent, identical framing to the single-frame files. The
+   state machine will alternate frames every ~1.2 s when a `-2` file exists.
+4. **Hero / store imagery** — seven 1600×1000 PNG scenes (hero, Soqi, music, downloads, smart
+   clipboard, prayer, settings) will be rendered from the real app after the visual refresh.
+   Nothing to draw by hand unless you want illustrated backgrounds.
+5. **Settings window logo** — the title bar still uses a small CSS pill as its mark. A 20×20 /
+   40×40 PNG of the dolphin silhouette (cyan on transparent) would replace it:
+   `assets/brand/mark-20.png`, `assets/brand/mark-40.png`.
 
 ## Rules
 - No copyrighted or trademarked characters, no reuse of Nova artwork.
 - Qur'an verses and religious text are never redrawn or stylised beyond the KFGQPC font.
-- Every placeholder is named `*-placeholder*` or listed above as such until replaced.
+- Generated or rendered imagery is never described as a 3D model or a finished animation.

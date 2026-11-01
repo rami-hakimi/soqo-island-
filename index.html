@@ -7,7 +7,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="island" class="idle" role="region" aria-label="Dynamic Island">
+  <div id="island" class="idle" role="region" aria-label="Soqo Island">
+    <!-- Soqi peeks over the island's edge: cursor nearby, music, reactions, asleep when you are away -->
+    <img id="soqi" alt="" aria-hidden="true" src="assets/soqi/idle.png">
     <div class="clip">
       <!-- glass: blurred live backdrop + tint + album glow + sheen -->
       <canvas id="bd" aria-hidden="true"></canvas>
@@ -64,16 +66,8 @@
         </div>
       </div>
 
-      <!-- scene: the island's own glass turns into a character's skin, with its face -->
-      <div class="skin" aria-hidden="true"></div>
-      <div class="layer l-scene" aria-hidden="true">
-        <div class="sc-face"><i class="eye"><b></b></i><i class="eye"><b></b></i><i class="cheek"></i><i class="cheek"></i><i class="smile"></i></div>
-      </div>
-
-      <!-- Soqi: eyes in the idle pill that follow the cursor, blink and show a mood -->
-      <div class="layer l-eyes" aria-hidden="true">
-        <div class="eyes"><i class="eye"><b></b></i><i class="eye"><b></b></i></div>
-      </div>
+      <!-- scene: the island becomes a small glass porthole with Soqi inside (views/scene.js) -->
+      <div class="layer l-scene" aria-hidden="true"><img id="sc-img" alt="" src="assets/soqi/happy.png"></div>
 
       <!-- compact -->
       <div class="layer l-compact">
@@ -443,39 +437,6 @@
       </div>
     </div>
   
-    <!-- scene props (outside the clip so they can stick out of the body) -->
-    <div class="sc" aria-hidden="true">
-      <svg class="sc-rug" width="120" height="30" viewBox="0 0 120 30">
-        <path d="M6 26 L114 26 L100 2 L20 2 Z" fill="#8e1a36"/>
-        <path d="M14 22 L106 22 L95 6 L25 6 Z" fill="none" stroke="#e8b85c" stroke-width="1.5"/>
-        <path d="M46 6 Q60 -6 74 6" fill="none" stroke="#e8b85c" stroke-width="1.5"/>
-        <path d="M8 26 l-2 4 M20 26 l-1 4 M32 26 v4 M44 26 v4 M56 26 v4 M68 26 v4 M80 26 v4 M92 26 l1 4 M104 26 l2 4" stroke="#e8b85c" stroke-width="1.2"/>
-      </svg>
-      <svg class="sc-limbs" width="120" height="130" viewBox="-60 0 120 130">
-        <path class="legs" d="M-10 58 L-12 86 M10 58 L12 86"/>
-        <ellipse class="foot" cx="-14" cy="90" rx="9" ry="5"/><ellipse class="foot" cx="14" cy="90" rx="9" ry="5"/>
-        <path class="arms a-rest" d="M-31 36 Q-44 46 -40 60 M31 36 Q44 46 40 60"/>
-        <path class="arms a-fold" d="M-31 38 Q-22 52 -6 50 M31 38 Q22 52 6 50"/>
-        <path class="arms a-type" d="M-31 38 Q-38 54 -24 66 M31 38 Q38 54 24 66"/>
-        <path class="arms a-hold" d="M-31 36 Q-44 46 -40 60 M31 38 Q44 46 42 40"/>
-      </svg>
-      <div class="sc-cap"></div>
-      <svg class="sc-band" width="76" height="24" viewBox="-6 -4 76 24">
-        <path d="M2 15 Q32 -3 62 15" fill="none" stroke="#ff6b6b" stroke-width="6" stroke-linecap="round"/>
-        <path d="M62 14 l9 -6 M62 14 l10 4" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/>
-      </svg>
-      <svg class="sc-laptop" width="80" height="40" viewBox="0 0 80 40">
-        <path d="M8 34 L72 34 L66 40 L14 40 Z" fill="#94a3b8"/>
-        <path d="M14 6 L66 6 L70 34 L10 34 Z" fill="#1e293b" stroke="#94a3b8" stroke-width="2"/>
-        <rect x="20" y="12" width="40" height="15" rx="2" fill="#ff6b6b" opacity=".35"/>
-        <text class="sc-laptop-time" x="40" y="24" text-anchor="middle" font-family="Segoe UI" font-weight="700" font-size="11" fill="#ffb3b3">25:00</text>
-      </svg>
-      <svg class="sc-glass" width="30" height="36" viewBox="0 0 30 36">
-        <path d="M3 3 h24 l-3 30 h-18 z" fill="rgba(255,255,255,.22)" stroke="#fff" stroke-width="1.6"/>
-        <path d="M5.5 14 h19 l-2 18 h-15 z" fill="#38bdf8"/>
-        <path d="M9 18 q2 -2 4 0" stroke="#fff" stroke-width="1.4" fill="none" opacity=".7"/>
-      </svg>
-    </div>
 </div>
     <!-- the card that stands beside the character -->
   <div class="scene-card" id="scene-card" dir="ltr" lang="en" aria-live="polite">
@@ -486,6 +447,7 @@
     <button class="sc-btn" id="sc-btn" hidden></button>
     <span class="sc-bar"><b></b></span>
   </div>
+  <script src="shared/soqi-state.js"></script>
   <script src="renderer.js"></script>
   <script src="views/apps.js"></script>
   <script src="views/shelf.js"></script>

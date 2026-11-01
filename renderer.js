@@ -36,6 +36,7 @@ const feat = (key) => state.features[key] !== false;
 
 // Good news: sparkles fly out of the island's edges.
 function celebrate(colors = ['#ffd479', '#30d158', '#8ab4ff', '#ff6b9d']) {
+  window.soqi?.react('excited');
   if (!feat('celebrate') || anchor.vertical) return;
   const r = island.getBoundingClientRect();
   const cx = r.left + r.width / 2;
@@ -282,11 +283,11 @@ function positionIsland() {
     [w, h] = anchor.addr === 'line' ? [90, 3] : [anchor.sw, anchor.sh];
   }
   if (lastMode === 'scene') {
-    // the body on the right, the card on its left: [card 430][gap 22][body 64], kept inside the window
-    const CW = 516;
+    // Soqi's porthole on the right, the card on its left: [card 430][gap 22][porthole 72], kept inside the window
+    const CW = 524;
     const left = Math.min(Math.max(anchor.x - CW / 2, 8), window.innerWidth - CW - 8);
     const top = anchor.docked ? 30 : Math.min(Math.max(anchor.y + 22, 10), window.innerHeight - 130);
-    island.style.setProperty('--x', `${Math.round(left + CW - 64)}px`);
+    island.style.setProperty('--x', `${Math.round(left + CW - 72)}px`);
     island.style.setProperty('--y', `${Math.round(top)}px`);
     const card = $('#scene-card');
     card.style.left = `${Math.round(left)}px`;
@@ -831,11 +832,13 @@ if (navigator.getBattery) {
       if (!feat('battery')) return;
       if (b.charging) showToast('charging', 'Charging', pct(), b.level);
       else showToast(b.level <= 0.2 ? 'low' : 'battery', 'On Battery', pct(), b.level);
+      if (!b.charging && b.level <= 0.2) window.soqi?.react('warning');
     });
     b.addEventListener('levelchange', () => {
       if (!b.charging && b.level <= 0.2 && !lowShown && feat('battery')) {
         lowShown = true;
         showToast('low', 'Low Battery', pct(), b.level, 4500);
+        window.soqi?.react('warning');
       }
       if (b.level > 0.2) lowShown = false;
     });
@@ -960,11 +963,10 @@ function startPhase(phase) {
   state.timer.running = true;
   drawTimer();
   render();
-  // Soqi puts her headband on and opens her laptop
+  // Soqi puts the headphones on: focus time
   if (phase === 'focus' && feat('soqiFocus')) {
-    $('.sc-laptop-time').textContent = `${min}:00`;
     window.playScene?.({
-      who: 'soqi', props: ['band', 'laptop'], arms: 'type', tone: 'focus', badge: '🎯 Focus',
+      mood: 'listening', tone: 'focus', badge: '🎯 Focus',
       title: 'Focus time',
       sub: `<b>${min} min</b> of deep work — reminders stay quiet until it ends`,
       ms: 6000,
@@ -1000,7 +1002,7 @@ setInterval(() => {
       startPhase('break');
       const brk = Math.round(state.timer.total / 60);
       const shown = feat('soqiFocus') && window.playScene?.({
-        who: 'soqi', props: ['band'], arms: 'rest', tone: 'focus', badge: '🎯 Focus',
+        mood: 'excited', tone: 'focus', badge: '🎯 Focus',
         title: 'Well done! 🎉',
         sub: `Focus session <b>${focus.round}</b> done · <b>${brk} min</b> break`,
         ms: 8000,

@@ -50,14 +50,14 @@ applicable on this machine (note why).
 | P4 | Adhan alerts + scene | Set PC clock near a prayer | ⏳ | | |
 | P5 | Reminders cards, quiet hours | Settings → Show one now | ⏳ (quiet hours 🤖) | | |
 | P6 | Religious text unchanged | Checksum test | 🤖 | | |
-| C1 | Companion eyes | Rest cursor beside pill 3 s | ⏳ | | |
-| C2 | Scenes with props | Adhan / water / focus | ⏳ | | |
+| C1 | Companion peek (Soqi, was eyes) | Rest cursor beside pill 3 s | ⏳ | ✅ CDP screenshot (curious/happy beside pill, over top when floating) | |
+| C2 | Scenes (Soqi porthole + card) | Adhan / water / focus | ⏳ | ✅ CDP screenshots adhan + focus | |
 | C3 | Welcome back / brief / care | Idle 5 min then move | ⏳ | | |
 | C4 | Water reminder + goal | Wait interval / shorten in Settings | ⏳ | | |
-| C5 | Celebrations | Finish a download | ⏳ | | |
+| C5 | Celebrations (+ Soqi excited) | Finish a download | ⏳ | 🤖 state machine; sparkles ⏳ | |
 | C6 | Meetings from iCal | Link a calendar | 🤖 parser; manual link | | |
 | C7 | Privacy dots | Open Camera app | 🤖 parser; ⏳ manual | | |
-| G1 | Settings window pages/search | Open Settings | ⏳ | | |
+| G1 | Settings window pages/search | Open Settings | ⏳ | ✅ opened via IPC, Companion + Support screenshotted | |
 | G2 | Feature validation | Unit test | 🤖 | | |
 | G3 | Start with Windows | Toggle; check Startup folder / Task Manager | ⏳ | | |
 | G4 | Startup/data migration | Create old folder, launch | ⏳ | 🤖 unit (copy once, never overwrite, key map) | |

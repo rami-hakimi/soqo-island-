@@ -885,70 +885,45 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .l-toast.clip-math #t-value { background: #fbbf24; color: #2a1a00; font-variant-numeric: tabular-nums; }
 .l-toast.clip-color #t-label { font-family: Consolas, monospace; }
 
-/* ============ Soqi (eyes) ============ */
-#island:not(.vertical).idle.eyes .l-info { opacity: 0; filter: blur(4px); transform: scale(.94); transition: opacity .18s ease, filter .2s ease, transform .3s var(--ease-out); }
-#island:not(.vertical).idle.eyes .l-eyes { opacity: 1; filter: none; transform: none; transition: opacity .25s ease .08s, filter .3s ease .08s, transform .45s var(--spring) .05s; }
-.l-eyes { display: grid; place-items: center; }
-.eyes { display: flex; gap: 14px; }
-.eye {
-  position: relative; width: 11px; height: 15px; border-radius: 6px; background: #fff; overflow: hidden;
-  box-shadow: 0 0 10px rgba(255, 255, 255, .35); transition: height .16s var(--ease-out), border-radius .2s, transform .3s var(--spring);
-}
-.eye b {
-  position: absolute; left: 50%; top: 50%; width: 6px; height: 7px; margin: -3.5px 0 0 -3px; border-radius: 50%;
-  background: #0b0b12; transform: translate(var(--px, 0px), var(--py, 0px)); transition: transform .12s linear;
-}
-.eyes.blink .eye { height: 2px; }
-
 /* ============ celebration sparkles ============ */
 .spark { position: fixed; z-index: 50; width: var(--s, 4px); height: var(--s, 4px); border-radius: 50%; pointer-events: none; box-shadow: 0 0 8px currentColor; }
 
-/* ============ scenes: the island becomes a character ============ */
-#island.scene { --w: 64px; --h: 66px; --r: 28px; }
-#island.scene.sc-drop { --h: 70px; }
-.skin { position: absolute; inset: 0; z-index: 3; opacity: 0; pointer-events: none; transition: opacity .4s ease; }
-#island.scene .skin { opacity: 1; transition-delay: .25s; }
-#island.sc-soqi .skin { background: radial-gradient(60% 50% at 32% 25%, rgba(255,255,255,.5), transparent 70%), linear-gradient(135deg, #8b7bff, #5b6cff 55%, #3b82f6); }
-#island.sc-drop .skin { background: radial-gradient(55% 45% at 34% 40%, rgba(255,255,255,.55), transparent 70%), linear-gradient(160deg, #a5f3fc, #38bdf8 50%, #2563eb); }
-/* the drop keeps its pointed top once the morph has settled */
-#island.scene.sc-drop .clip { clip-path: path("M32 0 C44 18 64 34 64 46 A32 24 0 0 1 0 46 C0 34 20 18 32 0Z"); transition: clip-path .3s ease .45s, border-radius var(--dur-morph) var(--spring); }
-#island.scene .sheen { box-shadow: inset 0 0 0 1px rgba(255,255,255,.35); }
-#island.scene .l-scene { opacity: 1; filter: none; transform: none; transition: opacity .3s ease .35s, filter .3s ease .35s, transform .45s var(--spring) .3s; }
-.l-scene { z-index: 5; }
-.sc-face { position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; margin: -17px 0 0 -15px; }
-#island.sc-drop .sc-face { margin-top: -6px; }
-.sc-face .eye { position: absolute; top: 0; width: 10px; height: 14px; border-radius: 5px; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,.4); transition: height .13s var(--ease-out); }
-.sc-face .eye:nth-child(1) { left: 0; } .sc-face .eye:nth-child(2) { right: 0; }
-.sc-face .eye b { position: absolute; left: 3px; top: 5px; width: 6px; height: 6px; border-radius: 50%; background: #0b0b12; }
-.sc-face.blink .eye { height: 2px; top: 6px; }
-.sc-face .cheek { position: absolute; top: 14px; width: 7px; height: 7px; border-radius: 50%; background: #ff8fb8; opacity: .7; }
-.sc-face .cheek:nth-child(3) { left: -10px; } .sc-face .cheek:nth-child(4) { right: -10px; }
-.sc-face .smile { position: absolute; left: 50%; top: 19px; width: 12px; height: 6px; margin-left: -6px; border: 2.2px solid #0b0b12; border-top: 0; border-radius: 0 0 8px 8px; }
+/* ============ Soqi: the dolphin peeking over the island's edge ============ */
+#soqi {
+  position: absolute; z-index: 0; width: 58px; height: 58px; object-fit: contain; pointer-events: none;
+  inset-inline-end: 10px; top: -30px; transform-origin: 50% 100%;
+  opacity: 0; transform: translateY(28px) scale(.8) rotate(var(--lean, 0deg));
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .45));
+  transition: opacity .22s ease, transform .5s var(--spring), top var(--dur-morph) var(--spring), width var(--dur-morph) var(--spring), height var(--dur-morph) var(--spring);
+}
+#island.soqi-show #soqi { opacity: 1; transform: translateX(var(--shift, 0px)) translateY(0) scale(1) rotate(var(--lean, 0deg)); }
+/* open island: Soqi sits on its roof, clear of the clock and the gear */
+#island.expanded #soqi { inset-inline-end: 12px; top: -58px; width: 66px; height: 66px; }
+/* nothing to see above a docked island: Soqi appears beside its end instead */
+#island.soqi-side #soqi { top: -6px; inset-inline-end: -42px; width: 44px; height: 44px; transform: translateX(-18px) scale(.8); }
+#island.soqi-side.soqi-show #soqi { transform: translateX(0) scale(1) rotate(var(--lean, 0deg)); }
+#island.soqi-side.expanded #soqi { top: 0; inset-inline-end: -44px; width: 50px; height: 50px; }
+/* moods move a little; never with reduced motion (global rule) or the Movement switch off */
+#island.soqi-show:not(.soqi-still) #soqi[data-mood="music"] { animation: soqi-bob 1.1s ease-in-out infinite; }
+#island.soqi-show:not(.soqi-still) #soqi[data-mood="sleeping"] { animation: soqi-breathe 3s ease-in-out infinite; }
+#island.soqi-show:not(.soqi-still) #soqi[data-mood="excited"] { animation: soqi-wiggle .5s ease-in-out 3; }
+#island.soqi-show:not(.soqi-still) #soqi[data-mood="happy"] { animation: soqi-nod .7s var(--spring) 1; }
+#island.soqi-show:not(.soqi-still) #soqi[data-mood="notification"],
+#island.soqi-show:not(.soqi-still) #soqi[data-mood="download"] { animation: soqi-nod .6s var(--spring) 2; }
+#island.soqi-show:not(.soqi-still) #soqi[data-mood="warning"] { animation: soqi-shiver .3s ease-in-out 4; }
+@keyframes soqi-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
+@keyframes soqi-breathe { 0%, 100% { scale: 1; } 50% { scale: 1.035; } }
+@keyframes soqi-wiggle { 0%, 100% { rotate: 0deg; } 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
+@keyframes soqi-nod { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+@keyframes soqi-shiver { 0%, 100% { translate: 0 0; } 50% { translate: 3px 0; } }
 
-/* props: hidden unless the scene asks for them; they slide in after the morph */
-.sc { position: absolute; inset: 0; pointer-events: none; z-index: 6; }
-.sc > * { position: absolute; opacity: 0; transition: opacity .25s ease, transform .45s var(--spring); }
-#island:not(.scene) .sc > * { transition-delay: 0s !important; }
-.sc-limbs { left: -28px; top: 0; overflow: visible; transform: translateY(-12px) scaleY(.5); --limb: #4c5dff; --arm: #6c7bff; }
-#island.sc-drop .sc-limbs { --limb: #1d4ed8; --arm: #38bdf8; top: 4px; }
-.sc-limbs .legs { fill: none; stroke: var(--limb); stroke-width: 6; stroke-linecap: round; }
-.sc-limbs .foot { fill: var(--limb); }
-.sc-limbs .arms { fill: none; stroke: var(--arm); stroke-width: 6; stroke-linecap: round; display: none; }
-#island.scene .sc-limbs { opacity: 1; transform: none; transition-delay: .5s; }
-#island.arms-rest .a-rest, #island.arms-fold .a-fold, #island.arms-type .a-type, #island.arms-hold .a-hold { display: inline; }
-.sc-rug { left: -28px; top: 80px; transform: scaleX(0); }
-#island.scene.p-rug .sc-rug { opacity: 1; transform: none; transition-delay: .55s; }
-.sc-cap { left: 5px; top: -15px; width: 54px; height: 22px; transform: translateY(-26px); }
-.sc-cap::before { content: ""; position: absolute; inset: 0 0 4px; border-radius: 27px 27px 4px 4px; background: #fafafa; background-image: repeating-linear-gradient(90deg, rgba(0,0,0,.06) 0 2px, transparent 2px 6px); }
-.sc-cap::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 4px; border-radius: 2px; background: #dcdce6; }
-#island.scene.p-cap .sc-cap { opacity: 1; transform: none; transition-delay: .85s; }
-/* the focus headband sits on the forehead, across the top curve, above the eyes */
-.sc-band { left: -6px; top: -4px; overflow: visible; transform: translateY(-10px) scale(.9); }
-#island.scene.p-band .sc-band { opacity: 1; transform: none; transition-delay: .8s; }
-.sc-laptop { left: -8px; top: 40px; transform: translateY(14px); }
-#island.scene.p-laptop .sc-laptop { opacity: 1; transform: none; transition-delay: .7s; }
-.sc-glass { left: 62px; top: 22px; transform: translateY(10px) rotate(8deg); }
-#island.scene.p-glass .sc-glass { opacity: 1; transform: rotate(-6deg); transition-delay: .7s; }
+/* ============ scenes: the island becomes a glass porthole with Soqi inside ============ */
+#island.scene { --w: 72px; --h: 72px; --r: 36px; }
+.l-scene { z-index: 5; display: grid; place-items: center; }
+#island.scene .l-scene { opacity: 1; filter: none; transform: none; transition: opacity .3s ease .35s, filter .3s ease .35s, transform .45s var(--spring) .3s; }
+#sc-img { width: 60px; height: 60px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .4)); }
+#island.scene:not(.soqi-still) #sc-img { animation: soqi-bob 2.2s ease-in-out infinite; }
+#island.scene .sheen { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .35); }
 
 /* the card beside the character */
 .scene-card {

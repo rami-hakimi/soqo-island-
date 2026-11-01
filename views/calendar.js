@@ -39,6 +39,7 @@
         fired.add(startId);
         showToast('meet-now', ev.title, ev.link ? 'Join' : 'Now', 0, 12000);
         note('📅', `Meeting started: ${ev.title}`);
+        window.soqi?.react('notification', 6000);
         if (ev.link) state.toastAction = () => bridge.openMeeting(ev.link);
         island.classList.add('meet-flash');
         setTimeout(() => island.classList.remove('meet-flash'), 12200);

@@ -51,7 +51,9 @@ const DEFAULTS = {
   smartClipboard: true,
   soqiEyes: true,
   soqiPrayer: true, // Soqi in her prayer cap at the adhan
-  soqiFocus: true, // Soqi with her headband at focus start / end
+  soqiFocus: true, // Soqi with her headphones at focus start / end
+  soqiReacts: true, // Soqi reacts to downloads, alerts, music, and your return
+  soqiMotion: true, // Soqi's small movements (off: still pictures only)
   water: true, // the Drop reminds you to drink
   waterEvery: 60, // minutes at the computer between glasses
   waterGoal: 8, // glasses a day (~2 L)

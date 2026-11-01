@@ -31,6 +31,7 @@ function showFeatures(f) {
   if (methodSel.options.length) methodSel.value = f.prayerMethod || 'auto';
   $$('[data-feature]').forEach((el) => { el.checked = !!f[el.dataset.feature]; });
   $$('[data-lang]').forEach((b) => b.setAttribute('aria-checked', String((f.lang || 'auto') === b.dataset.lang)));
+  $$('[data-size]').forEach((b) => b.setAttribute('aria-checked', String((f.timerSize || 'small') === b.dataset.size)));
   // child settings show only while every switch they depend on is on
   $$('[data-needs]').forEach((el) => el.classList.toggle('off', !el.dataset.needs.split(' ').every((k) => f[k])));
   showSteppers();
@@ -125,6 +126,10 @@ $$('[data-general-action]').forEach((b) => b.addEventListener('click', () => {
 }));
 $$('[data-lang]').forEach((b) => b.addEventListener('click', () => {
   api.setFeatures({ lang: b.dataset.lang });
+  saved();
+}));
+$$('[data-size]').forEach((b) => b.addEventListener('click', () => {
+  api.setFeatures({ timerSize: b.dataset.size });
   saved();
 }));
 

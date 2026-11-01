@@ -403,6 +403,39 @@ build: startup on → upgrade → value present right after the upgrade and afte
 value deleted by hand → back after relaunch (log "launch at startup registered again");
 real uninstall → exe, shortcuts and value gone; final reinstall → startup on, app running.
 
+## Stage 12 — Running-timer display sizes (2026-11-02) ✅
+**Changes**
+- Settings › **Timer** (new page, EN/AR): Display size Small / Medium / Large, "Keep a running
+  timer visible in full screen", and the focus-session durations (focus, break, long break)
+  which previously had no UI.
+- `src/shared/timer-pill.js` (pure, tested): sizes Small 300×32 (the original pill, default,
+  so existing users see no change), Medium 250×44 with a 24 px countdown, Large 310×60 with a
+  44 px countdown; hover widths +72 / +84 px for the inline controls; the island's
+  placement maths (`place`) moved here and is used by `positionIsland`.
+- Medium and Large: while the timer runs, hovering keeps the pill (grown slightly) and shows
+  pause/resume and reset inline; the countdown never disappears; a click on the pill itself
+  opens the whole island; the mouse leaving returns to the chosen size. Small keeps the
+  original behaviour (hover opens the island). Vertical and address-bar islands keep their
+  own pills. Digits are bold tabular numerals; CSS px follow Windows DPI scaling; motion
+  follows the global reduced-motion rule; the controls are real buttons with translated
+  aria-labels.
+- `timerOnTop`: the island already floats above every normal window (Chrome included);
+  with this on, a running timer also keeps the island visible while an app is full screen
+  (renderer reports `timer-state`, main's `updateVisibility` honours it).
+- Preferences `timerSize` (enum) and `timerOnTop` persist in `features.json`.
+
+**Checks ran**
+- `npm run verify` green: 47 tests incl. 4 new (three sizes and widths, hover growth,
+  placement clamping incl. docked/vertical, preference persistence and validation).
+- Live (dev build, Windows 11, 125 % DPI): a 10-minute timer; Small 300×32 / 13.5 px, hover
+  → expanded island (original); Medium 250×44 / 24 px, hover → 322 px with controls; Large
+  310×60 / 44 px, hover → 394 px with controls; pause via the pill froze the remaining time
+  (586 s) and resume continued; click on the pill → island expanded (pinned); Arabic Large
+  mirrored (controls on the left); choosing Medium in Settings re-shaped the running pill
+  immediately; zero page errors. Screenshots reviewed.
+- Not run: full-screen visibility with `timerOnTop` (needs a real full-screen app in the
+  foreground); the installed build was not rebuilt for this stage (dev build verified).
+
 **Installed-app branding scan** (DevTools DOM walk of the island and all settings pages in
 English and Arabic, after the final build): zero matches for the old names; Downloads rows
 read "IDM downloads / Browser downloads …", About reads "Developed by Rami Al-Hakimi" /

@@ -307,9 +307,17 @@ ipcMain.on('drag-end', () => {
   send('hover', false);
 });
 
+let timerRunning = false; // reported by the island; with timerOnTop a running timer stays visible in full screen
+ipcMain.on('timer-state', (_e, on) => {
+  if (typeof on !== 'boolean' || on === timerRunning) return;
+  timerRunning = on;
+  updateVisibility();
+});
+
 function updateVisibility() {
   if (!win) return;
-  const shouldShow = !userHidden && !(fullscreenHidden && features.get().hideFullscreen);
+  const keepForTimer = timerRunning && features.get().timerOnTop;
+  const shouldShow = !userHidden && !(fullscreenHidden && features.get().hideFullscreen && !keepForTimer);
   if (shouldShow && !win.isVisible()) win.showInactive();
   if (!shouldShow && win.isVisible()) win.hide();
   send('visibility', shouldShow);

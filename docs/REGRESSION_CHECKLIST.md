@@ -30,7 +30,7 @@ applicable on this machine (note why).
 | A1 | App catalogue, pins, reorder, launch | Apps tab | 🤖 helper `apps` returns 183 entries | | |
 | A2 | App icons | Visual | ⏳ | | |
 | F1 | Shelf drop/drag-out/open/reveal/clear/expiry | Drop a file | ⏳ | | |
-| T1 | Timer presets, sounds | Timer tab | ⏳ | | |
+| T1 | Timer presets, sounds, pill sizes | Timer tab; Settings › Timer | ⏳ | | ✅ Small/Medium/Large pills, hover controls, pause/resume accuracy, AR (Stage 12); sounds ⏳ |
 | T2 | Focus sessions + scenes | Focus button | ⏳ | | |
 | Y1 | CPU/RAM | Idle slide | ⏳ | | |
 | Y2 | Weather + location fallbacks | System tab; set manual city | ⏳ | | |

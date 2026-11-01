@@ -453,5 +453,18 @@
   "p.support.license": "License",
   "p.support.thirdParty": "Third-party",
   "p.support.thirdPartyHint": "KFGQPC Hafs font (King Fahd Glorious Quran Printing Complex), Electron, node-ical, Open-Meteo, PrayTimes method",
-  "p.dl.idmHint": "Live progress and control when the IDM download manager is installed"
+  "p.dl.idmHint": "Live progress and control when the IDM download manager is installed",
+  "p.nav.timer": "Timer",
+  "p.timer.running": "Running timer",
+  "p.timer.size": "Display size",
+  "p.timer.sizeHint": "How big the countdown pill is while a timer runs. Medium and large show pause and reset on hover.",
+  "p.timer.small": "Small",
+  "p.timer.medium": "Medium",
+  "p.timer.large": "Large",
+  "p.timer.onTop": "Keep a running timer visible in full screen",
+  "p.timer.onTopHint": "The island always floats above other windows such as Chrome; with this on it also stays while an app is full screen",
+  "p.timer.focusTitle": "Focus sessions",
+  "p.timer.focusMin": "Focus",
+  "p.timer.breakMin": "Break",
+  "p.timer.longBreakMin": "Long break"
 }

@@ -773,6 +773,10 @@ function startsWithWindows() {
 }
 
 function setStartWithWindows(on) {
+  // the choice is also kept in settings.json, so an update (which re-runs the installer) or a
+  // lost registry value can be repaired at the next start (see restoreStartup)
+  prefs.startWithWindows = !!on;
+  settings.save('settings.json', prefs);
   if (app.isPackaged) {
     app.setLoginItemSettings({ openAtLogin: on });
     return on;
@@ -1042,7 +1046,23 @@ function runKeyHas(valueName) {
   });
 }
 
+// Installed builds: the user asked for launch at startup but the Run value is gone (an update
+// re-ran the installer, or the value was cleaned up): register again. A value that Windows'
+// own Startup settings disabled stays present and is left alone.
+function restoreStartup() {
+  if (!app.isPackaged || prefs.startWithWindows !== true) return;
+  try {
+    if (!app.getLoginItemSettings().openAtLogin) {
+      app.setLoginItemSettings({ openAtLogin: true });
+      log.info('launch at startup registered again');
+    }
+  } catch (err) {
+    console.error('[startup]', err.message);
+  }
+}
+
 app.whenReady().then(() => {
+  restoreStartup();
   // Pages never need a browser permission (no camera, mic, geolocation or notifications from web
   // content): deny them all, and never allow a <webview>.
   session.defaultSession.setPermissionRequestHandler((_wc, _permission, callback) => callback(false));

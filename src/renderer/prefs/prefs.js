@@ -28,6 +28,7 @@ function nope(el) {
 // ---- feature switches ----
 function showFeatures(f) {
   features = f;
+  if (methodSel.options.length) methodSel.value = f.prayerMethod || 'auto';
   $$('[data-feature]').forEach((el) => { el.checked = !!f[el.dataset.feature]; });
   $$('[data-lang]').forEach((b) => b.setAttribute('aria-checked', String((f.lang || 'auto') === b.dataset.lang)));
   // child settings show only while every switch they depend on is on
@@ -123,6 +124,27 @@ $$('[data-lang]').forEach((b) => b.addEventListener('click', () => {
   api.setFeatures({ lang: b.dataset.lang });
   saved();
 }));
+
+// ---- prayer: calculation method and what is active ----
+const methodSel = $('#pr-method');
+async function fillMethods() {
+  const list = await api.prayerMethods();
+  methodSel.innerHTML = '';
+  const add = (value, label) => { const o = document.createElement('option'); o.value = value; o.textContent = label; methodSel.append(o); };
+  add('auto', t('p.islamic.methodAuto'));
+  for (const m of list) add(m.key, t(`prayer.method.${m.key}`));
+  methodSel.value = features.prayerMethod || 'auto';
+}
+methodSel.addEventListener('change', () => { api.setFeatures({ prayerMethod: methodSel.value }); saved(); });
+let lastPrayer = null;
+function showPrayer(info) {
+  lastPrayer = info;
+  const el = $('#pr-active');
+  if (!info?.enabled || !info.city) { el.textContent = t('p.islamic.inactive'); return; }
+  el.textContent = t('p.islamic.active', { city: info.city, method: info.methodKey ? t(`prayer.method.${info.methodKey}`) : info.method });
+}
+api.onPrayer(showPrayer);
+api.prayerInfo().then(showPrayer);
 
 // ---- location ----
 let lastLocation = null;
@@ -321,8 +343,10 @@ api.onI18n((payload) => {
   if (lastCalendar) showCalendar(lastCalendar);
   showFolders(lastFolders);
   showBridge();
+  fillMethods();
+  showPrayer(lastPrayer);
 });
 api.onFeatures(showFeatures);
 api.onGeneral(showGeneral);
-api.features().then(showFeatures);
+api.features().then((f) => { showFeatures(f); fillMethods(); api.prayerInfo().then(showPrayer); });
 api.general().then(showGeneral);

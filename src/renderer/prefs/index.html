@@ -27,7 +27,7 @@
       <a href="#general" data-page="general"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg><span data-i18n="p.nav.general">General</span></a>
       <a href="#island" data-page="island"><svg viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="4"/></svg><span data-i18n="p.nav.island">Island</span></a>
       <a href="#companion" data-page="companion"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg><span data-i18n="p.nav.companion">Companion</span></a>
-      <a href="#faith" data-page="faith"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><span data-i18n="p.nav.faith">Prayer &amp; Dhikr</span></a>
+      <a href="#faith" data-page="faith"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><span data-i18n="p.nav.features">Features</span></a>
       <a href="#alerts" data-page="alerts"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span data-i18n="p.nav.alerts">Alerts &amp; Privacy</span></a>
       <a href="#connections" data-page="connections"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-i18n="p.nav.connections">Connections</span></a>
       <a href="#support" data-page="support"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span data-i18n="p.nav.support">Support</span></a>
@@ -85,7 +85,7 @@
             <label class="chip"><input type="checkbox" data-feature="tabMedia" data-tab><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><b data-i18n="tabs.music">Music</b></label>
             <label class="chip"><input type="checkbox" data-feature="tabApps" data-tab><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><b data-i18n="tabs.apps">Apps</b></label>
             <label class="chip"><input type="checkbox" data-feature="tabShelf" data-tab><svg viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z"/></svg><b data-i18n="tabs.shelf">Shelf</b></label>
-            <label class="chip"><input type="checkbox" data-feature="tabPrayer" data-tab><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><b data-i18n="tabs.prayer">Prayer</b></label>
+            <label class="chip" data-needs="islamic"><input type="checkbox" data-feature="tabPrayer" data-tab><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><b data-i18n="tabs.prayer">Prayer</b></label>
             <label class="chip"><input type="checkbox" data-feature="tabTimer" data-tab><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg><b data-i18n="tabs.timer">Timer</b></label>
             <label class="chip"><input type="checkbox" data-feature="tabSystem" data-tab><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><b data-i18n="tabs.system">System</b></label>
           </div>
@@ -96,7 +96,7 @@
           <div class="card">
             <label class="row"><b data-i18n="p.island.slideClock">Clock &amp; weather</b><input type="checkbox" class="sw" data-feature="slideClock"></label>
             <label class="row"><b data-i18n="p.island.slideStats">CPU &amp; memory</b><input type="checkbox" class="sw" data-feature="slideStats"></label>
-            <label class="row"><b data-i18n="p.island.slidePrayer">Next prayer</b><input type="checkbox" class="sw" data-feature="slidePrayer"></label>
+            <label class="row" data-needs="islamic"><b data-i18n="p.island.slidePrayer">Next prayer</b><input type="checkbox" class="sw" data-feature="slidePrayer"></label>
           </div>
         </div>
         <div class="group">
@@ -122,7 +122,7 @@
             <label class="row"><b data-i18n="p.soqi.eyes">Peeks at the cursor</b><input type="checkbox" class="sw" data-feature="soqiEyes"></label>
             <label class="row"><div class="txt"><b data-i18n="p.soqi.reacts">Reacts to events</b><small data-i18n="p.soqi.reactsHint">Downloads, alerts, music, welcome back</small></div><input type="checkbox" class="sw" data-feature="soqiReacts"></label>
             <label class="row"><div class="txt"><b data-i18n="p.soqi.motion">Movement</b><small data-i18n="p.soqi.motionHint">Off: still pictures only. Also off with Windows' reduced-motion setting</small></div><input type="checkbox" class="sw" data-feature="soqiMotion"></label>
-            <label class="row"><b data-i18n="p.soqi.prayer">At the adhan</b><input type="checkbox" class="sw" data-feature="soqiPrayer"></label>
+            <label class="row" data-needs="islamic"><b data-i18n="p.soqi.prayer">At the adhan</b><input type="checkbox" class="sw" data-feature="soqiPrayer"></label>
             <label class="row"><b data-i18n="p.soqi.focus">Focus sessions</b><input type="checkbox" class="sw" data-feature="soqiFocus"></label>
             <label class="row"><b data-i18n="p.soqi.celebrate">Celebrations</b><input type="checkbox" class="sw" data-feature="celebrate"></label>
           </div>
@@ -153,18 +153,27 @@
 
       <!-- PRAYER & DHIKR -->
       <section id="faith" class="page">
-        <h1 data-i18n="p.nav.faith">Prayer &amp; Dhikr</h1>
+        <h1 data-i18n="p.nav.features">Features</h1>
         <div class="group">
-          <h2 data-i18n="p.faith.prayer">Prayer</h2>
+          <h2 data-i18n="p.islamic.title">Islamic Features</h2>
           <div class="card">
-            <label class="row"><b data-i18n="p.faith.alerts">Prayer alerts</b><input type="checkbox" class="sw" data-feature="prayerAlerts"></label>
+            <label class="row"><div class="txt"><b data-i18n="p.islamic.enable">Enable Islamic Features</b><small data-i18n="p.islamic.enableHint">Prayer times, reminders, du'a and Qur'an verses. Off for new installations; everything below applies only while this is on.</small></div><input type="checkbox" class="sw" data-feature="islamic"></label>
+          </div>
+          <div class="card" data-needs="islamic">
+            <label class="row"><b data-i18n="p.islamic.prayerTab">Prayer times</b><input type="checkbox" class="sw" data-feature="tabPrayer"></label>
+            <label class="row"><b data-i18n="p.islamic.slide">Next prayer on the island</b><input type="checkbox" class="sw" data-feature="slidePrayer"></label>
+            <label class="row"><b data-i18n="p.islamic.notifications">Prayer notifications</b><input type="checkbox" class="sw" data-feature="prayerAlerts"></label>
+            <label class="row sub" data-needs="islamic prayerAlerts"><b data-i18n="p.islamic.adhan">Adhan sound</b><input type="checkbox" class="sw" data-feature="adhanSound"></label>
+            <label class="row"><div class="txt"><b data-i18n="p.islamic.scenes">Islamic scenes</b><small data-i18n="p.islamic.scenesHint">Soqi announces the adhan beside a card</small></div><input type="checkbox" class="sw" data-feature="soqiPrayer"></label>
+            <div class="row"><b data-i18n="p.islamic.method">Calculation method</b><select id="pr-method" class="select"></select></div>
+            <div class="row"><div class="txt"><b data-i18n="p.islamic.location">Location</b><small id="pr-active" data-i18n="p.islamic.inactive">Not calculated yet</small></div><small class="val" data-i18n="p.islamic.locationHint">Change the city under General</small></div>
             <label class="row"><b data-i18n="p.faith.hanafi">Hanafi Asr</b><input type="checkbox" class="sw" data-feature="asrHanafi"></label>
             <div class="row"><div class="txt"><b data-i18n="p.faith.hijri">Hijri date</b><small data-i18n="p.faith.hijriHint">Match local moon sighting</small></div>
               <div class="stepper" data-num="hijriAdjust" data-steps="-2,-1,0,1,2" data-unit="day"><button data-dir="-1" aria-label="One day less" data-i18n-aria="common.less">−</button><output></output><button data-dir="1" aria-label="One day more" data-i18n-aria="common.more">+</button></div>
             </div>
           </div>
         </div>
-        <div class="group">
+        <div class="group" data-needs="islamic">
           <h2 data-i18n="p.faith.reminders">Dhikr, du'a &amp; Qur'an</h2>
           <div class="card">
             <label class="row"><b data-i18n="p.faith.showReminders">Show reminders</b><input type="checkbox" class="sw" data-feature="reminders"></label>
@@ -187,6 +196,7 @@
           </div>
           <div class="actions"><button class="btn accent" id="rm-preview" data-i18n="p.faith.preview">Show one now</button></div>
         </div>
+        <p class="hint" data-i18n="p.islamic.sources">Qur'an text in the KFGQPC Hafs script (King Fahd Glorious Quran Printing Complex); prayer times calculated on this PC with the PrayTimes method.</p>
       </section>
 
       <!-- ALERTS & PRIVACY -->

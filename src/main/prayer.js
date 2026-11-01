@@ -14,49 +14,7 @@ let midnightTimer = null;
 let failed = false; // the last run found no location (logged once, until it works again)
 let approx = false; // calculated for the time zone's capital, waiting for the real place
 
-// fajr / isha: sun angle below the horizon, or isha as minutes after maghrib ("90 min");
-// maghrib: an angle, or minutes after sunset (default: at sunset)
-const METHODS = {
-  MWL: { name: 'Muslim World League', fajr: 18, isha: 17 },
-  ISNA: { name: 'Islamic Society of North America', fajr: 15, isha: 15 },
-  EGYPT: { name: 'Egyptian General Authority of Survey', fajr: 19.5, isha: 17.5 },
-  MAKKAH: { name: 'Umm Al-Qura University, Makkah', fajr: 18.5, isha: '90 min' },
-  KARACHI: { name: 'University of Islamic Sciences, Karachi', fajr: 18, isha: 18 },
-  TEHRAN: { name: 'Institute of Geophysics, Tehran', fajr: 17.7, isha: 14, maghrib: 4.5 },
-  GULF: { name: 'Gulf Region', fajr: 19.5, isha: '90 min' },
-  KUWAIT: { name: 'Kuwait', fajr: 18, isha: 17.5 },
-  QATAR: { name: 'Qatar', fajr: 18, isha: '90 min' },
-  SINGAPORE: { name: 'Majlis Ugama Islam Singapura', fajr: 20, isha: 18 },
-  JAKIM: { name: 'JAKIM, Malaysia', fajr: 20, isha: 18 },
-  KEMENAG: { name: 'Kemenag, Indonesia', fajr: 20, isha: 18 },
-  FRANCE: { name: 'Union des Organisations Islamiques de France', fajr: 12, isha: 12 },
-  TURKEY: { name: 'Diyanet, Turkey', fajr: 18, isha: 17 },
-  RUSSIA: { name: 'Spiritual Administration of Muslims of Russia', fajr: 16, isha: 15 },
-  DUBAI: { name: 'Dubai', fajr: 18.2, isha: 18.2, tune: { dhuhr: 3, maghrib: 3 } },
-  TUNISIA: { name: 'Tunisia', fajr: 18, isha: 18 },
-  ALGERIA: { name: 'Algeria', fajr: 18, isha: 17 },
-  MOROCCO: { name: 'Morocco', fajr: 19, isha: 17 },
-  JORDAN: { name: 'Ministry of Awqaf, Jordan', fajr: 18, isha: 18, maghrib: '5 min' },
-};
-const BY_COUNTRY = {
-  EG: 'EGYPT', SD: 'EGYPT', LY: 'EGYPT', SY: 'EGYPT', LB: 'EGYPT', IQ: 'MWL',
-  SA: 'MAKKAH', YE: 'MAKKAH', AE: 'DUBAI', KW: 'KUWAIT', QA: 'QATAR', BH: 'GULF', OM: 'GULF',
-  JO: 'JORDAN', PS: 'JORDAN', MA: 'MOROCCO', DZ: 'ALGERIA', TN: 'TUNISIA', TR: 'TURKEY', IR: 'TEHRAN',
-  PK: 'KARACHI', IN: 'KARACHI', BD: 'KARACHI', AF: 'KARACHI', SG: 'SINGAPORE', BN: 'SINGAPORE',
-  MY: 'JAKIM', ID: 'KEMENAG', US: 'ISNA', CA: 'ISNA', FR: 'FRANCE', RU: 'RUSSIA',
-};
-// a location saved before countries were known: the country from its time zone
-const ZONES = {
-  'Africa/Cairo': 'EG', 'Asia/Riyadh': 'SA', 'Asia/Dubai': 'AE', 'Asia/Kuwait': 'KW', 'Asia/Qatar': 'QA', 'Asia/Bahrain': 'BH',
-  'Asia/Muscat': 'OM', 'Asia/Amman': 'JO', 'Africa/Casablanca': 'MA', 'Africa/Algiers': 'DZ', 'Africa/Tunis': 'TN',
-  'Europe/Istanbul': 'TR', 'Asia/Tehran': 'IR', 'Asia/Karachi': 'PK', 'Asia/Kolkata': 'IN', 'Asia/Dhaka': 'BD',
-  'Asia/Singapore': 'SG', 'Asia/Kuala_Lumpur': 'MY', 'Asia/Jakarta': 'ID', 'Europe/Paris': 'FR', 'Asia/Baghdad': 'IQ',
-};
-function methodFor(loc) {
-  const code = String(loc.country || '').toUpperCase();
-  const country = /^[A-Z]{2}$/.test(code) ? code : ZONES[loc.timezone] || '';
-  return METHODS[BY_COUNTRY[country]] || METHODS.MWL;
-}
+const { METHODS, methodFor } = require('./prayer-methods');
 
 // ---- PrayTimes (degrees, hours) ----
 const rad = (d) => (d * Math.PI) / 180;
@@ -161,10 +119,10 @@ function hijriOf(day, adjust) {
 
 function calcDay(day, loc, zone) {
   const f = features.get();
-  let method = methodFor(loc);
+  let method = methodFor(loc, f.prayerMethod);
   const hijri = hijriOf(day, f.hijriAdjust || 0);
   // Umm al-Qura: Isha two hours after Maghrib in Ramadan
-  if (method === METHODS.MAKKAH && hijri.month === 9) method = { ...method, isha: '120 min' };
+  if (method.key === 'MAKKAH' && hijri.month === 9) method = { ...method, isha: '120 min' };
   const t = computeDay(day.y, day.m, day.d, loc.lat, loc.lon, method, f.asrHanafi ? 2 : 1);
   // the authority's own minute offsets, plus one minute of precaution on Asr so it is never
   // announced before the times people were used to (AlAdhan is up to a minute later on Asr)
@@ -186,13 +144,18 @@ function calcDay(day, loc, zone) {
     hijriEn: hijri.textEn,
     hijriMonth: hijri.month, // 9 = Ramadan
     method: method.name,
+    methodKey: method.key,
     // times are wall-clock times in this zone, which may differ from the PC's
     tz: zone,
   };
 }
 
+let enabled = false; // the master switch (features.islamic): nothing runs while it is off
+let onUpdate = () => {};
+
 async function refresh() {
   clearTimeout(midnightTimer);
+  if (!enabled || !getLocation) return;
   try {
     const loc = await getLocation();
     const zone = loc.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -203,6 +166,7 @@ async function refresh() {
     data = { city: `${loc.city || ''}${approx ? ' (approx.)' : ''}`, today: calcDay(today, loc, zone), tomorrow: calcDay(tomorrow, loc, zone) };
     settings.save('prayer-cache.json', data);
     send('prayer', data);
+    onUpdate();
     if (failed) console.warn('[prayer] back');
     failed = false;
     // next run just after local midnight
@@ -219,17 +183,33 @@ async function refresh() {
 
 // after sleep or a lost connection: recalculate now if the last run failed or was approximate
 function retry() {
-  if (failed || approx) refresh();
+  if (enabled && (failed || approx)) refresh();
 }
 
-function start(sender, locate) {
+// Islamic features on or off: on starts the calculation and the midnight timer, off stops them.
+function setEnabled(on) {
+  if (on === enabled) return;
+  enabled = !!on;
+  if (enabled) refresh();
+  else {
+    clearTimeout(midnightTimer);
+    midnightTimer = null;
+  }
+}
+
+function start(sender, locate, on = false) {
   send = sender;
   getLocation = locate;
-  refresh();
+  setEnabled(on);
 }
 
 function snapshot() {
-  return data;
+  return enabled ? data : null;
 }
 
-module.exports = { start, snapshot, refresh, retry, calcDay };
+// for Settings: what is active right now
+function info() {
+  return { enabled, city: data?.city || '', method: data?.today?.method || '', methodKey: data?.today?.methodKey || '', timer: !!midnightTimer };
+}
+
+module.exports = { start, setEnabled, snapshot, refresh, retry, calcDay, info, METHODS, onUpdate: (fn) => { onUpdate = fn; } };

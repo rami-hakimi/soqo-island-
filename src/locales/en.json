@@ -1,7 +1,6 @@
 {
   "app.name": "Soqo Island",
   "app.tagline": "A Living Island for Windows",
-
   "menu.show": "Show island",
   "menu.vertical": "Vertical (dock left / right)",
   "menu.resetPosition": "Reset position",
@@ -11,7 +10,6 @@
   "menu.quit": "Quit",
   "dialog.addFolder": "Add a download folder",
   "prefs.windowTitle": "Soqo Island Settings",
-
   "common.close": "Close",
   "common.settings": "Settings",
   "common.open": "Open",
@@ -23,7 +21,6 @@
   "common.more": "More",
   "common.earlier": "Earlier",
   "common.later": "Later",
-
   "island.label": "Soqo Island",
   "tabs.views": "Views",
   "tabs.music": "Music",
@@ -36,11 +33,9 @@
   "tabs.system": "System",
   "chip.idle": "Idle",
   "chip.media": "Media",
-
   "stats.cpu": "CPU",
   "stats.ram": "RAM",
   "stats.memory": "Memory",
-
   "media.nowPlaying": "Now Playing",
   "media.nowPlayingIn": "Now Playing · {app}",
   "media.nothing": "Nothing playing",
@@ -58,7 +53,6 @@
   "media.mute": "Mute",
   "media.volume": "Volume",
   "vol.muted": "Muted",
-
   "apps.clickToOpen": "Click to open",
   "apps.add": "Add",
   "apps.edit": "Edit",
@@ -71,7 +65,6 @@
   "apps.addName": "Add {name}",
   "apps.loading": "Loading apps…",
   "apps.none": "No apps found",
-
   "shelf.dropHere": "Drop files here",
   "shelf.dropHint": "Drag files onto the island to keep them handy, then drag them out anywhere.",
   "shelf.clear": "Clear",
@@ -81,7 +74,6 @@
   "shelf.leaves": "Leaves the Shelf on its own",
   "shelf.remove": "Remove {name}",
   "shelf.addFailed": "Couldn't add these files to the shelf",
-
   "dl.offlineTitle": "IDM Nova is not running",
   "dl.offlineSub": "Start it and your downloads will show up here live.",
   "dl.outdatedTitle": "IDM Nova needs an update",
@@ -107,7 +99,6 @@
   "dl.recent": "{n} recent",
   "dl.noteDone": "Downloaded {name}",
   "dl.noteFailed": "Download failed: {name}",
-
   "prayer.next": "Next prayer",
   "prayer.alerts": "Alerts",
   "prayer.alertsTitle": "A heads-up 10 minutes before each prayer and at the adhan",
@@ -130,11 +121,9 @@
   "prayer.iftarWish": " · May Allah accept your fast",
   "prayer.iftar": "Iftar",
   "prayer.ramadan": "Ramadan Kareem · {label} {time} · in {left}",
-
   "reminder.ayah": "Verse",
   "reminder.dhikr": "Dhikr",
   "reminder.dua": "Du'a",
-
   "timer.pick": "Pick a time",
   "timer.min": "m",
   "timer.focus": "Focus",
@@ -158,11 +147,9 @@
   "focus.doneToast": "Focus {n} done",
   "focus.breakMin": "Break {min} min",
   "focus.breakOver": "Break over",
-
   "battery.charging": "Charging",
   "battery.onBattery": "On Battery",
   "battery.low": "Low Battery",
-
   "weather.loading": "Loading weather…",
   "weather.clear": "Clear",
   "weather.partly": "Partly Cloudy",
@@ -173,7 +160,6 @@
   "weather.storm": "Thunderstorm",
   "weather.inCity": "{label} in {city}",
   "weather.hiLo": "H {hi}° L {lo}°",
-
   "sys.network": "Network",
   "sys.inUse": "In use",
   "sys.brightness": "Brightness",
@@ -181,7 +167,6 @@
   "sys.clearClips": "Clear clipboard history",
   "clips.empty": "Copied text shows up here",
   "clips.copy": "Click to copy",
-
   "cal.now": "now",
   "cal.inMin": "in {m} min",
   "cal.inH": "in {h}h",
@@ -190,7 +175,6 @@
   "meet.join": "Join",
   "meet.now": "Now",
   "meet.started": "Meeting started: {title}",
-
   "greet.morning": "Good morning",
   "greet.afternoon": "Good afternoon",
   "greet.evening": "Good evening",
@@ -213,7 +197,6 @@
   "dur.min": "{m} min",
   "dur.h": "{h} h",
   "dur.hm": "{h} h {m} min",
-
   "water.badge": "💧 Water",
   "water.title": "Drink a glass of water",
   "water.goalReached": "Daily goal reached ({g} glasses) 🎉 — one more won't hurt",
@@ -221,7 +204,6 @@
   "water.drank": "I drank ✓",
   "water.goalToast": "Water goal reached!",
   "water.glassToast": "Glass of water ✓",
-
   "net.wifi": "Wi-Fi",
   "net.ethernet": "Ethernet",
   "net.offline": "Offline",
@@ -234,12 +216,10 @@
   "net.back": "Back online",
   "net.wifiConnected": "Connected to Wi-Fi",
   "net.noteBack": "Back online {ago}",
-
   "pv.cam": "{apps} is using the camera",
   "pv.mic": "{apps} is using the microphone",
   "pv.cameraLabel": "Camera: {apps}",
   "pv.micLabel": "Mic: {apps}",
-
   "shot.imageSaved": "Image saved",
   "shot.saved": "Screenshot saved",
   "shot.addedToShelf": "Added to Shelf ✓",
@@ -247,21 +227,17 @@
   "shot.copied": "Screenshot copied",
   "shot.addToShelf": "Add to Shelf",
   "shot.onShelf": "On the Shelf",
-
   "upd.ready": "Update ready · {v}",
   "upd.now": "Update now",
   "upd.updating": "Updating · back in a few seconds",
-
   "clip.download": "Download",
   "clip.open": "Open",
   "clip.words": "{n} words",
   "clip.chars": "{n} chars",
   "clip.copied": "Copied",
-
   "kbd.caps": "Caps Lock",
   "kbd.on": "On",
   "kbd.off": "Off",
-
   "mini.title": "Mini Player",
   "mini.cantPlay": "This video can't play in the mini player",
   "mini.ownerOnly": "Its owner only allows it on YouTube. Going back to the tab…",
@@ -269,12 +245,10 @@
   "mini.backTitle": "Back to the tab (continues from here)",
   "mini.closeTitle": "Close (the tab stays paused at this point)",
   "mini.resize": "Resize",
-
   "p.nav.pages": "Pages",
   "p.nav.general": "General",
   "p.nav.island": "Island",
   "p.nav.companion": "Companion",
-  "p.nav.faith": "Prayer & Dhikr",
   "p.nav.alerts": "Alerts & Privacy",
   "p.nav.connections": "Connections",
   "p.nav.support": "Support",
@@ -285,7 +259,6 @@
   "p.savedDone": "Done",
   "p.savedReport": "Report copied",
   "p.savedReset": "Reset to defaults",
-
   "p.general.language": "Language",
   "p.general.langAuto": "Auto",
   "p.general.langEn": "English",
@@ -309,7 +282,6 @@
   "p.location.searching": "Searching…",
   "p.location.failed": "Search failed. Check your connection.",
   "p.location.none": "No results",
-
   "p.island.tabs": "Tabs",
   "p.island.keepOne": "Keep at least one tab",
   "p.island.collapsed": "Collapsed",
@@ -320,7 +292,6 @@
   "p.island.mediaPill": "Show media",
   "p.island.mediaTitle": "Title",
   "p.island.trackPeek": "New track card",
-
   "p.soqi.hero": "Soqi the Dolphin",
   "p.soqi.heroText": "Lives in your island: peeks at the cursor, dances to your music, cheers your downloads, dozes off when you step away.",
   "p.soqi.title": "Soqi",
@@ -343,7 +314,6 @@
   "p.water.reminder": "Water reminder",
   "p.water.every": "Every",
   "p.water.goal": "Daily goal",
-
   "p.faith.prayer": "Prayer",
   "p.faith.alerts": "Prayer alerts",
   "p.faith.hanafi": "Hanafi Asr",
@@ -360,7 +330,6 @@
   "p.faith.from": "From",
   "p.faith.to": "To",
   "p.faith.preview": "Show one now",
-
   "p.alerts.title": "Alerts",
   "p.alerts.volume": "Volume",
   "p.alerts.brightness": "Brightness",
@@ -375,7 +344,6 @@
   "p.privacy.dots": "Mic & camera dots",
   "p.privacy.clips": "Clipboard history",
   "p.privacy.clipsHint": "Kept in memory only",
-
   "p.cal.title": "Calendar",
   "p.cal.meetings": "Upcoming meetings",
   "p.cal.placeholder": "iCal link (https://… .ics)",
@@ -410,7 +378,6 @@
   "p.trouble.log": "Error log",
   "p.trouble.copyReport": "Copy report",
   "p.trouble.all": "All settings",
-
   "p.support.lead": "Soqo Island is free and open source (GPL-3.0), with no ads and no tracking, and always will be.",
   "p.support.star": "Star on GitHub",
   "p.support.starHint": "Free, and it helps others find Soqo Island",
@@ -419,7 +386,6 @@
   "p.support.openSource": "Open source",
   "p.support.openSourceHint": "GPL-3.0 · based on the Nova Island project",
   "p.support.credits": "Credits",
-
   "unit.glasses": "{n} glasses",
   "unit.none": "None",
   "unit.dayPlus": "+{n} day",
@@ -428,5 +394,52 @@
   "unit.daysMinus": "−{n} days",
   "unit.min": "{n} min",
   "unit.h": "{n} h",
-  "unit.s": "{n} s"
+  "unit.s": "{n} s",
+  "p.nav.features": "Features",
+  "p.islamic.title": "Islamic Features",
+  "p.islamic.enable": "Enable Islamic Features",
+  "p.islamic.enableHint": "Prayer times, reminders, du'a and Qur'an verses. Off for new installations; everything below applies only while this is on.",
+  "p.islamic.prayerTab": "Prayer times",
+  "p.islamic.slide": "Next prayer on the island",
+  "p.islamic.notifications": "Prayer notifications",
+  "p.islamic.adhan": "Adhan sound",
+  "p.islamic.scenes": "Islamic scenes",
+  "p.islamic.scenesHint": "Soqi announces the adhan beside a card",
+  "p.islamic.method": "Calculation method",
+  "p.islamic.methodAuto": "Automatic (by country)",
+  "p.islamic.location": "Location",
+  "p.islamic.locationHint": "Change the city under General",
+  "p.islamic.active": "Active: {city} · {method}",
+  "p.islamic.inactive": "Not calculated yet",
+  "p.islamic.sources": "Qur'an text in the KFGQPC Hafs script (King Fahd Glorious Quran Printing Complex); prayer times calculated on this PC with the PrayTimes method.",
+  "onboarding.badge": "Welcome",
+  "onboarding.title": "Welcome to Soqo Island",
+  "onboarding.sub": "Music, downloads, apps, a shelf for files and smart alerts live in this little island. Press <b>Ctrl+Alt+I</b> to open it, right-click for the menu. Optional features such as prayer times are under Settings › Features.",
+  "onboarding.settings": "Open Settings",
+  "onboarding.later": "Later",
+  "islamicPrompt.badge": "Islamic Features",
+  "islamicPrompt.title": "Keep prayer times and reminders?",
+  "islamicPrompt.sub": "Your Nova Island settings had them on. Keep them, or turn them off — you can change this any time under Settings › Features.",
+  "islamicPrompt.keep": "Keep on",
+  "islamicPrompt.off": "Turn off",
+  "prayer.method.MWL": "Muslim World League",
+  "prayer.method.ISNA": "Islamic Society of North America",
+  "prayer.method.EGYPT": "Egyptian General Authority of Survey",
+  "prayer.method.MAKKAH": "Umm Al-Qura University, Makkah",
+  "prayer.method.KARACHI": "University of Islamic Sciences, Karachi",
+  "prayer.method.TEHRAN": "Institute of Geophysics, Tehran",
+  "prayer.method.GULF": "Gulf Region",
+  "prayer.method.KUWAIT": "Kuwait",
+  "prayer.method.QATAR": "Qatar",
+  "prayer.method.SINGAPORE": "Majlis Ugama Islam Singapura",
+  "prayer.method.JAKIM": "JAKIM, Malaysia",
+  "prayer.method.KEMENAG": "Kemenag, Indonesia",
+  "prayer.method.FRANCE": "Union des Organisations Islamiques de France",
+  "prayer.method.TURKEY": "Diyanet, Turkey",
+  "prayer.method.RUSSIA": "Spiritual Administration of Muslims of Russia",
+  "prayer.method.DUBAI": "Dubai",
+  "prayer.method.TUNISIA": "Tunisia",
+  "prayer.method.ALGERIA": "Algeria",
+  "prayer.method.MOROCCO": "Morocco",
+  "prayer.method.JORDAN": "Ministry of Awqaf, Jordan"
 }

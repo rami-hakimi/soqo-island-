@@ -49,6 +49,9 @@
     const btn = $('#sc-btn');
     btn.hidden = !s.button;
     if (s.button) btn.textContent = s.button.label;
+    const btn2 = $('#sc-btn2');
+    btn2.hidden = !s.button2;
+    if (s.button2) btn2.textContent = s.button2.label;
     total = s.ms || 30000;
     state.sceneUntil = Date.now() + total;
     bar.style.width = '100%';
@@ -65,6 +68,12 @@
   $('#sc-btn').addEventListener('click', (e) => {
     e.stopPropagation();
     const fn = current?.button?.onClick;
+    end('button');
+    fn?.();
+  });
+  $('#sc-btn2').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const fn = current?.button2?.onClick;
     end('button');
     fn?.();
   });

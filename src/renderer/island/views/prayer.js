@@ -111,7 +111,7 @@
       if (diff <= 0 && diff > -60000 && !fired.has(`${id}-now`)) {
         fired.add(`${id}-now`);
         note('🕌', t('prayer.adhanNote', { name: NAMES[k], time: clock(at_) }));
-        chime();
+        if (feat('adhanSound')) chime();
         // Soqi announces the adhan beside the card; the plain toast when that is off or there's no room
         const iftar = k === 'maghrib' && isRamadan(d) ? t('prayer.iftarWish') : '';
         // the title is Qur'anic (Ta-Ha 20:14) and stays in Arabic in every language
@@ -165,7 +165,7 @@
 
   let lastListKey = '';
   function tick() {
-    const d = days();
+    const d = feat('islamic') ? days() : null;
     zone = d?.today?.tz || '';
     view.classList.toggle('loading', !d);
     $('.pr-slide').hidden = !d;
@@ -200,7 +200,7 @@
 
   // for the morning card: the next prayer as text
   window.nextPrayerText = () => {
-    const d = days();
+    const d = feat('islamic') ? days() : null;
     if (!d) return '';
     const now = new Date();
     const n = nextPrayer(d, now);
@@ -210,6 +210,12 @@
   window.addEventListener('island:i18n', () => { lastListKey = ''; tick(); });
   bridge.onPrayer((p) => {
     data = p;
+    lastListKey = '';
+    tick();
+  });
+  // turning the features on later: fetch what main has calculated meanwhile
+  window.addEventListener('island:features', () => {
+    if (feat('islamic') && !data) bridge.prayerSnapshot().then((p) => { if (p) { data = p; tick(); } });
     lastListKey = '';
     tick();
   });

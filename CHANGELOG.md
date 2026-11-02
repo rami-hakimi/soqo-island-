@@ -3,7 +3,7 @@
 All notable changes to Soqo Island. The format follows Keep a Changelog; versions follow
 semver.
 
-## [2.0.0-beta.6] — unreleased
+## [2.0.0-beta.6] — 2026-11-02
 
 Scrolling fix after the owner's beta.5 test.
 

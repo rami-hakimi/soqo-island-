@@ -83,7 +83,7 @@ More captures are in [`assets/screenshots/app/`](assets/screenshots/app/).
 
 Windows 10 or 11, 64-bit. No account is needed.
 
-> **Beta.** The current beta, 2.0.0-beta.3, is available as a pre-release on the Releases
+> **Beta.** The current beta, 2.0.0-beta.6, is available as a pre-release on the Releases
 > page; see its notes for the known limitations. You can also build from source
 > (see [Built with](#built-with)).
 

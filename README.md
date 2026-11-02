@@ -80,8 +80,9 @@ More captures are in [`assets/screenshots/app/`](assets/screenshots/app/).
 
 Windows 10 or 11, 64-bit. No account is needed.
 
-> **No installer has been published yet.** The first public beta (2.0.0-beta.2) will appear on
-> the Releases page below; until then you can build from source (see [Built with](#built-with)).
+> **Beta.** The first public beta, 2.0.0-beta.2, is available as a pre-release on the Releases
+> page; see its notes for the known limitations. You can also build from source
+> (see [Built with](#built-with)).
 
 1. Open the [Releases page](https://github.com/rami-hakimi/soqo-island-/releases).
 2. Download the latest Windows installer, `Soqo-Island-Setup-<version>.exe`.

@@ -147,8 +147,6 @@ Architecture, localisation, privacy, security, releasing and release notes are i
 
 ## License
 
-Soqo Island is free software under the [GNU General Public License v3.0](LICENSE).
-It is based on the GPL-licensed Nova Island project; upstream authorship, the modification
-notice and all third-party credits (including the KFGQPC Hafs Qur'an font, which is not
-covered by the GPL) are in [NOTICE.md](NOTICE.md); the licence texts of bundled components
-are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Soqo Island is free software, released under the [GNU General Public License v3.0](LICENSE).
+Copyright and attribution notices are in [NOTICE.md](NOTICE.md); the licence texts of the
+bundled third-party components are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

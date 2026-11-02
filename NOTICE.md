@@ -41,6 +41,8 @@ written confirmation from KFGQPC (info@qurancomplex.gov.sa), or replacing the pa
 Tanzil Project's Uthmani text, which carries an explicit licence (CC BY 3.0: verbatim copies
 only, "Tanzil Project" named as source, link to tanzil.net, copyright notice kept). Until one of
 these is done the text stays as inherited from upstream and the question is flagged here.
+A verified, ready-to-apply comparison with the Tanzil text (all 25 passages match letter for
+letter) is in `docs/QURAN_TEXT_PROPOSAL.md`; it is applied only on the owner's approval.
 
 ## Artwork
 - **Application screenshots** (`assets/screenshots/app/`) were captured from the running
@@ -48,12 +50,16 @@ these is done the text stays as inherited from upstream and the question is flag
 - **Derived images** (`build/icon.*`, `build/tray*.png`, `assets/soqi/*.png`) are produced by
   `scripts/prepare-art.py` from the originals below and are reproducible.
 - **Originals** (`assets/branding/`, `assets/mascot/`, `assets/ui/`) and the five **concept
-  illustrations** (`assets/screenshots/promo/`) were supplied by the maintainer for this project.
-  How they were made (hand-drawn, commissioned, or created with image-generation tools) is not
-  recorded in this repository yet; **the maintainer is to confirm and this paragraph will be
-  updated**. Until then they are described only as "provided for Soqo Island", no copyright
-  claim beyond that is made, and they are not described as licensed under the GPL. They contain
-  no Nova Island artwork; Soqi is not the Nova character.
+  illustrations** (`assets/screenshots/promo/`) are AI-assisted assets supplied by the project
+  maintainer (Rami al-Hakimi) for Soqo Island: created with image-generation tools from the
+  maintainer's direction and selected, cropped and prepared by the project. No exclusive
+  copyright is claimed beyond what the law of the relevant jurisdiction supports for such
+  material; to the extent the maintainer holds rights in them, they may be used under the same
+  GPL-3.0 terms as the rest of the repository. The concept illustrations are marketing
+  concepts, not screenshots, and are labelled as such wherever they appear. They contain no
+  Nova Island artwork; Soqi is not the Nova character. The "Soqo Island" name and the Soqi
+  character remain this project's identifiers; please use a different name and mascot for
+  modified versions.
 
 ## Sounds
 Timer, alert and prayer-chime sounds are synthesised at runtime with the Web Audio API; no

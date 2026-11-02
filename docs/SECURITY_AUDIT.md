@@ -51,3 +51,9 @@ Severity: **High** (exploitable or privacy-breaking), **Medium** (defence in dep
   window title/process, mic/camera usage registry, Start-menu catalogue (cached as names/ids).
 - **Sent over the network:** IP (geolocation vendors), coordinates (Open-Meteo), nothing else
   except the user's own iCal URL, YouTube embed, GitHub for updates, and a connectivity probe.
+
+## Change log (after the audit)
+- 2026-11-02: new IPC channels `interactive` / `release` (renderer → main, boolean / no
+  payload, only toggle the click-through state) and `soqi-wave` (Settings → main → island,
+  no payload, triggers a cosmetic animation). `island-rect` gained an optional `soqi`
+  rectangle, validated like the island rectangle. No new privileged capability.

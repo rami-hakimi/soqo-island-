@@ -1,6 +1,6 @@
 # Regression Checklist
 
-Feature ids refer to `MIGRATION_PLAN.md` §2. Update the status column at the end of every
+Feature ids refer to `archive/MIGRATION_PLAN.md` §2. Update the status column at the end of every
 stage. Legend: ✅ verified · 🤖 automated test green · ⏳ not yet run · ❌ broken · ➖ not
 applicable on this machine (note why).
 
@@ -50,6 +50,8 @@ applicable on this machine (note why).
 | P4 | Adhan alerts + scene | Set PC clock near a prayer | ⏳ | | |
 | P5 | Reminders cards, quiet hours | Settings → Show one now | ⏳ (quiet hours 🤖) | | |
 | P6 | Religious text unchanged | Checksum test | 🤖 | | |
+| L1 | Dutch interface (nl-NL): strings, dates, plurals, language switch, installer language | Settings › General › Nederlands; island + Settings pages | ⏳ | | ✅ Stage 16: 473/473 keys (gate + test), live switch en→nl→ar→en, `ma 2 nov` / `14:05`, dismissal 4/4 in nl; NSIS nl_NL added; native review pending |
+| C8 | Soqi click reaction, idle motion, no island opening from Soqi | Rest pointer on Soqi beside the pill, click, move onto the pill | ⏳ | | ✅ Stage 16 real mouse: pointer on Soqi → window interactive, island stays closed (`soqiHot`); click → swim animation + happy/excited; pointer onto the pill → opens; Settings › "Say hi" works; reduced-motion CSS |
 | P7 | Card × closes on first click and releases the mouse | Show a Qur'an card and a scene; click × once with a real mouse; click again where it was | ⏳ | | ✅ Stage 15: 22/22 first clicks (live glass on), scene card too, second click reaches the window underneath, island does not reopen under the pointer; `hover-policy` 🤖 |
 | C1 | Companion peek (Soqi, was eyes) | Rest cursor beside pill 3 s | ⏳ | ✅ CDP screenshot (curious/happy beside pill, over top when floating) | |
 | C2 | Scenes (Soqi porthole + card) | Adhan / water / focus | ⏳ | ✅ CDP screenshots adhan + focus | |

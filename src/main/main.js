@@ -647,6 +647,7 @@ async function captureBackdrop() {
 // The island only becomes interactive after the cursor rests on it, so a quick sweep
 // to a browser tab underneath never gets caught.
 let islandRect = { x: 0, y: 0, width: 0, height: 0 };
+let soqiRect = null; // Soqi's picture when she is out (clickable, reported with the island rect)
 let inside = false;
 let active = false;
 let enteredAt = 0;
@@ -669,20 +670,23 @@ ipcMain.on('release', () => {
 ipcMain.on('island-rect', (_e, r) => {
   if (!isObj(r) || ![r.x, r.y, r.width, r.height].every((n) => Number.isFinite(n))) return;
   const resized = r.width !== islandRect.width || r.height !== islandRect.height;
-  islandRect = r;
+  const q = r.soqi;
+  soqiRect = isObj(q) && [q.x, q.y, q.width, q.height].every((n) => Number.isFinite(n)) ? { x: q.x, y: q.y, width: q.width, height: q.height } : null;
+  islandRect = { x: r.x, y: r.y, width: r.width, height: r.height };
   if (resized) {
     if (!instant) busyUntil = Date.now() + 2000;
     scheduleCapture(120);
   }
 });
 
-function setActive(on) {
+function setActive(on, onSoqi = false) {
   if (on === active) return;
   active = on;
   win.setIgnoreMouseEvents(!on);
   if (on && !instant) scheduleCapture(60);
   if (!on && win.isFocusable()) win.setFocusable(false);
-  send('hover', on);
+  // the pointer rests on Soqi only: the renderer keeps the island closed until it moves onto it
+  send('hover', on && onSoqi ? 'soqi' : on);
 }
 
 // Soqi's eyes follow the cursor while it is near the island (sent only on real movement).
@@ -712,7 +716,9 @@ function pollCursor() {
   sendNear(x, y);
   const pad = HoverPolicy.pad({ active, instant });
   const within = (r) => x >= r.x - pad && x <= r.x + r.width + pad && y >= r.y - pad && y <= r.y + r.height + pad;
-  const now = within(islandRect);
+  const onIsland = within(islandRect);
+  const onSoqi = !!soqiRect && !onIsland && within(soqiRect);
+  const now = onIsland || onSoqi;
   if (now && !inside) enteredAt = Date.now();
   inside = now;
   if (!now) {
@@ -721,8 +727,8 @@ function pollCursor() {
       releasedRect = null;
     }
     setActive(false);
-  } else if (HoverPolicy.shouldActivate({ inside: now, active, suppressed: suppressUntilLeave, instant, sinceEnterMs: Date.now() - enteredAt })) {
-    setActive(true);
+  } else if (HoverPolicy.shouldActivate({ inside: now, active, suppressed: suppressUntilLeave, instant: instant || onSoqi, sinceEnterMs: Date.now() - enteredAt })) {
+    setActive(true, onSoqi);
   }
 }
 
@@ -892,6 +898,8 @@ ipcMain.handle('features-get', () => features.get());
 ipcMain.on('features-set', (_e, patch) => { if (isObj(patch)) features.set(patch); });
 ipcMain.on('features-reset', () => features.reset());
 ipcMain.on('reminder-preview', () => send('reminder-now'));
+// Settings › Companion › "Say hi to Soqi": the keyboard-reachable way to trigger her reaction
+ipcMain.on('soqi-wave', () => send('soqi-wave'));
 ipcMain.handle('general-get', () => generalState());
 ipcMain.on('i18n-get-sync', (e) => { e.returnValue = i18n.payload(); });
 ipcMain.handle('i18n-get', () => i18n.payload());

@@ -98,6 +98,7 @@ $$('.stepper').forEach((st) => st.addEventListener('click', (e) => {
   saved();
 }));
 $('#rm-preview').addEventListener('click', () => api.previewReminder());
+$('#soqi-wave').addEventListener('click', () => api.soqiWave());
 
 // ---- general (lives in the main process) ----
 function showGeneral(g) {

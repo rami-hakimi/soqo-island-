@@ -1,4 +1,8 @@
-# Migration Status
+# Migration Status (archived)
+
+This is the stage-by-stage log of the Nova Island → Soqo Island rebuild (November 2026). It is
+kept for history; current information lives in `README.md`, `CHANGELOG.md`,
+`docs/REGRESSION_CHECKLIST.md` and `docs/releases/`.
 
 Branch: `rebuild/soqo-island` (from upstream `main` 7e3c4ee, Nova Island 1.4.0).
 Remotes: `origin` → github.com/rami-hakimi/soqo-island- (first push: Stage 15),
@@ -558,3 +562,24 @@ and the copyright line.
 - Not done / owner items: Dutch translation (not started; README says so), Soqi click
   gestures (not a feature; concept art only), tray menu by automation, multi-monitor, code
   signing, GitHub Release.
+
+## Stage 16 — Dutch, interactive Soqi, quality pass, beta.2 (2026-11-02) ✅
+- **Dutch** (`src/locales/nl.json`, 473 keys): resolver, `nl-NL` locale for dates and times,
+  language selector, NSIS `nl_NL`, Chromium `nl` locale; parity gate extended to every
+  dictionary (keys and placeholders); two new tests. Live switch en→nl→ar→en checked over the
+  DevTools protocol (`Muziek`, `3 bestanden`, `ma 2 nov`, `14:05`; Arabic still RTL).
+- **Soqi interactive**: click / Enter / Space / Settings "Say hi" → swim animation + happy or
+  excited reaction (2.4 s) then back; idle float, random blink (squash) and glance; sway to
+  music; shown beside the compact island for music and timers. Main treats Soqi's rectangle
+  (reported with the island rect) as instantly interactive and tells the renderer `'soqi'`,
+  so the island does not open until the pointer moves onto it. Verified with a real mouse:
+  pointer on Soqi → island closed, click → `play` class and reaction, pointer onto the pill →
+  opens, pointer away → closed. `soqiClicks` switch; reduced-motion CSS; `#soqi` excluded from
+  drag and from the pin-on-click handler.
+- **Dismissal regression**: 4/4 first clicks in nl, ar and en with live glass on (dev build);
+  installed build retested after the upgrade (see release notes).
+- **Quality pass**: comment scan found no session commentary or chatty comments (section
+  headers kept); no machine-specific paths or secrets in tracked files; migration plan/log and
+  the announcement draft moved to `docs/archive/`, release notes to `docs/releases/`;
+  README rewritten short and English-only; NOTICE gained the GPL §5 modification notice,
+  Electron/Chromium notices and the image/sound provenance; version 2.0.0-beta.2.

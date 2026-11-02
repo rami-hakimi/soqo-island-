@@ -9,8 +9,8 @@ Nothing is published automatically. A release is a deliberate, owner-approved st
    `assets/mascot`).
 3. Walk `docs/REGRESSION_CHECKLIST.md` on a real Windows desktop (media controls, mini
    player, address-bar slot, multi-monitor, Arabic + RTL).
-4. Bump `version` in `package.json` (semver; pre-releases as `2.0.0-beta.1`), update
-   `docs/MIGRATION_STATUS.md` / a CHANGELOG entry, commit.
+4. Bump `version` in `package.json` and `package-lock.json` (semver; pre-releases as
+   `2.0.0-beta.2`), update `CHANGELOG.md` and `docs/releases/<version>.md`, commit.
 
 ## Build
 ```bash

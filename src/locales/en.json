@@ -466,5 +466,10 @@
   "p.timer.focusTitle": "Focus sessions",
   "p.timer.focusMin": "Focus",
   "p.timer.breakMin": "Break",
-  "p.timer.longBreakMin": "Long break"
+  "p.timer.longBreakMin": "Long break",
+  "p.general.langNl": "Nederlands",
+  "p.soqi.clicks": "Reacts to clicks",
+  "p.soqi.clicksHint": "A click on Soqi gets a playful reaction",
+  "p.soqi.wave": "Say hi to Soqi",
+  "soqi.aria": "Soqi the Dolphin. Click to say hi"
 }

@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('prefs', {
   onGeneral: on('general'),
   window: (action) => ipcRenderer.send('prefs-window', action),
   previewReminder: () => ipcRenderer.send('reminder-preview'),
+  soqiWave: () => ipcRenderer.send('soqi-wave'),
   bridgeStatus: () => ipcRenderer.invoke('bridge-status'),
   openLog: () => ipcRenderer.send('open-log'),
   copyReport: () => ipcRenderer.invoke('copy-report'),

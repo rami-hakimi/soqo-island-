@@ -29,3 +29,11 @@ request titled "ar: review …". Mark anything ambiguous in the PR description.
 
 Also to review in context (not in the dictionaries): the installer's Arabic language pack
 comes from NSIS itself; the Windows tray menu uses the dictionary.
+
+## Dutch (nl.json)
+All 473 strings were written in one pass for Netherlands usage (informal "je", Dutch date and
+time formats via `nl-NL`, "Plank" for the Shelf, "Metgezel" for the Companion page, "Eiland"
+for the island). Points a reviewer should look at first: the Settings hints (long sentences),
+the prayer-method names (kept in their official language where one exists), and whether
+"Starten met Windows" / "Verbergen bij volledig scherm" read naturally in context. Religious
+terms (Fajr, Dhuhr, adhan, dhikr, du'a) are left untranslated on purpose.

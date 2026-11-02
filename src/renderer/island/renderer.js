@@ -204,8 +204,16 @@ window.addEventListener('island:mode', (e) => {
 
 // ---------------- hover (main process polls the cursor with hover intent) ----------------
 let hoverTimer = null;
+// 'soqi': the pointer rests on Soqi beside the island; the window takes the mouse so she can be
+// clicked, but the island itself opens only once the pointer moves onto it
+let soqiHot = false;
 bridge.onHover((v) => {
   clearTimeout(hoverTimer);
+  if (v === 'soqi') {
+    soqiHot = true;
+    return;
+  }
+  soqiHot = false;
   if (v) {
     state.hover = true;
     render();
@@ -214,6 +222,14 @@ bridge.onHover((v) => {
       state.hover = false;
       render();
     }, 160);
+  }
+});
+
+island.addEventListener('pointerover', (e) => {
+  if (soqiHot && e.target.id !== 'soqi') {
+    soqiHot = false;
+    state.hover = true;
+    render();
   }
 });
 
@@ -227,7 +243,12 @@ function reportRect() {
     const top = Math.min(r.top, c.top);
     r = { left, top, width: Math.max(r.right, c.right) - left, height: Math.max(r.bottom, c.bottom) - top };
   }
-  const rect = { x: Math.round(r.left), y: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height) };
+  const rect = { x: Math.round(r.left), y: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height), soqi: null };
+  // Soqi beside or above the island is clickable: main treats her picture as part of the island
+  if (island.classList.contains('soqi-show')) {
+    const q = $('#soqi').getBoundingClientRect();
+    if (q.width) rect.soqi = { x: Math.round(q.left), y: Math.round(q.top), width: Math.round(q.width), height: Math.round(q.height) };
+  }
   const key = JSON.stringify(rect);
   if (key !== lastRect) {
     lastRect = key;
@@ -244,7 +265,7 @@ bridge.onToggle(() => {
 
 // ---------------- drag to move (docks when dropped at the top edge) ----------------
 // a card's header row and close button never start a drag: a click there must close the card
-const NO_DRAG = 'button, input, .slider, .file, .app, .pick, .picker, .clip-item, .shelf-items, .rm-head, .sc-x';
+const NO_DRAG = 'button, input, .slider, .file, .app, .pick, .picker, .clip-item, .shelf-items, .rm-head, .sc-x, #soqi';
 let press = null;
 let justMoved = false;
 

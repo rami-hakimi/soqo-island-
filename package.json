@@ -1,6 +1,6 @@
 {
   "name": "soqo-island",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "Soqo Island — A Living Island for Windows (سوكو آيلاند)",
   "main": "src/main/main.js",
   "scripts": {
@@ -35,7 +35,8 @@
     "copyright": "Copyright © 2026 Rami al-Hakimi and Soqo Island contributors. Based on Nova Island © 2026 AmerTech (GPL-3.0).",
     "electronLanguages": [
       "en-US",
-      "ar"
+      "ar",
+      "nl"
     ],
     "directories": {
       "output": "dist",
@@ -93,7 +94,8 @@
       "deleteAppDataOnUninstall": false,
       "installerLanguages": [
         "en_US",
-        "ar_SA"
+        "ar_SA",
+        "nl_NL"
       ],
       "multiLanguageInstaller": true,
       "displayLanguageSelector": true

@@ -9,6 +9,13 @@ authors asked that modified versions use a different name and logo; "Nova Island
 Nova companion character and the Nova logo are their marks and are not used by this project.
 The upstream Git history is preserved in this repository.
 
+**Modification notice (GPL-3.0 §5).** This program has been modified from Nova Island by
+Rami al-Hakimi, 2026 (rebrand, Soqi companion, Arabic and Dutch interfaces, optional Islamic
+features, timer sizes, security hardening, project structure). The commit history and
+`CHANGELOG.md` record what changed and when. Files added by this project carry the Soqo Island
+copyright; files inherited from upstream keep their origin as shown by `git log --follow`.
+Nothing here claims upstream code as the work of the current maintainer.
+
 ## Third-party components
 | Component | Licence | Use |
 |---|---|---|
@@ -19,6 +26,13 @@ The upstream Git history is preserved in this repository.
 | Open-Meteo | CC BY 4.0 (data) | Weather and city search |
 | KFGQPC HAFS Uthmanic Script v3.0 | King Fahd Glorious Quran Printing Complex EULA (`assets/fonts/KFGQPC-LICENSE.txt`) | Qur'an text rendering. Included unmodified; **not** covered by the GPL |
 | Qur'an text | Quran.com API (`text_qpc_hafs`), KFGQPC script | `views/reminders-data.js`, unchanged from upstream |
+| Chromium, Node.js and the libraries bundled by Electron | Various (BSD, MIT, …) | Their notices ship inside the installed app as `LICENSES.chromium.html` and `LICENSE.electron.txt` |
+| Contributor Covenant 2.1 | CC BY 4.0 | `CODE_OF_CONDUCT.md` |
+
+Sounds (timer, alerts, the prayer chime) are synthesised at runtime with the Web Audio API; no
+third-party audio files are bundled. All images (icon, Soqi, concept illustrations, screenshots)
+are original work made for Soqo Island and are covered by the GPL-3.0 like the rest of the
+repository, except where this file says otherwise.
 
 ## Integrations
 The download manager shown as "IDM" in the interface is the upstream author's separate

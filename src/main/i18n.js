@@ -1,4 +1,4 @@
-// Language of the app: the setting (auto / en / ar), resolved against Windows' display language.
+// Language of the app: the setting (auto / en / ar / nl), resolved against Windows' display language.
 // Loads the dictionaries once and hands renderers a payload { lang, dir, dict, fallback }.
 const fs = require('fs');
 const path = require('path');
@@ -6,7 +6,7 @@ const { app } = require('electron');
 const I18n = require('../shared/i18n');
 
 const LOCALES = path.join(__dirname, '..', 'locales');
-const SUPPORTED = ['en', 'ar'];
+const SUPPORTED = ['en', 'ar', 'nl'];
 const dicts = {};
 for (const lang of SUPPORTED) {
   try {
@@ -23,7 +23,9 @@ const listeners = [];
 
 function systemLang() {
   const tag = (app.getLocale?.() || 'en').toLowerCase();
-  return tag.startsWith('ar') ? 'ar' : 'en';
+  if (tag.startsWith('ar')) return 'ar';
+  if (tag.startsWith('nl')) return 'nl';
+  return 'en';
 }
 
 function resolve(value) {
@@ -36,7 +38,7 @@ function build() {
   return current;
 }
 
-// setting: 'auto' | 'en' | 'ar'. Returns true when the resolved language changed.
+// setting: 'auto' | 'en' | 'ar' | 'nl'. Returns true when the resolved language changed.
 function setSetting(value) {
   const next = SUPPORTED.includes(value) ? value : 'auto';
   const before = current ? current.lang : null;

@@ -473,5 +473,10 @@
   "p.timer.focusTitle": "جلسات التركيز",
   "p.timer.focusMin": "تركيز",
   "p.timer.breakMin": "استراحة",
-  "p.timer.longBreakMin": "استراحة طويلة"
+  "p.timer.longBreakMin": "استراحة طويلة",
+  "p.general.langNl": "Nederlands",
+  "p.soqi.clicks": "يتفاعل مع النقر",
+  "p.soqi.clicksHint": "نقرة على سوقي تمنحه ردّة فعل مرحة",
+  "p.soqi.wave": "ألقِ التحية على سوقي",
+  "soqi.aria": "سوقي الدلفين. انقر لإلقاء التحية"
 }

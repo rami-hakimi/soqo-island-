@@ -13,7 +13,7 @@ body:
     attributes:
       label: Soqo Island version
       description: Shown at the bottom of the Settings sidebar and in Settings › About.
-      placeholder: 2.0.0-beta.1
+      placeholder: 2.0.0-beta.2
     validations:
       required: true
   - type: input
@@ -31,6 +31,7 @@ body:
       options:
         - English
         - Arabic (العربية)
+        - Dutch (Nederlands)
         - Automatic
     validations:
       required: true

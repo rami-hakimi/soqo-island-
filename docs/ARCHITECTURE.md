@@ -32,7 +32,7 @@ src/
 ├─ shared/          i18n.js (translation core), soqi-state.js (Soqi's mood machine) — UMD,
 │                   used by main, renderers and tests; timer-pill.js (pill sizes), hover-policy.js (when
 │                   the click-through window takes the mouse)
-└─ locales/         en.json, ar.json
+└─ locales/         en.json, ar.json, nl.json
 helper/             SoqoHelper.cs, Apps.cs, YtUrl.cs, AddressBar.cs, build.cmd → soqo-helper.exe
 assets/
 ├─ soqi/            Soqi sprites + sheet.json (shipped)
@@ -44,7 +44,8 @@ assets/
 build/              icon.ico / icon.png / tray.png (derived by scripts/prepare-art.py), installer.nsh
 test/               node:test suites; helpers/electron-stub.js lets main modules load under Node
 scripts/            check-syntax, i18n-check, prepare-art, dev-setup.cmd
-docs/               plan, status, checklist, security audit, art requests, this file, …
+docs/               architecture, localisation, privacy, security audit, releasing, checklist,
+                    releases/ (notes per version), archive/ (migration plan and log)
 .github/            CI workflow (verify + helper + unsigned installer), issue and PR templates
 ```
 

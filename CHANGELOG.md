@@ -3,17 +3,26 @@
 All notable changes to Soqo Island. The format follows Keep a Changelog; versions follow
 semver. Nothing below has been published yet.
 
-## [2.0.0-beta.1] — unreleased
+## [2.0.0-beta.2] — unreleased
 
-First Soqo Island build, a rebrand and rebuild of Nova Island 1.4.0 (GPL-3.0, by AmerTech).
+First public beta of Soqo Island, a rebrand and rebuild of Nova Island 1.4.0 (GPL-3.0, by
+AmerTech). beta.1 was an internal build and was never published.
 
 ### Added
 - **Soqi the Dolphin**: an original companion with ten moods (idle, happy, excited, curious,
   listening, music, sleeping, notification, download, warning) reacting to real events;
   peeks beside or above the island; appears in the player and in scene cards. Switches for
-  showing Soqi, cursor peeks, reactions and movement; honours Windows' reduced-motion setting.
+  showing Soqi, cursor peeks, reactions, movement and clicks; honours Windows' reduced-motion
+  setting.
+- **Soqi is interactive**: a click (or Enter/Space, or Settings › Companion › *Say hi to
+  Soqi*) gets a short swim and a happy or excited face, then she returns to what she was
+  doing. At rest she floats gently, blinks now and then and glances around; she sways to
+  music and shows up beside the small island during music and timers. Resting the pointer on
+  Soqi makes her clickable without opening the island.
 - **Arabic interface** next to English with live switching (Settings › General › Language),
   full right-to-left layouts, Arabic plural rules, Arabic/English Hijri month names.
+- **Dutch interface** (Nederlands): all 473 strings, Netherlands date and time formats,
+  automatic selection on Dutch Windows, Dutch installer language.
 - **Optional Islamic Features** with a master switch under Settings › Features, **off for new
   installations**: prayer times, notifications, adhan sound, Islamic scenes, calculation
   method (20 authorities), dhikr / du'a / Qur'an reminders. Nothing prayer-related runs while
@@ -67,5 +76,5 @@ First Soqo Island build, a rebrand and rebuild of Nova Island 1.4.0 (GPL-3.0, by
 - Arabic strings await a native-speaker review (`docs/TRANSLATION_REVIEW.md`).
 - The "adhan sound" is a soft chime, not a recorded adhan.
 - The IDM download-manager bridge is kept as an optional third-party integration.
-- Soqi reacts to events only; there are no click gestures yet.
-- Only English and Arabic ship; Dutch is not available.
+- Dutch and Arabic strings await a second native-speaker review.
+- Soqi's blink is a short squash of the still picture, not a drawn eyelid frame.

@@ -19,6 +19,9 @@
   let nearSince = 0;
   let dwellTimer = null;
   let shown = '';
+  let out = false; // Soqi currently visible
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const motionOn = () => feat('soqiMotion') && !reduced.matches;
 
   const reactsOn = () => feat('soqiReacts');
   const peekOn = () => feat('soqiEyes');
@@ -32,13 +35,15 @@
     if (lastMode === 'expanded') return reactsOn();
     if (reactsOn() && machine.reacting()) return true;
     if (reactsOn() && machine.context().away) return true;
-    if (lastMode === 'compact' && reactsOn() && compactKind() === 'media') return true;
+    // beside the small island while music plays or a timer runs (outside the pill: nothing is covered)
+    if (lastMode === 'compact' && reactsOn() && (compactKind() === 'media' || compactKind() === 'timer')) return true;
     if (lastMode === 'idle' && peekOn() && near && Date.now() - nearSince >= DWELL_MS && !state.hover) return true;
     return false;
   }
 
   function apply() {
     const on = visible();
+    out = on;
     const mood = machine.current();
     if (mood !== shown) {
       shown = mood;
@@ -60,8 +65,62 @@
     }
   }
 
+  // ---- a click (or Enter / Space, or Settings › "Say hi"): a short playful reaction, then back
+  // to whatever she was doing. Timers, music and cards are untouched; it is only her picture.
+  let playTimer = null;
+  function play(force) {
+    if (!feat('companion')) return false;
+    if (!force && !feat('soqiClicks')) return false;
+    const mood = Math.random() < 0.5 ? 'happy' : 'excited';
+    machine.react(mood, 2400);
+    apply();
+    if (motionOn()) {
+      img.classList.remove('play');
+      void img.offsetWidth; // restart the swim animation on a second click
+      img.classList.add('play');
+      clearTimeout(playTimer);
+      playTimer = setTimeout(() => img.classList.remove('play'), 1400);
+    }
+    setTimeout(apply, 2460);
+    return true;
+  }
+  img.addEventListener('pointerdown', (e) => e.stopPropagation());
+  img.addEventListener('click', (e) => {
+    e.stopPropagation();
+    play();
+  });
+  img.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      play();
+    }
+  });
+  bridge.onSoqiWave(() => play(true));
+
+  // ---- alive at rest: an occasional blink and, now and then, a brief change of expression.
+  // Random intervals (no metronome), only while she is out, only with movement allowed.
+  const RESTING = new Set(['idle', 'listening', 'curious']);
+  function blink() {
+    if (out && motionOn() && RESTING.has(machine.current())) {
+      img.classList.add('blink');
+      setTimeout(() => img.classList.remove('blink'), 220);
+    }
+    setTimeout(blink, 3500 + Math.random() * 5500);
+  }
+  setTimeout(blink, 4000);
+  function glance() {
+    if (out && motionOn() && RESTING.has(machine.current()) && lastMode !== 'reminder') {
+      machine.react(Math.random() < 0.7 ? 'curious' : 'happy', 1200);
+      apply();
+      setTimeout(apply, 1260);
+    }
+    setTimeout(glance, 25000 + Math.random() * 30000);
+  }
+  setTimeout(glance, 30000);
+
   // ---- public API for the other views ----
   window.soqi = {
+    play,
     react(mood, ms) {
       if (!reactsOn()) return false;
       const ok = machine.react(mood, ms);

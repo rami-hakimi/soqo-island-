@@ -35,6 +35,7 @@ contextBridge.exposeInMainWorld('soqo', {
   onNetwork: on('network'),
   onClipSmart: on('clip-smart'),
   onNear: on('near'),
+  onSoqiWave: on('soqi-wave'),
   clipAction: (action) => ipcRenderer.send('clip-action', action),
   network: () => ipcRenderer.invoke('net-get'),
   onShotSaved: on('shot-saved'),

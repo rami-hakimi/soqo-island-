@@ -4,16 +4,24 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const en = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/locales/en.json'), 'utf8'));
-const ar = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/locales/ar.json'), 'utf8'));
+const OTHERS = ['ar', 'nl'];
+const dicts = Object.fromEntries(OTHERS.map((l) => [l, JSON.parse(fs.readFileSync(path.join(ROOT, `src/locales/${l}.json`), 'utf8'))]));
 const base = (k) => k.replace(/_(zero|one|two|few|many|other)$/, '');
 let bad = 0;
 const fail = (msg) => { bad++; console.error('✖', msg); };
 
-// 1. parity
+// 1. parity (plural forms compared by base key) and matching placeholders
 const enBase = new Set(Object.keys(en).map(base));
-const arBase = new Set(Object.keys(ar).map(base));
-for (const k of enBase) if (!arBase.has(k)) fail(`ar.json missing ${k}`);
-for (const k of arBase) if (!enBase.has(k)) fail(`en.json has no ${k} (present in ar.json)`);
+const ph = (s) => (String(s).match(/\{\w+\}/g) || []).sort().join(',');
+for (const [l, d] of Object.entries(dicts)) {
+  const other = new Set(Object.keys(d).map(base));
+  for (const k of enBase) if (!other.has(k)) fail(`${l}.json missing ${k}`);
+  for (const k of other) if (!enBase.has(k)) fail(`en.json has no ${k} (present in ${l}.json)`);
+  for (const k of Object.keys(en)) {
+    if (!(k in d) || /_(zero|one|two|few|many|other)$/.test(k)) continue;
+    if (ph(d[k]) !== ph(en[k])) fail(`${l}.json placeholders differ for ${k}`);
+  }
+}
 
 // 2. keys referenced in code
 function walk(dir, out = []) {
@@ -66,5 +74,5 @@ for (const f of files.filter((x) => x.endsWith('.html'))) {
     }
   }
 }
-console.log(`i18n: ${Object.keys(en).length} en keys, ${Object.keys(ar).length} ar keys, ${used.size} used, ${bad} problems`);
+console.log(`i18n: ${Object.keys(en).length} en keys, ${OTHERS.map((l) => `${Object.keys(dicts[l]).length} ${l}`).join(', ')} keys, ${used.size} used, ${bad} problems`);
 process.exit(bad ? 1 : 0);

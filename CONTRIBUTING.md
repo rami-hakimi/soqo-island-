@@ -31,9 +31,9 @@ and off by default for new installations.
 ## Translations
 - The dictionaries are `src/locales/en.json` and `src/locales/ar.json`; every key must exist in
   both, and `npm run i18n:check` enforces it.
-- Arabic strings were written during the rebuild; a native-speaker review is the most useful
-  contribution right now. Record what you checked in `docs/TRANSLATION_REVIEW.md`.
-- Adding a language (Dutch is the next candidate) is described in `docs/LOCALIZATION.md`:
+- The Arabic and Dutch strings were written during the rebuild; a native-speaker review of
+  either is the most useful contribution right now. Record what you checked in `docs/TRANSLATION_REVIEW.md`.
+- Adding a language is described in `docs/LOCALIZATION.md`:
   a new `src/locales/<code>.json`, the language option in Settings › General, plural rules,
   and, for right-to-left languages, the `dir` handling that Arabic already uses.
 - Qur'an text, du'a and dhikr are never retranslated or edited; the UI around them is.

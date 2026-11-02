@@ -39,8 +39,9 @@
     return {
       lang: short,
       dir: RTL.has(short) ? 'rtl' : 'ltr',
-      // Arabic UI keeps Latin digits so numbers read the same everywhere in the island
-      locale: short === 'ar' ? 'ar-u-nu-latn' : undefined,
+      // Arabic UI keeps Latin digits so numbers read the same everywhere in the island;
+      // Dutch formats dates and times the Netherlands way; English follows the system locale
+      locale: short === 'ar' ? 'ar-u-nu-latn' : short === 'nl' ? 'nl-NL' : undefined,
       t,
       has,
     };

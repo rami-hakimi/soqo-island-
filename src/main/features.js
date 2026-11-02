@@ -8,7 +8,7 @@ const Islamic = require('../shared/islamic');
 const { METHODS } = require('./prayer-methods');
 
 const DEFAULTS = {
-  // language of the interface: auto (Windows' display language), en, ar
+  // language of the interface: auto (Windows' display language), en, ar, nl
   lang: 'auto',
   // expanded tabs
   tabMedia: true,
@@ -72,6 +72,7 @@ const DEFAULTS = {
   soqiFocus: true, // Soqi with her headphones at focus start / end
   soqiReacts: true, // Soqi reacts to downloads, alerts, music, and your return
   soqiMotion: true, // Soqi's small movements (off: still pictures only)
+  soqiClicks: true, // a click on Soqi gets a playful reaction
   water: true, // the Drop reminds you to drink
   waterEvery: 60, // minutes at the computer between glasses
   waterGoal: 8, // glasses a day (~2 L)
@@ -100,7 +101,7 @@ const DEFAULTS = {
 };
 
 // string settings and their allowed values
-const ENUMS = { lang: ['auto', 'en', 'ar'], prayerMethod: ['auto', ...Object.keys(METHODS)], timerSize: ['small', 'medium', 'large'] };
+const ENUMS = { lang: ['auto', 'en', 'ar', 'nl'], prayerMethod: ['auto', ...Object.keys(METHODS)], timerSize: ['small', 'medium', 'large'] };
 // number settings and their allowed range
 const RANGES = {
   remindEvery: [1, 240], remindFor: [5, 300], quietFrom: [0, 1439], quietTo: [0, 1439],

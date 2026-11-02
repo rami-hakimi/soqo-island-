@@ -127,8 +127,15 @@ function currentMode() {
 }
 
 let lastMode = '';
+let lastInstant = null;
 function render() {
   const mode = currentMode();
+  // cards, scenes and action toasts must take the first click: tell main to skip the hover delay
+  const instant = HoverPolicy.instantFor(mode, !!state.toastAction);
+  if (instant !== lastInstant) {
+    lastInstant = instant;
+    bridge.interactive(instant);
+  }
   if (mode !== lastMode) {
     island.classList.toggle('shrinking', !!lastMode && SIZE[mode] < SIZE[lastMode]);
     island.classList.remove('idle', 'compact', 'toast', 'peek', 'reminder', 'scene', 'expanded');
@@ -236,7 +243,8 @@ bridge.onToggle(() => {
 });
 
 // ---------------- drag to move (docks when dropped at the top edge) ----------------
-const NO_DRAG = 'button, input, .slider, .file, .app, .pick, .picker, .clip-item, .shelf-items';
+// a card's header row and close button never start a drag: a click there must close the card
+const NO_DRAG = 'button, input, .slider, .file, .app, .pick, .picker, .clip-item, .shelf-items, .rm-head, .sc-x';
 let press = null;
 let justMoved = false;
 
@@ -246,7 +254,9 @@ island.addEventListener('pointerdown', (e) => {
 });
 window.addEventListener('pointermove', (e) => {
   if (!press || state.moving) return;
-  if (Math.hypot(e.screenX - press.x, e.screenY - press.y) < 5) return; // drag threshold
+  // drag threshold; wider on a card or scene, which are meant to be read and closed, not moved
+  const threshold = lastMode === 'reminder' || lastMode === 'scene' ? 12 : 5;
+  if (Math.hypot(e.screenX - press.x, e.screenY - press.y) < threshold) return;
   state.moving = true;
   island.setPointerCapture(press.id);
   island.classList.add('moving');

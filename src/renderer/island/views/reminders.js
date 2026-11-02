@@ -156,6 +156,7 @@
     e.stopPropagation();
     previewing = false;
     hide();
+    bridge.release(); // the mouse goes back to whatever is under the cursor right away
   });
 
   // a new interval counts from now

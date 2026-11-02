@@ -48,6 +48,8 @@ contextBridge.exposeInMainWorld('soqo', {
     control: (id, action) => ipcRenderer.send('dl-control', id, action),
   },
   timerState: (running) => ipcRenderer.send('timer-state', !!running),
+  interactive: (on) => ipcRenderer.send('interactive', !!on),
+  release: () => ipcRenderer.send('release'),
   dragStart: () => ipcRenderer.send('drag-start'),
   dragEnd: () => ipcRenderer.send('drag-end'),
 

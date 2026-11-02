@@ -597,5 +597,8 @@
   "p.notif.off": "Uit",
   "p.notif.preview": "Berichtvoorbeelden tonen",
   "p.notif.previewHint": "Uit: alleen app en titel, nooit de tekst van het bericht",
-  "p.notif.note": "Stil zolang Windows op niet storen staat, tijdens een focussessie en zolang een app op volledig scherm staat. Chrome moet zijn meldingen via Windows afleveren (de standaardinstelling). Het eiland wordt nooit op het vergrendelscherm getoond."
+  "p.notif.note": "Stil zolang Windows op niet storen staat, tijdens een focussessie en zolang een app op volledig scherm staat. Chrome moet zijn meldingen via Windows afleveren (de standaardinstelling). Het eiland wordt nooit op het vergrendelscherm getoond.",
+  "sys.metersAria": "Systeemmeters",
+  "apps.gridAria": "Vastgezette apps",
+  "apps.resultsAria": "Zoekresultaten"
 }

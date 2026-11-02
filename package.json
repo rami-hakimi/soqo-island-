@@ -1,6 +1,6 @@
 {
   "name": "soqo-island",
-  "version": "2.0.0-beta.5",
+  "version": "2.0.0-beta.6",
   "description": "Soqo Island — A Living Island for Windows (سوكو آيلاند)",
   "main": "src/main/main.js",
   "scripts": {

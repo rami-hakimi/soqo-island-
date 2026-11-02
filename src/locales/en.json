@@ -597,5 +597,8 @@
   "p.notif.off": "Off",
   "p.notif.preview": "Show message previews",
   "p.notif.previewHint": "Off: app and title only, never the message text",
-  "p.notif.note": "Quiet while Windows is in do-not-disturb, during a focus session and while an app is full screen. Chrome has to deliver its notifications through Windows (its default). The island is never shown on the lock screen."
+  "p.notif.note": "Quiet while Windows is in do-not-disturb, during a focus session and while an app is full screen. Chrome has to deliver its notifications through Windows (its default). The island is never shown on the lock screen.",
+  "sys.metersAria": "System meters",
+  "apps.gridAria": "Pinned apps",
+  "apps.resultsAria": "Search results"
 }

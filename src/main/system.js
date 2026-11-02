@@ -32,7 +32,7 @@ function tickStats() {
 // ---- clipboard (kept in memory only; may contain sensitive text) ----
 // Read only when Windows reports a new copy (the helper's clipboard sequence). The helper also
 // says whether a password manager marked the copy as private; those are never read.
-const MAX_CLIPS = 8;
+const MAX_CLIPS = 20;
 let clips = [];
 let lastClip = '';
 clipboard.readText().then((t) => { lastClip = t || ''; }).catch(() => {});

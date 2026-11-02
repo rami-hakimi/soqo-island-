@@ -12,7 +12,7 @@ the one found from your IP, the iCal link you entered (a secret URL: it is writt
 error log (`soqo.log`, ≤ 1 MB, no clipboard text, no links, no file contents).
 
 ## Read while running, never stored
-- **Clipboard text** for the clipboard history (memory only, 8 entries, cleared when the
+- **Clipboard text** for the clipboard history (memory only, 20 entries, cleared when the
   switch is turned off) and the smart clipboard. Copies that password managers mark as
   private are never read. **Copied images** are kept in memory until you save them or they are
   auto-shelved; the saved file goes to `Pictures\Soqo Island`.

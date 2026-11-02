@@ -269,7 +269,7 @@ bridge.onToggle(() => {
 
 // ---------------- drag to move (docks when dropped at the top edge) ----------------
 // a card's header row and close button never start a drag: a click there must close the card
-const NO_DRAG = 'button, input, .slider, .file, .app, .pick, .picker, .clip-item, .shelf-items, .rm-head, .sc-x, #soqi, .act-list, .wx-pop';
+const NO_DRAG = 'button, input, .slider, .file, .app, .pick, .picker, .clip-item, .shelf-items, .rm-head, .sc-x, #soqi, .scroll, .wx-pop';
 let press = null;
 let justMoved = false;
 
@@ -826,7 +826,8 @@ $('#vol-btn').addEventListener('click', () => {
 });
 
 island.addEventListener('wheel', (e) => {
-  if (e.target.closest('.picker-list, .clip-list, .shelf-items') || state.vol === null) return;
+  // over a scrolling region (lists, the System meters, a popover) the wheel scrolls it, never the volume
+  if (e.target.closest('.scroll, .shelf-items, .wx-pop') || state.vol === null) return;
   e.preventDefault();
   // proportional to the scroll distance: one mouse notch ≈ 3%, touchpads move in fine steps
   const perPx = e.deltaMode === 1 ? 0.01 : 0.0003;
@@ -868,6 +869,29 @@ function handleBrightness(m) {
   $('#bright-val').textContent = `${m.bright}%`;
   if (changed && lastMode !== 'expanded') showHud('bright', m.bright / 100);
 }
+
+// ---------------- keyboard focus for scrolling regions ----------------
+// The island window never takes keyboard focus by itself (a click on a clipboard entry must not
+// steal it from the editor you paste into). A click on a region's own surface — its scrollbar
+// or empty space — asks for it, so the arrow keys, Page Up / Down, Home and End scroll the
+// region and Tab reaches its rows; Escape or closing the island hands it back.
+island.addEventListener('pointerdown', (e) => {
+  const region = e.target.closest('.scroll');
+  if (!region || e.target !== region) return;
+  bridge.focusInput(true);
+  setTimeout(() => region.focus({ preventScroll: true }), 60);
+});
+island.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || !e.target.closest('.scroll')) return;
+  e.target.closest('.scroll').blur();
+  bridge.focusInput(false);
+});
+window.addEventListener('island:mode', (e) => {
+  if (e.detail.mode !== 'expanded' && document.activeElement && document.activeElement.closest('.scroll')) {
+    document.activeElement.blur();
+    bridge.focusInput(false);
+  }
+});
 
 // ---------------- toasts & HUD ----------------
 let toastTimer = null;

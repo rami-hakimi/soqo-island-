@@ -295,7 +295,7 @@
                 <button id="apps-edit" class="pill small" data-i18n="apps.edit">Edit</button>
               </div>
             </div>
-            <div id="apps-grid" class="apps-grid"></div>
+            <div id="apps-grid" class="apps-grid scroll" tabindex="0" aria-label="Pinned apps" data-i18n-aria="apps.gridAria"></div>
           </div>
           <div id="apps-picker" class="picker" hidden>
             <div class="picker-bar">
@@ -305,7 +305,7 @@
               </label>
               <button id="apps-done" class="pill small" data-i18n="apps.done">Done</button>
             </div>
-            <div id="apps-list" class="picker-list"></div>
+            <div id="apps-list" class="picker-list scroll" tabindex="0" aria-label="Search results" data-i18n-aria="apps.resultsAria"></div>
           </div>
         </section>
 
@@ -342,7 +342,7 @@
               <span class="sub" id="dl-summary"></span>
               <button id="dl-show" class="pill small" data-i18n="dl.openIdm">Open IDM</button>
             </div>
-            <div class="dl-list" id="dl-list"></div>
+            <div class="dl-list scroll" id="dl-list" tabindex="0" aria-label="Downloads" data-i18n-aria="tabs.downloads"></div>
           </div>
         </section>
 
@@ -364,7 +364,7 @@
               </div>
             </div>
             <div class="pr-side">
-              <div class="pr-list" id="pr-list"></div>
+              <div class="pr-list scroll" id="pr-list" tabindex="0" aria-label="Prayer times" data-i18n-aria="tabs.prayerAria"></div>
               <div class="pr-foot" id="pr-city"></div>
             </div>
           </div>
@@ -431,7 +431,7 @@
               </div>
             </div>
 
-            <div class="card meters">
+            <div class="card meters scroll" tabindex="0" aria-label="System meters" data-i18n-aria="sys.metersAria">
               <div class="meter">
                 <div class="meter-row"><span><svg class="s" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg><span data-i18n="stats.cpu">CPU</span></span><b id="cpu-val">0%</b></div>
                 <div class="bar"><b id="cpu-bar"></b></div>
@@ -465,7 +465,7 @@
                   <svg class="s" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
                 </button>
               </div>
-              <div id="clip-list" class="clip-list"></div>
+              <div id="clip-list" class="clip-list scroll" tabindex="0" aria-label="Clipboard" data-i18n-aria="sys.clipboard"></div>
             </div>
           </div>
         </section>
@@ -478,14 +478,14 @@
                 <span><svg class="s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-5-6-5M12 19h8"/></svg><span data-i18n="act.agents">Coding Agents</span></span>
                 <span class="sub" id="act-agents-sub"></span>
               </div>
-              <div class="act-list" id="act-agents" role="list" aria-label="Coding agent sessions" data-i18n-aria="act.agentsAria"></div>
+              <div class="act-list scroll" id="act-agents" tabindex="0" role="list" aria-label="Coding agent sessions" data-i18n-aria="act.agentsAria"></div>
             </div>
             <div class="card act-col">
               <div class="act-head">
                 <span><svg class="s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span data-i18n="act.recent">Recent</span></span>
                 <button id="act-clear" class="mini-btn" aria-label="Clear recent notifications" data-i18n-aria="act.clear" title="Clear" data-i18n-title="act.clearShort"><svg class="s" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
               </div>
-              <div class="act-list" id="act-recent" role="list" aria-label="Recent notifications" data-i18n-aria="act.recent"></div>
+              <div class="act-list scroll" id="act-recent" tabindex="0" role="list" aria-label="Recent notifications" data-i18n-aria="act.recent"></div>
             </div>
           </div>
         </section>

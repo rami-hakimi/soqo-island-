@@ -3,6 +3,26 @@
 All notable changes to Soqo Island. The format follows Keep a Changelog; versions follow
 semver.
 
+## [2.0.0-beta.6] — unreleased
+
+Scrolling fix after the owner's beta.5 test.
+
+### Fixed
+- **Content below the island's edge could not be reached.** A panel's grid row grew to its
+  tallest card instead of being bounded by the view (162 px inside the 548 × 232 island), so
+  with Brightness and Battery present the System meters card was 229 px tall, the Battery row
+  sat below the island's bottom edge, and a clipboard list with many entries grew with the
+  card instead of scrolling; the mouse wheel over those areas changed the volume instead. Now
+  every panel grid is bounded (`grid-template-rows: minmax(0, 1fr)`), the overflowing content
+  scrolls inside its card (System meters, clipboard, Activity lists, pinned apps, app search,
+  downloads, prayer list: `.scroll`), the wheel scrolls these regions, a drag on them or their
+  scrollbar never moves the island, and a click on a region's surface gives it keyboard focus
+  so the arrow keys and Page Up / Down scroll it (Escape or closing the island gives focus
+  back). Regression test: `test/scroll-layout.test.js`.
+
+### Changed
+- Clipboard history keeps 20 entries (was 8), still in memory only.
+
 ## [2.0.0-beta.5] — unreleased
 
 Battery, weather credit, coding agents, Activity tab, Windows notifications.

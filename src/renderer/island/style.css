@@ -301,6 +301,15 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .wx-mini b { font-weight: 600; color: var(--text-1); }
 
 .view { display: none; flex: 1; min-height: 0; position: relative; }
+/* Scrolling inside the island: the island itself never grows, a panel's grid row is bounded
+   by the view's height (minmax(0, 1fr)), and the content that does not fit scrolls inside its
+   card. The wheel scrolls these regions (not the volume), a drag on them never moves the
+   island, and with keyboard focus (click on the region) the arrow keys scroll them. */
+.scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--fill-2) transparent; }
+.scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.scroll::-webkit-scrollbar-thumb { background: var(--fill-2); border-radius: 3px; }
+.scroll::-webkit-scrollbar-thumb:hover { background: var(--fill-3); }
+.scroll:focus-visible { outline: 1px solid rgba(255, 255, 255, .45); outline-offset: -1px; border-radius: 10px; }
 .view.active { display: flex; animation: viewin .38s var(--spring); }
 @keyframes viewin { from { opacity: 0; transform: translateY(8px) scale(.98); } }
 
@@ -412,7 +421,7 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .apps-actions .pill.small { height: 26px; padding: 0 12px; font-size: 12px; display: flex; gap: 5px; }
 .apps-actions svg { width: 13px; height: 13px; }
 #apps-edit.on { background: rgba(var(--accent-rgb), .25); color: rgb(var(--accent-rgb)); }
-.apps-grid { flex: 1; display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 62px; gap: 2px 6px; align-content: start; position: relative; }
+.apps-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 62px; gap: 2px 6px; align-content: start; position: relative; }
 .apps-empty { grid-column: 1 / -1; align-self: center; text-align: center; font-size: 12.5px; color: var(--text-3); padding-top: 30px; }
 .app {
   position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
@@ -505,7 +514,7 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 #tm-start { flex: 1; }
 
 /* ---------- prayer ---------- */
-.pr { flex: 1; display: grid; grid-template-columns: 200px 1fr; gap: 10px; min-width: 0; }
+.pr { flex: 1; display: grid; grid-template-columns: 200px 1fr; grid-template-rows: minmax(0, 1fr); gap: 10px; min-width: 0; min-height: 0; }
 #v-prayer.loading .pr { display: none; }
 .pr-loading { display: none; flex: 1; align-items: center; justify-content: center; font-size: 13px; color: var(--text-3); }
 #v-prayer.loading .pr-loading { display: flex; }
@@ -531,8 +540,9 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .pr-bell .off-line { display: inline; }
 .pr-bell.on { background: rgba(255, 212, 121, .2); color: #ffd479; }
 .pr-bell.on .off-line { display: none; }
-.pr-side { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.pr-list { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.pr-side { display: flex; flex-direction: column; gap: 4px; min-width: 0; min-height: 0; }
+.pr-list { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 2px; }
+.pr-row { flex: none; }
 .pr-row {
   display: flex; align-items: center; justify-content: space-between; height: 21px; padding: 0 10px; border-radius: 8px;
   font-size: 12.5px; transition: background .3s;
@@ -547,7 +557,8 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .pr-foot { font-size: 10.5px; color: var(--text-3); padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ---------- system ---------- */
-.sys { flex: 1; display: grid; grid-template-columns: 138px 160px 1fr; gap: 10px; min-width: 0; }
+.sys { flex: 1; display: grid; grid-template-columns: 138px 160px 1fr; grid-template-rows: minmax(0, 1fr); gap: 10px; min-width: 0; min-height: 0; }
+.sys > .card { min-height: 0; }
 .wx { padding: 14px; display: flex; flex-direction: column; justify-content: center; gap: 4px;
   background: linear-gradient(160deg, rgba(90, 160, 255, .22), rgba(255, 255, 255, .04)); }
 .wx.night { background: linear-gradient(160deg, rgba(110, 90, 220, .25), rgba(255, 255, 255, .04)); }
@@ -556,7 +567,8 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .wx.night .wx-top svg, .wx.cloudy .wx-top svg { color: var(--text-1); }
 .wx-top b { font-size: 30px; font-weight: 600; letter-spacing: -.03em; }
 .wx-desc { font-size: 13px; font-weight: 600; }
-.meters { padding: 12px 14px; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+.meters { padding: 12px 10px 12px 14px; display: flex; flex-direction: column; justify-content: safe center; gap: 12px; }
+.meters > .meter { flex: none; }
 .meter-row { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--text-2); margin-bottom: 6px; }
 .meter-row span { display: flex; align-items: center; gap: 6px; }
 .meter-row svg { width: 14px; height: 14px; }
@@ -566,11 +578,11 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .bar b.warn { background: var(--orange); }
 .bar b.hot { background: var(--red); }
 .meter .slider { height: 14px; }
-.clips { padding: 10px 8px 8px 12px; display: flex; flex-direction: column; min-width: 0; }
+.clips { padding: 10px 8px 8px 12px; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 .clips-head { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--text-2); margin-bottom: 4px; }
 .clips-head span { display: flex; align-items: center; gap: 6px; }
 .clips-head span svg { width: 14px; height: 14px; }
-.clip-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; padding-right: 2px; }
+.clip-list { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 2px; padding-inline-end: 2px; }
 .clip-item { text-align: left; padding: 6px 8px; border-radius: 9px; font-size: 12px; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: none; transition: background var(--dur-fast); }
 .clip-item:hover { background: var(--fill-1); }
 .clip-item.copied { color: var(--green); }
@@ -1079,7 +1091,7 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .batt-row.unknown .bar b { background: var(--text-3); }
 
 /* ============ activity: coding agents + recent notifications ============ */
-.act { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; min-height: 0; }
+.act { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: minmax(0, 1fr); gap: 10px; min-width: 0; min-height: 0; }
 .act-col { display: flex; flex-direction: column; min-height: 0; min-width: 0; padding: 8px 6px 6px 10px; }
 .act-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 12px; color: var(--text-2); margin-bottom: 4px; padding-inline-end: 4px; }
 .act-head > span { display: flex; align-items: center; gap: 6px; min-width: 0; }

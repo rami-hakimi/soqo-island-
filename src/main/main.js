@@ -39,6 +39,7 @@ const network = require('./network');
 const prefsWindow = require('./prefs-window');
 const updater = require('./updater');
 const i18n = require('./i18n');
+const HoverPolicy = require('../shared/hover-policy');
 i18n.setSetting(features.get().lang);
 const t = (key, params) => i18n.t(key, params);
 
@@ -48,7 +49,6 @@ app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling');
 
 const WIN_W = 640;
 const WIN_H = 356;
-const HOVER_INTENT_MS = 280;
 
 let win = null;
 let tray = null;
@@ -597,7 +597,10 @@ function scheduleCapture(ms) {
   clearTimeout(captureTimer);
   captureTimer = setTimeout(async () => {
     await captureBackdrop();
-    scheduleCapture(active || Date.now() < busyUntil ? CAPTURE_ACTIVE_MS : CAPTURE_IDLE_MS);
+    // a capture stalls the main thread for a moment; while a card or scene is being read the
+    // cursor poll must stay responsive so its × takes the first click, so capture rarely then
+    const period = !instant && (active || Date.now() < busyUntil) ? CAPTURE_ACTIVE_MS : CAPTURE_IDLE_MS;
+    scheduleCapture(period);
   }, ms);
 }
 async function captureBackdrop() {
@@ -648,13 +651,27 @@ let inside = false;
 let active = false;
 let enteredAt = 0;
 let suppressUntilLeave = false;
+// the island shows something with buttons (a card's ×, a scene's buttons, a toast action):
+// take the mouse as soon as the cursor is on it instead of after the hover-intent delay
+let instant = false;
+ipcMain.on('interactive', (_e, on) => {
+  if (typeof on === 'boolean') instant = on;
+});
+// a card was closed: hand the mouse back at once and stay click-through until the cursor has
+// left the island and the area the card covered (a slide appearing there must not pop open)
+let releasedRect = null;
+ipcMain.on('release', () => {
+  suppressUntilLeave = true;
+  releasedRect = { ...islandRect };
+  setActive(false);
+});
 
 ipcMain.on('island-rect', (_e, r) => {
   if (!isObj(r) || ![r.x, r.y, r.width, r.height].every((n) => Number.isFinite(n))) return;
   const resized = r.width !== islandRect.width || r.height !== islandRect.height;
   islandRect = r;
   if (resized) {
-    busyUntil = Date.now() + 2000;
+    if (!instant) busyUntil = Date.now() + 2000;
     scheduleCapture(120);
   }
 });
@@ -663,7 +680,7 @@ function setActive(on) {
   if (on === active) return;
   active = on;
   win.setIgnoreMouseEvents(!on);
-  if (on) scheduleCapture(60);
+  if (on && !instant) scheduleCapture(60);
   if (!on && win.isFocusable()) win.setFocusable(false);
   send('hover', on);
 }
@@ -693,18 +710,18 @@ function pollCursor() {
   const x = p.x - b.x;
   const y = p.y - b.y;
   sendNear(x, y);
-  const pad = active ? 8 : 2;
-  const now =
-    x >= islandRect.x - pad &&
-    x <= islandRect.x + islandRect.width + pad &&
-    y >= islandRect.y - pad &&
-    y <= islandRect.y + islandRect.height + pad;
+  const pad = HoverPolicy.pad({ active, instant });
+  const within = (r) => x >= r.x - pad && x <= r.x + r.width + pad && y >= r.y - pad && y <= r.y + r.height + pad;
+  const now = within(islandRect);
   if (now && !inside) enteredAt = Date.now();
   inside = now;
   if (!now) {
-    suppressUntilLeave = false;
+    if (!releasedRect || !within(releasedRect)) {
+      suppressUntilLeave = false;
+      releasedRect = null;
+    }
     setActive(false);
-  } else if (!active && !suppressUntilLeave && Date.now() - enteredAt >= HOVER_INTENT_MS) {
+  } else if (HoverPolicy.shouldActivate({ inside: now, active, suppressed: suppressUntilLeave, instant, sinceEnterMs: Date.now() - enteredAt })) {
     setActive(true);
   }
 }
@@ -797,7 +814,7 @@ function setStartWithWindows(on) {
   return shell.writeShortcutLink(link, 'create', shortcutOptions());
 }
 
-// "Setup Soqo Island.cmd" launches the app with --setup: create the desktop icon and the
+// scripts/dev-setup.cmd launches a source checkout with --setup: create the desktop icon and the
 // startup entry, and write what happened to setup-log.txt next to the app.
 function runSetup() {
   const lines = [`Soqo Island setup - ${new Date().toLocaleString()}`];
@@ -1109,7 +1126,11 @@ app.whenReady().then(() => {
   });
   apps.init(async () => send('apps', await apps.list()));
   shelf.start(async () => send('shelf', await shelf.list()));
-  setInterval(pollCursor, 40);
+  // faster while a card or scene is on screen, so the first click on its × is caught
+  (function pollLoop() {
+    pollCursor();
+    setTimeout(pollLoop, HoverPolicy.pollMs(instant));
+  })();
   scheduleCapture(300);
   globalShortcut.register('CommandOrControl+Alt+I', () => send('toggle'));
   screen.on('display-metrics-changed', () => layout());

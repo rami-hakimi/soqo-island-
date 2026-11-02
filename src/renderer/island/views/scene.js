@@ -65,17 +65,19 @@
   window.sceneShowing = () => !!current;
   window.endScene = end;
 
-  $('#sc-close').addEventListener('click', (e) => { e.stopPropagation(); end(); });
+  $('#sc-close').addEventListener('click', (e) => { e.stopPropagation(); end(); bridge.release(); });
   $('#sc-btn').addEventListener('click', (e) => {
     e.stopPropagation();
     const fn = current?.button?.onClick;
     end('button');
+    bridge.release();
     fn?.();
   });
   $('#sc-btn2').addEventListener('click', (e) => {
     e.stopPropagation();
     const fn = current?.button2?.onClick;
     end('button');
+    bridge.release();
     fn?.();
   });
 

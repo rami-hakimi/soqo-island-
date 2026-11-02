@@ -198,7 +198,7 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .side { display: flex; align-items: center; gap: 7px; min-width: 0; }
 .c-art { width: 20px; height: 20px; border-radius: 6px; object-fit: cover; background: var(--fill-2); box-shadow: 0 0 0 .5px rgba(255, 255, 255, .15); }
 .c-ico { width: 18px; height: 18px; color: var(--orange); display: none; margin-left: 4px; }
-.c-time { display: none; font-size: 13.5px; font-weight: 600; color: var(--orange); font-variant-numeric: tabular-nums; }
+.c-time { display: none; font-size: 17px; font-weight: 700; letter-spacing: .01em; color: var(--orange); font-variant-numeric: tabular-nums; }
 .l-compact.timer .c-art, .l-compact.timer .eq { display: none; }
 .l-compact.timer .c-ico, .l-compact.timer .c-time { display: block; }
 
@@ -594,15 +594,18 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 @keyframes marquee { 0%, 14% { transform: translateX(0); } 86%, 100% { transform: translateX(var(--dist)); } }
 .l-compact.timer .c-title { display: none; }
 /* running timer sizes (Settings › Timer); the countdown is the prominent element: bold tabular digits */
-#island:not(.vertical).compact.t-md { --w: 250px; --h: 44px; --r: 22px; }
-#island:not(.vertical).compact.t-lg { --w: 310px; --h: 60px; --r: 30px; }
-#island:not(.vertical).compact.t-md.t-hover { --w: 322px; }
-#island:not(.vertical).compact.t-lg.t-hover { --w: 394px; }
+/* running-timer pill sizes (shared/timer-pill.js keeps the same numbers) */
+#island:not(.vertical).compact.t-sm { --h: 38px; --r: 19px; }
+#island:not(.vertical).compact.t-md { --w: 260px; --h: 50px; --r: 25px; }
+#island:not(.vertical).compact.t-lg { --w: 324px; --h: 66px; --r: 33px; }
+#island:not(.vertical).compact.t-md.t-hover { --w: 332px; }
+#island:not(.vertical).compact.t-lg.t-hover { --w: 408px; }
 #island.t-md .l-compact, #island.t-lg .l-compact { justify-content: center; gap: 10px; }
-#island.t-md .l-compact .c-time { font-size: 24px; font-weight: 700; letter-spacing: .01em; }
-#island.t-lg .l-compact .c-time { font-size: 44px; font-weight: 700; letter-spacing: .01em; line-height: 1; }
-#island.t-md .l-compact .c-ico { width: 22px; height: 22px; }
-#island.t-lg .l-compact .c-ico { width: 28px; height: 28px; }
+#island.t-sm .l-compact .c-ico { width: 20px; height: 20px; }
+#island.t-md .l-compact .c-time { font-size: 28px; font-weight: 700; letter-spacing: .01em; line-height: 1; }
+#island.t-lg .l-compact .c-time { font-size: 48px; font-weight: 700; letter-spacing: .01em; line-height: 1; }
+#island.t-md .l-compact .c-ico { width: 24px; height: 24px; }
+#island.t-lg .l-compact .c-ico { width: 30px; height: 30px; }
 /* inline pause / resume and reset, shown only while hovering a medium or large pill */
 .c-tctl { display: none; align-items: center; gap: 6px; margin-inline-start: 8px; }
 #island.t-hover .l-compact .c-tctl { display: flex; }
@@ -613,8 +616,9 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .ct .ct-play { display: none; fill: currentColor; }
 .ct.paused .ct-pause { display: none; }
 .ct.paused .ct-play { display: block; }
-#island.t-lg .ct { width: 36px; height: 36px; }
-#island.t-lg .ct svg { width: 18px; height: 18px; }
+#island.t-md .ct { width: 32px; height: 32px; }
+#island.t-lg .ct { width: 38px; height: 38px; }
+#island.t-lg .ct svg { width: 19px; height: 19px; }
 
 /* ============ IDM downloads ============ */
 :root { --dl-rgb: 0, 201, 187; }

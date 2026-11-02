@@ -1,7 +1,7 @@
 # Notices and attribution
 
 Soqo Island is free software under the GNU General Public License v3.0 (see `LICENSE`).
-Copyright © 2026 Rami al-Hakimi and Soqo Island contributors. Licence texts of the bundled
+Copyright © 2026 Rami Al-Hakimi and Soqo Island contributors. Licence texts of the bundled
 third-party components are in `THIRD_PARTY_NOTICES.md`.
 
 ## Based on Nova Island
@@ -11,7 +11,7 @@ asked that modified versions use a different name and logo; "Nova Island", the N
 character and the Nova logo are their marks and are not used by this project.
 
 **Modification notice (GPL-3.0 §5).** This program has been modified from Nova Island 1.4.0
-(upstream commit `7e3c4ee`) by Rami al-Hakimi, November 2026: rebrand, the Soqi companion,
+(upstream commit `7e3c4ee`) by Rami Al-Hakimi, November 2026: rebrand, the Soqi companion,
 Arabic and Dutch interfaces, optional Islamic features, timer sizes, security hardening, project
 structure, and the fixes listed in `CHANGELOG.md`. A large part of the code base, including the
 island concept and the media, download, clipboard, shelf and prayer modules, was written by the
@@ -46,7 +46,7 @@ component under its own licence (above).
   `scripts/prepare-art.py` from the originals below and are reproducible.
 - **Originals** (`assets/branding/`, `assets/mascot/`, `assets/ui/`) and the five **concept
   illustrations** (`assets/screenshots/promo/`) are AI-assisted assets supplied by the project
-  maintainer (Rami al-Hakimi) for Soqo Island: created with image-generation tools from the
+  maintainer (Rami Al-Hakimi) for Soqo Island: created with image-generation tools from the
   maintainer's direction and selected, cropped and prepared by the project. No exclusive
   copyright is claimed beyond what the law of the relevant jurisdiction supports for such
   material; to the extent the maintainer holds rights in them, they may be used under the same

@@ -40,6 +40,8 @@ const prefsWindow = require('./prefs-window');
 const updater = require('./updater');
 const i18n = require('./i18n');
 const HoverPolicy = require('../shared/hover-policy');
+const Placement = require('../shared/placement');
+const Visibility = require('../shared/visibility');
 i18n.setSetting(features.get().lang);
 const t = (key, params) => i18n.t(key, params);
 
@@ -61,6 +63,14 @@ let prefs = Object.assign(
   settings.load('settings.json', {})
 );
 if (freshInstall && !migratedFrom && prefs.onboardingPending === undefined) prefs.onboardingPending = true;
+// 2.0.0-beta.3: the browser address-bar slot became opt-in. It moved the island into whichever
+// browser window was in front (anywhere on the screen), so it is switched off once for existing
+// installations; Settings › General › Browser address bar turns it back on, and that choice sticks.
+if (!prefs.addrIslandOptIn) {
+  if (!freshInstall && features.get().addrIsland) features.set({ addrIsland: false });
+  prefs.addrIslandOptIn = true;
+  settings.save('settings.json', prefs);
+}
 
 // The island's position is an "anchor": the top-center of the collapsed pill, in screen
 // coordinates. The window (always fully on screen) follows it, and the renderer places the
@@ -99,9 +109,9 @@ function send(channel, data) {
   if (win && !win.isDestroyed()) win.webContents.send(channel, data);
 }
 
+const PLACE = { WIN_W, WIN_H, PILL_HALF_W, PILL_H, FLOAT_TOP, HEADROOM, V_PILL_HALF_H };
 function defaultAnchor() {
-  const { bounds } = screen.getPrimaryDisplay();
-  return { x: bounds.x + bounds.width / 2, y: bounds.y + FLOAT_TOP };
+  return Placement.defaultAnchor(screen.getPrimaryDisplay().bounds, PLACE);
 }
 
 function clamp(v, lo, hi) {
@@ -133,17 +143,16 @@ function onOmni(o) {
   layout();
 }
 
+// true when the slot was laid out; false when the omnibox's right third is not on screen
 function layoutAddressBar() {
   // the helper reports physical pixels; Electron places windows in DIPs
   const r = screen.screenToDipRect(null, { x: omni.x, y: omni.y, width: omni.w, height: omni.h });
   const b = screen.getDisplayMatching(r).bounds;
-  const third = r.width / 3;
-  const sh = Math.round(Math.min(30, Math.max(22, r.height + 6)));
-  const sw = Math.round(Math.min(third - 12, 380));
-  const cx = r.x + r.width - third / 2; // centre of the right third
-  const top = Math.round(r.y + r.height / 2 - sh / 2);
-  const wx = Math.round(clamp(cx - WIN_W / 2, b.x, b.x + b.width - WIN_W));
-  const wy = Math.round(clamp(top - FLOAT_TOP, b.y, b.y + b.height - WIN_H));
+  const slot = Placement.addressBarSlot(r, b, PLACE);
+  if (!slot) return false;
+  const { cx, top, sw, sh } = slot;
+  const wx = slot.win.x;
+  const wy = slot.win.y;
   const cur = win.getBounds();
   if (cur.x !== wx || cur.y !== wy || cur.width !== WIN_W || cur.height !== WIN_H) {
     win.setBounds({ x: wx, y: wy, width: WIN_W, height: WIN_H });
@@ -157,31 +166,20 @@ function layoutAddressBar() {
     lastLayout = key;
     send('anchor', msg);
   }
+  return true;
 }
 
 function layout() {
   if (!win || !anchor) return;
   // not while the user drags the island somewhere else
-  if (omni && !drag && omniAllowed()) {
-    layoutAddressBar();
-    return;
-  }
+  if (omni && !drag && omniAllowed() && layoutAddressBar()) return;
+  // the user's own place: the anchor is kept on its display (shared/placement.js, unit-tested)
   const display = screen.getDisplayNearestPoint({ x: Math.round(anchor.x), y: Math.round(anchor.y) });
-  const b = display.bounds;
-  const wa = display.workArea;
-  let wx;
-  let wy;
-  if (prefs.vertical) {
-    anchor.x = prefs.side === 'left' ? b.x : b.x + b.width;
-    anchor.y = clamp(anchor.y, wa.y + V_PILL_HALF_H, wa.y + wa.height - V_PILL_HALF_H);
-    wx = prefs.side === 'left' ? b.x : b.x + b.width - WIN_W;
-    wy = Math.round(clamp(anchor.y - WIN_H / 2, wa.y, wa.y + wa.height - WIN_H));
-  } else {
-    anchor.x = clamp(anchor.x, b.x + PILL_HALF_W, b.x + b.width - PILL_HALF_W);
-    anchor.y = prefs.docked ? b.y : clamp(anchor.y, b.y, wa.y + wa.height - PILL_H - 6);
-    wx = Math.round(clamp(anchor.x - WIN_W / 2, b.x, b.x + b.width - WIN_W));
-    wy = Math.round(prefs.docked ? b.y : clamp(anchor.y - HEADROOM, b.y, wa.y + wa.height - WIN_H));
-  }
+  const placed = Placement.layout(anchor, display, { vertical: prefs.vertical, side: prefs.side, docked: prefs.docked }, PLACE);
+  anchor.x = placed.anchor.x;
+  anchor.y = placed.anchor.y;
+  const wx = placed.win.x;
+  const wy = placed.win.y;
   const cur = win.getBounds();
   if (cur.x !== wx || cur.y !== wy || cur.width !== WIN_W || cur.height !== WIN_H) {
     win.setBounds({ x: wx, y: wy, width: WIN_W, height: WIN_H });
@@ -212,7 +210,7 @@ function placeWindow() {
 function atDefaultPlace() {
   if (prefs.vertical || !anchor) return false;
   const b = screen.getDisplayNearestPoint({ x: Math.round(anchor.x), y: Math.round(anchor.y) }).bounds;
-  return Math.abs(anchor.x - (b.x + b.width / 2)) < 2 && anchor.y - b.y <= FLOAT_TOP + 2;
+  return Placement.atDefaultPlace(anchor, b, PLACE);
 }
 
 function savePosition() {
@@ -314,10 +312,17 @@ ipcMain.on('timer-state', (_e, on) => {
   updateVisibility();
 });
 
+// a maximized app in front (the helper reports the window state; our own windows never count)
+let maximizedFront = false;
+let frontProc = '';
+const OWN_PROC = path.basename(process.execPath, '.exe').toLowerCase();
 function updateVisibility() {
   if (!win) return;
-  const keepForTimer = timerRunning && features.get().timerOnTop;
-  const shouldShow = !userHidden && !(fullscreenHidden && features.get().hideFullscreen && !keepForTimer);
+  const f = features.get();
+  const shouldShow = Visibility.shouldShow({
+    userHidden, fullscreen: fullscreenHidden, maximized: maximizedFront,
+    hideFullscreen: f.hideFullscreen, hideMaximized: f.hideMaximized, timerRunning, timerOnTop: f.timerOnTop,
+  });
   if (shouldShow && !win.isVisible()) win.showInactive();
   if (!shouldShow && win.isVisible()) win.hide();
   send('visibility', shouldShow);
@@ -417,6 +422,14 @@ function startMedia() {
         if (typeof data.fs === 'boolean' && data.fs !== fullscreenHidden) {
           fullscreenHidden = data.fs;
           updateVisibility();
+        }
+        if (typeof data.fgProc === 'string') frontProc = data.fgProc;
+        if (typeof data.fgMax === 'boolean') {
+          const m = data.fgMax && frontProc.toLowerCase() !== OWN_PROC;
+          if (m !== maximizedFront) {
+            maximizedFront = m;
+            updateVisibility();
+          }
         }
         send('media', data);
       } catch {}
@@ -941,12 +954,15 @@ ipcMain.handle('i18n-get', () => i18n.payload());
 // Settings > Support: the page names a link, main holds the addresses
 const SUPPORT_LINKS = {
   github: 'https://github.com/rami-hakimi/soqo-island-',
-  upstream: 'https://github.com/NOVA-TECH-KIT/nova-island', // the project this app is based on
   developer: 'https://github.com/rami-hakimi',
-  license: 'https://www.gnu.org/licenses/gpl-3.0.html',
   openmeteo: 'https://open-meteo.com/', // weather and city search data (CC BY 4.0)
   tanzil: 'https://tanzil.net/', // source of the Qur'an text (CC BY 3.0)
 };
+// Settings › Legal notices: the licence and notice files shipped inside this copy
+const legalFile = (name) => {
+  try { return fs.readFileSync(path.join(__dirname, '..', '..', name), 'utf8'); } catch { return ''; }
+};
+ipcMain.handle('legal-get', () => ({ license: legalFile('LICENSE'), notice: legalFile('NOTICE.md'), thirdParty: legalFile('THIRD_PARTY_NOTICES.md') }));
 ipcMain.on('open-support', (_e, key) => {
   if (isStr(key, 32) && Object.hasOwn(SUPPORT_LINKS, key)) shell.openExternal(SUPPORT_LINKS[key]);
 });

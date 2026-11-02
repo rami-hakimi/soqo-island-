@@ -90,6 +90,10 @@ const fmt = (sec) => {
   return m >= 60 ? `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}:${s}` : `${m}:${s}`;
 };
 
+// Until views/soqi.js installs the real one, calls into Soqi do nothing. Without this the <img id="soqi">
+// element would shadow the name and an early event (network, download) would throw.
+window.soqi = { react: () => false, play: () => false, set() {}, mood: () => 'idle' };
+
 // ---------------- mode ----------------
 const SIZE = { idle: 1, compact: 2, toast: 3, peek: 4, reminder: 4, scene: 4, expanded: 5 };
 
@@ -160,10 +164,12 @@ function render() {
     if (typeof positionIsland === 'function') positionIsland();
   }
   // running-timer pill size and its hover state (inline controls)
+  const tsm = kind === 'timer' && timerSize() === 'small';
   const tmd = kind === 'timer' && timerSize() === 'medium';
   const tlg = kind === 'timer' && timerSize() === 'large';
   const thover = mode === 'compact' && state.hover && !state.pinned && timerHoverPill();
-  if (tmd !== island.classList.contains('t-md') || tlg !== island.classList.contains('t-lg') || thover !== island.classList.contains('t-hover')) {
+  if (tsm !== island.classList.contains('t-sm') || tmd !== island.classList.contains('t-md') || tlg !== island.classList.contains('t-lg') || thover !== island.classList.contains('t-hover')) {
+    island.classList.toggle('t-sm', tsm);
     island.classList.toggle('t-md', tmd);
     island.classList.toggle('t-lg', tlg);
     island.classList.toggle('t-hover', thover);

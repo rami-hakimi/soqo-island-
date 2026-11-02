@@ -3,7 +3,37 @@
 All notable changes to Soqo Island. The format follows Keep a Changelog; versions follow
 semver. Nothing below has been published yet.
 
-## [2.0.0-beta.2] — unreleased
+## [2.0.0-beta.3] — unreleased
+
+Fixes from the first days of the public beta.
+
+### Fixed
+- **The island no longer moves into browser windows by itself.** The "browser address bar"
+  slot, which placed the island inside whichever Chromium window was in front (so it could end
+  up in the middle of the screen when that window was not maximized), is now opt-in under
+  Settings › General and was switched off once for existing installations. The island stays
+  at the top centre of its display, or wherever you dragged it, and that place is restored on
+  every start; when the slot is on, it is skipped whenever the address bar is not fully on
+  screen, and the detection no longer mistakes a text field on a web page for the address bar.
+- Placement and visibility rules moved to small pure modules with unit tests (`placement`,
+  `visibility`): anchors off the display, second monitors, vertical islands, maximized and
+  full-screen apps, the timer opt-in.
+
+### Added
+- Settings › General › **Hide while an app is maximized** (off by default), next to "Hide in
+  full screen". The running-timer opt-in keeps the timer visible in both cases; the timer
+  keeps counting while the island is hidden.
+- Settings › **Legal notices**: the GPL-3.0 licence, the notices and credits, and the
+  third-party licences shipped inside the application, readable without leaving it. The old
+  Credits button, which opened an external repository, is gone.
+
+### Changed
+- Larger running-timer pill in all three sizes: Small 300 × 38 with 17 px digits (was 300 × 32,
+  13.5 px), Medium 260 × 50 with 28 px digits (was 250 × 44, 24 px), Large 324 × 66 with 48 px
+  digits (was 310 × 60, 44 px); bigger pause/reset targets. Colours unchanged.
+- Developer name shown as Rami Al-Hakimi.
+
+## [2.0.0-beta.2] — 2026-11-02
 
 First public beta of Soqo Island, a rebrand and rebuild of Nova Island 1.4.0 (GPL-3.0, by
 AmerTech). beta.1 was an internal build and was never published.

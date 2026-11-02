@@ -1,8 +1,8 @@
 // The running-timer pill: three display sizes (Settings › Timer) and the placement maths the
 // island uses to keep any pill inside its window. Pure, shared by the renderer and the tests.
-//   small  : the original compact pill (default; existing users keep it)
-//   medium : wider, with a clearly readable countdown
-//   large  : prominent 44 px countdown
+//   small  : the compact pill (default), 38 px tall with a 17 px countdown
+//   medium : 260 × 50 with a 28 px countdown
+//   large  : 324 × 66 with a prominent 48 px countdown
 // On hover, medium and large grow a little to show pause / resume and reset without hiding the
 // countdown; small keeps the original behaviour (hover opens the island).
 (function (root, factory) {
@@ -11,9 +11,9 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   const SIZES = ['small', 'medium', 'large'];
   // [width, height] in CSS px (device-independent; Windows DPI scaling applies on top)
-  const DIMS = { small: [300, 32], medium: [250, 44], large: [310, 60] };
+  const DIMS = { small: [300, 38], medium: [260, 50], large: [324, 66] };
   const HOVER_EXTRA = { small: 0, medium: 72, large: 84 }; // room for the two inline controls
-  const FONT_PX = { small: 13.5, medium: 24, large: 44 };
+  const FONT_PX = { small: 17, medium: 28, large: 48 };
 
   const normalize = (size) => (SIZES.includes(size) ? size : 'small');
 

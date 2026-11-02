@@ -4,9 +4,10 @@ const fs = require('fs');
 const path = require('path');
 const T = require('../src/shared/timer-pill');
 
-test('three sizes with the required widths; small is the original pill', () => {
+test('three sizes with the required widths; small is the compact pill', () => {
   assert.deepEqual(T.SIZES, ['small', 'medium', 'large']);
-  assert.deepEqual(T.dims('small'), [300, 32]);
+  assert.deepEqual(T.dims('small'), [300, 38]);
+  assert.ok(T.FONT_PX.small >= 16, 'small digits readable (beta.3: 17 px, was 13.5)');
   const [mw, mh] = T.dims('medium');
   assert.ok(mw >= 230 && mw <= 260, `medium width ${mw}`);
   assert.ok(mh > 32);
@@ -15,14 +16,14 @@ test('three sizes with the required widths; small is the original pill', () => {
   assert.ok(lh > mh);
   assert.ok(T.FONT_PX.large >= 40 && T.FONT_PX.large <= 48, 'large countdown 40–48 px');
   assert.ok(T.FONT_PX.medium > T.FONT_PX.small);
-  assert.deepEqual(T.dims('nonsense'), [300, 32], 'unknown size falls back to small');
+  assert.deepEqual(T.dims('nonsense'), [300, 38], 'unknown size falls back to small');
 });
 
 test('hover: medium and large grow for inline controls, small keeps the original behaviour', () => {
-  assert.deepEqual(T.dims('small', { hover: true }), [300, 32]);
-  assert.equal(T.dims('medium', { hover: true })[0], 250 + T.HOVER_EXTRA.medium);
-  assert.equal(T.dims('large', { hover: true })[0], 310 + T.HOVER_EXTRA.large);
-  assert.equal(T.dims('large', { hover: true })[1], 60, 'height never changes on hover');
+  assert.deepEqual(T.dims('small', { hover: true }), [300, 38]);
+  assert.equal(T.dims('medium', { hover: true })[0], 260 + T.HOVER_EXTRA.medium);
+  assert.equal(T.dims('large', { hover: true })[0], 324 + T.HOVER_EXTRA.large);
+  assert.equal(T.dims('large', { hover: true })[1], 66, 'height never changes on hover');
   assert.equal(T.inlineControls('small', true), false);
   assert.equal(T.inlineControls('medium', true), true);
   assert.equal(T.inlineControls('large', true), true);
@@ -50,6 +51,8 @@ test('preferences: timerSize enum and timerOnTop persist through the features st
   const features = require('../src/main/features');
   assert.equal(features.get().timerSize, 'small', 'existing users keep the compact pill');
   assert.equal(features.get().timerOnTop, false);
+  assert.equal(features.get().addrIsland, false, 'beta.3: the browser address-bar slot is opt-in');
+  assert.equal(features.get().hideMaximized, false, 'a maximized app never hides the island unless asked');
   features.set({ timerSize: 'huge' });
   assert.equal(features.get().timerSize, 'small', 'unknown size ignored');
   features.set({ timerSize: 'large', timerOnTop: true });

@@ -62,9 +62,9 @@ More captures are in [`assets/screenshots/app/`](assets/screenshots/app/).
 
 | | |
 |---|---|
-| **Floating desktop island** | Click-through glass capsule that opens on hover, horizontal or vertical, docked or floating, hides in full screen, `Ctrl + Alt + I` to pin |
+| **Floating desktop island** | Click-through glass capsule that opens on hover, horizontal or vertical, docked at the top centre or placed anywhere (and kept there), hides in full screen or, if you choose, while an app is maximized, optional browser address-bar slot, `Ctrl + Alt + I` to pin |
 | **Music and media controls** | Whatever Windows is playing: artwork, title, play/pause/skip, volume and brightness, floating YouTube mini player |
-| **Timer and focus tools** | Preset timers and focus/break sessions; a running-timer pill in three sizes that can stay visible over full-screen apps |
+| **Timer and focus tools** | Preset timers and focus/break sessions; a running-timer pill in three sizes that can stay visible over full-screen or maximized apps |
 | **Download monitoring** | Browser downloads with progress and speed; live control of the IDM download manager when installed |
 | **Clipboard tools** | History kept in memory only; smart actions for copied links, colours and sums |
 | **Notifications** | Cards inside the island for downloads, screenshots, battery, keyboard language, Caps Lock, network changes and upcoming meetings (iCal) |
@@ -144,7 +144,7 @@ Architecture, localisation, privacy, security, releasing and release notes are i
 
 ## Developer
 
-**Developed by Rami al-Hakimi** · [github.com/rami-hakimi](https://github.com/rami-hakimi)
+**Developed by Rami Al-Hakimi** · [github.com/rami-hakimi](https://github.com/rami-hakimi)
 
 ## License
 

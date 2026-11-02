@@ -48,7 +48,8 @@ const DEFAULTS = {
   // window
   hideFullscreen: true,
   autoUpdate: true, // download new versions from GitHub and offer a restart on the island
-  addrIsland: true, // take the right third of the browser's address bar
+  addrIsland: false, // opt-in: take the right third of a Chromium browser's address bar while it is in front
+  hideMaximized: false, // hide while a maximized app is in front (full screen has its own switch)
   // System tab
   clipboardHistory: true,
   // copied image / screenshot -> toast; on the Shelf by itself for a while, or "Add to Shelf"

@@ -21,7 +21,7 @@ using Windows.Storage.Streams;
 [assembly: AssemblyTitle("Soqo Island Helper")]
 [assembly: AssemblyDescription("System bridge for Soqo Island (media, volume, brightness, clipboard, windows)")]
 [assembly: AssemblyProduct("Soqo Island")]
-[assembly: AssemblyCopyright("Rami al-Hakimi and contributors, GPL-3.0. Based on Nova Island by AmerTech.")]
+[assembly: AssemblyCopyright("Rami Al-Hakimi and contributors, GPL-3.0. Based on Nova Island by AmerTech.")]
 [assembly: AssemblyVersion("2.0.0.0")]
 [assembly: AssemblyFileVersion("2.0.0.0")]
 
@@ -67,6 +67,7 @@ static class Win {
   [StructLayout(LayoutKind.Sequential)] public struct RECT { public int L, T, R, B; }
   [StructLayout(LayoutKind.Sequential)] public struct MONITORINFO { public int cbSize; public RECT rcMonitor; public RECT rcWork; public int dwFlags; }
   [DllImport("user32.dll")] static extern IntPtr GetForegroundWindow();
+  [DllImport("user32.dll")] static extern bool IsZoomed(IntPtr h);
   [DllImport("user32.dll")] static extern bool GetWindowRect(IntPtr h, out RECT r);
   [DllImport("user32.dll")] static extern IntPtr MonitorFromWindow(IntPtr h, int flags);
   [DllImport("user32.dll")] static extern bool GetMonitorInfo(IntPtr m, ref MONITORINFO mi);
@@ -126,6 +127,7 @@ static class Win {
   public static bool CapsLock() { return (GetKeyState(0x14) & 1) != 0; }
 
   public static IntPtr ForegroundHandle() { return GetForegroundWindow(); }
+  public static bool WindowRect(IntPtr h, out RECT r) { return GetWindowRect(h, out r); }
 
   // a screen recorder running: NVIDIA's capture helper (Instant Replay / recording), OBS,
   // Streamlabs. Only the process names are looked at, every 2 s; nothing is read from them.
@@ -147,6 +149,15 @@ static class Win {
   // physical pixels everywhere (UI Automation rectangles, window rects); main converts to DIPs
   [DllImport("user32.dll")] static extern bool SetProcessDpiAwarenessContext(IntPtr ctx);
   public static void PerMonitorDpi() { try { SetProcessDpiAwarenessContext(new IntPtr(-4)); } catch { } }
+
+  // the window in front is maximized (not the desktop or the taskbar); only its state is read
+  public static bool ForegroundMaximized() {
+    IntPtr h = GetForegroundWindow();
+    if (h == IntPtr.Zero) return false;
+    string cls = ClassOf(h);
+    if (cls == "Progman" || cls == "WorkerW" || cls == "Shell_TrayWnd") return false;
+    return IsZoomed(h);
+  }
 
   public static void Foreground(out string proc, out string title) {
     proc = ""; title = "";
@@ -394,6 +405,7 @@ static class Program {
       if (brightOk && loop % 4 == 0) bright = Brightness.Get();
       o.Add("bright", brightOk ? bright : -1);
       try { o.Add("fs", Win.IsFullscreen()); } catch { o.Add("fs", false); }
+      try { o.Add("fgMax", Win.ForegroundMaximized()); } catch { o.Add("fgMax", false); }
       try { o.Add("kl", Win.KeyboardLayout()).Add("caps", Win.CapsLock()); } catch { }
       try { long seq = Win.ClipboardSeq(); o.Add("clip", (double)seq).Add("clipPriv", Win.ClipboardPrivate(seq)); } catch { }
       try { o.Add("idle", Win.IdleSeconds()); } catch { }

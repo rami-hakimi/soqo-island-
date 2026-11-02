@@ -35,7 +35,7 @@ test('Dutch: left-to-right, Netherlands locale, plurals and fallback', () => {
   assert.equal(d.t('shelf.count', { count: 1 }), '1 bestand');
   assert.equal(d.t('shelf.count', { count: 3 }), '3 bestanden');
   assert.equal(d.t('welcome.away', { dur: '5 min' }), '5 min weggeweest');
-  assert.equal(d.t('p.support.developer'), 'Ontwikkeld door Rami al-Hakimi');
+  assert.equal(d.t('p.support.developer'), 'Ontwikkeld door Rami Al-Hakimi');
   // a date formatted with the Dutch locale reads day-month
   const s = new Date(Date.UTC(2026, 10, 2, 12, 0)).toLocaleDateString(d.locale, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
   assert.match(s, /^ma 2 nov/);

@@ -32,6 +32,7 @@
       <a href="#alerts" data-page="alerts"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span data-i18n="p.nav.alerts">Alerts &amp; Privacy</span></a>
       <a href="#connections" data-page="connections"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-i18n="p.nav.connections">Connections</span></a>
       <a href="#support" data-page="support"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span data-i18n="p.nav.support">Support</span></a>
+      <a href="#legal" data-page="legal"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><span data-i18n="p.nav.legal">Legal</span></a>
       <p class="side-foot"><span dir="ltr"><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd></span> <span data-i18n="p.nav.shortcut">opens the island</span><br><span id="version"></span></p>
     </nav>
 
@@ -61,6 +62,7 @@
             </div>
             <label class="row"><div class="txt"><b data-i18n="p.general.addrIsland">Browser address bar</b><small data-i18n="p.general.addrIslandHint">Only from its default place at the top</small></div><input type="checkbox" class="sw" data-feature="addrIsland"></label>
             <label class="row"><b data-i18n="p.general.hideFullscreen">Hide in full screen</b><input type="checkbox" class="sw" data-feature="hideFullscreen"></label>
+            <label class="row"><div class="txt"><b data-i18n="p.general.hideMaximized">Hide while an app is maximized</b><small data-i18n="p.general.hideMaximizedHint">Off by default. A running timer stays if "Keep a running timer visible in full screen" is on</small></div><input type="checkbox" class="sw" data-feature="hideMaximized"></label>
             <label class="row"><b data-i18n="p.general.autoUpdate">Auto-update</b><input type="checkbox" class="sw" data-feature="autoUpdate"></label>
             <div class="row"><b data-i18n="p.general.position">Position</b><button class="btn" data-general-action="resetPosition" data-i18n="common.reset">Reset</button></div>
           </div>
@@ -323,11 +325,21 @@
           <h2 data-i18n="p.support.about">About</h2>
           <div class="card">
             <div class="row about-app"><img class="about-icon" src="../../../build/icon.png" alt="" aria-hidden="true"><div class="txt"><b data-i18n="app.name">Soqo Island</b><small><span data-i18n="app.tagline">A Living Island for Windows</span> · <span id="about-version"></span></small></div></div>
-            <div class="row"><div class="txt"><b data-i18n="p.support.developer">Developed by Rami al-Hakimi</b><small data-i18n="p.support.developerHint">Netherlands · free and open source</small></div><button class="btn" data-support="developer">GitHub</button></div>
-            <div class="row"><div class="txt"><b data-i18n="p.support.openSource">Open source</b><small data-i18n="p.support.openSourceHint">GPL-3.0 · based on an open-source upstream project (see Credits)</small></div><div class="btns"><button class="btn" data-support="license" data-i18n="p.support.license">License</button><button class="btn" data-support="upstream" data-i18n="p.support.credits">Credits</button></div></div>
+            <div class="row"><div class="txt"><b data-i18n="p.support.developer">Developed by Rami Al-Hakimi</b><small data-i18n="p.support.developerHint">Netherlands · free and open source</small></div><button class="btn" data-support="developer">GitHub</button></div>
+            <div class="row"><div class="txt"><b data-i18n="p.support.openSource">Open source</b><small data-i18n="p.support.openSourceHint">GPL-3.0 · notices and licences under Legal notices</small></div><div class="btns"><button class="btn" data-page-link="legal" data-i18n="p.support.legal">Legal notices</button></div></div>
             <div class="row"><div class="txt"><b data-i18n="p.support.thirdParty">Third-party</b><small data-i18n="p.support.thirdPartyHint">KFGQPC Hafs font (King Fahd Glorious Quran Printing Complex), Electron, node-ical, Open-Meteo, PrayTimes method</small></div></div>
           </div>
         </div>
+      </section>
+      <section id="legal" class="page">
+        <h1 data-i18n="p.legal.title">Legal notices</h1>
+        <p class="hint" data-i18n="p.legal.hint">Soqo Island is free software under the GNU General Public License v3.0. These are the notices shipped inside this copy of the application.</p>
+        <div class="seg legal-tabs" role="radiogroup" aria-label="Document" data-i18n-aria="p.legal.title">
+          <button role="radio" data-legal="notice" aria-checked="true" data-i18n="p.legal.notices">Notices and credits</button>
+          <button role="radio" data-legal="license" aria-checked="false" data-i18n="p.legal.license">GPL-3.0 licence</button>
+          <button role="radio" data-legal="thirdParty" aria-checked="false" data-i18n="p.legal.thirdParty">Third-party licences</button>
+        </div>
+        <pre id="legal-text" dir="ltr" tabindex="0"></pre>
       </section>
     </main>
   </div>

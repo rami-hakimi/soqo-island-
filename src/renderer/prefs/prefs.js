@@ -99,6 +99,17 @@ $$('.stepper').forEach((st) => st.addEventListener('click', (e) => {
 }));
 $('#rm-preview').addEventListener('click', () => api.previewReminder());
 $('#soqi-wave').addEventListener('click', () => api.soqiWave());
+// links from one page to another (Support › Legal notices)
+$$('[data-page-link]').forEach((b) => b.addEventListener('click', () => showPage(b.dataset.pageLink)));
+// Legal notices: the texts shipped with this copy, loaded once
+let legalDocs = null;
+async function showLegal(which) {
+  legalDocs ||= await api.legal();
+  $$('[data-legal]').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.legal === which)));
+  $('#legal-text').textContent = legalDocs[which] || '';
+}
+$$('[data-legal]').forEach((b) => b.addEventListener('click', () => showLegal(b.dataset.legal)));
+showLegal('notice');
 
 // ---- general (lives in the main process) ----
 function showGeneral(g) {

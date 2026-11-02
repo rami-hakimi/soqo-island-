@@ -8,11 +8,11 @@ applicable on this machine (note why).
 |---|---|---|---|---|---|
 | S1 | Hover intent opens island, sweep does not | Launch, move cursor across, then rest on pill | ⏳ | | |
 | S2 | Mode morphs (idle/compact/toast/peek/reminder/scene/expanded) | Trigger each | ⏳ | | |
-| S3 | Drag, dock to top, centre snap, "placed" memory | Drag around, restart | ⏳ | | |
+| S3 | Drag, dock to top, centre snap, "placed" memory | Drag around, restart | ⏳ | | 🤖 placement.test.js (clamping, docking, second display, idempotence); ✅ beta.3: position restored across quit/relaunch on the installed build |
 | S4 | Vertical mode left/right | Menu → Vertical, drag across centre | ⏳ | | |
 | S5 | Multi-monitor layout | Move to second display, unplug | ➖ one display here | | |
-| S6 | Address-bar slot in Chromium | Focus Chrome, type in omnibox | ⏳ | | |
-| S7 | Hide in fullscreen; Show/Hide menu | Fullscreen video; toggle menu | ⏳ | | |
+| S6 | Address-bar slot in Chromium (opt-in since beta.3) | Settings › General › Browser address bar on; focus Chrome, type in omnibox | ⏳ | | ✅ beta.2 reproduced the island following a half-off-screen Chrome window to mid-screen; beta.3: off by default, skipped when the slot is off screen, page text fields ignored |
+| S7 | Hide in fullscreen / while maximized (opt-in); Show/Hide menu | Chrome F11; maximize with the option on; toggle menu | ⏳ | | 🤖 visibility.test.js; ✅ beta.3 real Chrome (see status) |
 | S8 | Live glass backdrop | Move island over coloured window | ⏳ | | |
 | S9 | Ctrl+Alt+I toggles; pin | Press shortcut | ⏳ | | |
 | S10 | Tray menu items | Click tray | ⏳ | | ⏳ icon not reachable via UI Automation in this session; same menu tested via island right-click (Stage 11) |

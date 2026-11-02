@@ -31,7 +31,8 @@ src/
 │  └─ mini/         mini player page (YouTube iframe API)
 ├─ shared/          i18n.js (translation core), soqi-state.js (Soqi's mood machine) — UMD,
 │                   used by main, renderers and tests; timer-pill.js (pill sizes), hover-policy.js (when
-│                   the click-through window takes the mouse)
+│                   the click-through window takes the mouse), placement.js (anchor and
+│                   window position), visibility.js (when the island is shown)
 └─ locales/         en.json, ar.json, nl.json
 helper/             SoqoHelper.cs, Apps.cs, YtUrl.cs, AddressBar.cs, build.cmd → soqo-helper.exe
 assets/

@@ -418,7 +418,7 @@
   "p.islamic.locationHint": "غيّر المدينة من «عام»",
   "p.islamic.active": "الحالي: {city} · {method}",
   "p.islamic.inactive": "لم يُحسب بعد",
-  "p.islamic.sources": "نص القرآن بخط مجمع الملك فهد لطباعة المصحف الشريف (حفص)؛ مواقيت الصلاة تُحسب على هذا الجهاز بطريقة PrayTimes.",
+  "p.islamic.sources": "نص القرآن الكريم: مشروع تنزيل (tanzil.net)، النص العثماني، منقول دون تغيير برخصة CC BY 3.0 ومعروض بخط مجمع الملك فهد لطباعة المصحف الشريف (حفص). تُحسب مواقيت الصلاة على هذا الجهاز بطريقة PrayTimes.",
   "onboarding.badge": "مرحبًا",
   "onboarding.title": "مرحبًا بك في سوكو آيلاند",
   "onboarding.sub": "الموسيقى والتنزيلات والتطبيقات ورف للملفات وتنبيهات ذكية، كلها في هذه الجزيرة الصغيرة. اضغط <b>Ctrl+Alt+I</b> لفتحها، وزر الفأرة الأيمن للقائمة. الميزات الاختيارية مثل مواقيت الصلاة تجدها في الإعدادات › الميزات.",
@@ -459,7 +459,7 @@
   "p.support.developerHint": "هولندا · مجاني ومفتوح المصدر",
   "p.support.license": "الرخصة",
   "p.support.thirdParty": "مكوّنات خارجية",
-  "p.support.thirdPartyHint": "خط مجمع الملك فهد (حفص)، Electron، node-ical، Open-Meteo، طريقة PrayTimes",
+  "p.support.thirdPartyHint": "خط مجمع الملك فهد (حفص)، نص القرآن من مشروع تنزيل، Electron، node-ical، Open-Meteo، طريقة PrayTimes",
   "p.dl.idmHint": "تقدّم مباشر وتحكّم عند تثبيت مدير التنزيلات IDM",
   "p.nav.timer": "المؤقّت",
   "p.timer.running": "المؤقّت أثناء العمل",
@@ -481,5 +481,7 @@
   "soqi.aria": "سوقي الدلفين. انقر لإلقاء التحية",
   "weather.credit": "بيانات الطقس من Open-Meteo.com",
   "p.location.openMeteoHint": "البحث عن المدن والتوقعات من Open-Meteo (رخصة CC BY 4.0، مجاني للاستخدام غير التجاري)",
-  "p.location.openMeteo": "Open-Meteo.com"
+  "p.location.openMeteo": "Open-Meteo.com",
+  "p.islamic.tanzil": "tanzil.net",
+  "reminder.source": "نص القرآن: مشروع تنزيل، tanzil.net"
 }

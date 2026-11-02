@@ -85,6 +85,18 @@ Copyright (c) 2010 King Fahd Glorious Quran Printing Complex. Included unmodifie
 end-user licence agreement, \`assets/fonts/KFGQPC-LICENSE.txt\` (free to use, copy and
 distribute; no selling or modification). Not covered by the GPL.
 
+### Qur'an text — Tanzil Project (CC BY 3.0)
+
+The Qur'anic passages in \`src/renderer/island/views/reminders-data.js\` are verbatim words of
+the Tanzil Quran Text (Uthmani, version 1.1), Copyright (C) 2007-2026 Tanzil Project,
+https://tanzil.net, Creative Commons Attribution 3.0. The text is unchanged; verse numbers
+shown after complete verses are added by the application. Tanzil's notice follows and also
+ships as \`assets/quran/TANZIL-LICENSE.txt\`.
+
+\`\`\`
+${fs.readFileSync(path.join(ROOT, 'assets', 'quran', 'TANZIL-LICENSE.txt'), 'utf8').trim()}
+\`\`\`
+
 ### Open-Meteo (weather and geocoding data)
 
 Weather data by Open-Meteo.com, https://open-meteo.com/, Creative Commons Attribution 4.0

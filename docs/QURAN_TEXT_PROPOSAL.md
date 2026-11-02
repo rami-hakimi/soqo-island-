@@ -1,9 +1,9 @@
 # Qur'an text: proposal to move to the Tanzil Project text
 
-Status: **proposal, not applied.** The application still ships the KFGQPC Hafs text inherited
-from upstream (`src/renderer/island/views/reminders-data.js`, protected by a checksum test).
-This document prepares the change the owner asked for; the displayed religious text changes
-only after the owner reviews this table and approves a separate commit.
+Status: **applied on 2 November 2026** with the owner's approval. The table below is the
+verification that preceded the change; after it, the data file was compared again against the
+official download (25 of 25 passages identical, word for word) and its checksum re-pinned in
+`test/religious-text.test.js`.
 
 ## Why
 No explicit licence could be found for the KFGQPC Hafs text as obtained through the

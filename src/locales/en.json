@@ -411,7 +411,7 @@
   "p.islamic.locationHint": "Change the city under General",
   "p.islamic.active": "Active: {city} · {method}",
   "p.islamic.inactive": "Not calculated yet",
-  "p.islamic.sources": "Qur'an text in the KFGQPC Hafs script (King Fahd Glorious Quran Printing Complex); prayer times calculated on this PC with the PrayTimes method.",
+  "p.islamic.sources": "Qur'an text: Tanzil Project (tanzil.net), Uthmani text, copied unchanged under CC BY 3.0 and shown in the KFGQPC Hafs font (King Fahd Glorious Quran Printing Complex). Prayer times are calculated on this PC with the PrayTimes method.",
   "onboarding.badge": "Welcome",
   "onboarding.title": "Welcome to Soqo Island",
   "onboarding.sub": "Music, downloads, apps, a shelf for files and smart alerts live in this little island. Press <b>Ctrl+Alt+I</b> to open it, right-click for the menu. Optional features such as prayer times are under Settings › Features.",
@@ -452,7 +452,7 @@
   "p.support.developerHint": "Netherlands · free and open source",
   "p.support.license": "License",
   "p.support.thirdParty": "Third-party",
-  "p.support.thirdPartyHint": "KFGQPC Hafs font (King Fahd Glorious Quran Printing Complex), Electron, node-ical, Open-Meteo, PrayTimes method",
+  "p.support.thirdPartyHint": "KFGQPC Hafs font (King Fahd Glorious Quran Printing Complex), Qur'an text by the Tanzil Project, Electron, node-ical, Open-Meteo, PrayTimes method",
   "p.dl.idmHint": "Live progress and control when the IDM download manager is installed",
   "p.nav.timer": "Timer",
   "p.timer.running": "Running timer",
@@ -474,5 +474,7 @@
   "soqi.aria": "Soqi the Dolphin. Click to say hi",
   "weather.credit": "Weather data by Open-Meteo.com",
   "p.location.openMeteoHint": "City search and forecasts come from Open-Meteo (CC BY 4.0, free for non-commercial use)",
-  "p.location.openMeteo": "Open-Meteo.com"
+  "p.location.openMeteo": "Open-Meteo.com",
+  "p.islamic.tanzil": "tanzil.net",
+  "reminder.source": "Qur'an text: Tanzil Project, tanzil.net"
 }

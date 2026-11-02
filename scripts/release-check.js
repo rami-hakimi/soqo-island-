@@ -58,7 +58,7 @@ for (const f of ['LICENSES.chromium.html', 'LICENSE.electron.txt']) {
 try {
   const asar = require('@electron/asar');
   const listed = new Set(asar.listPackage(path.join(unpacked, 'resources', 'app.asar')).map((p) => p.replace(/\\/g, '/').replace(/^\//, '')));
-  for (const f of ['LICENSE', 'NOTICE.md', 'THIRD_PARTY_NOTICES.md', 'assets/fonts/KFGQPC-LICENSE.txt', 'assets/fonts/KFGQPC-Hafs-V30.ttf', 'assets/soqi/sheet.json', 'src/locales/en.json', 'src/locales/ar.json', 'src/locales/nl.json']) {
+  for (const f of ['LICENSE', 'NOTICE.md', 'THIRD_PARTY_NOTICES.md', 'assets/fonts/KFGQPC-LICENSE.txt', 'assets/quran/TANZIL-LICENSE.txt', 'assets/fonts/KFGQPC-Hafs-V30.ttf', 'assets/soqi/sheet.json', 'src/locales/en.json', 'src/locales/ar.json', 'src/locales/nl.json']) {
     if (listed.has(f)) ok(`packaged: ${f}`);
     else fail(`not packaged: ${f}`);
   }

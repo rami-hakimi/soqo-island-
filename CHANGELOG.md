@@ -56,6 +56,10 @@ AmerTech). beta.1 was an internal build and was never published.
 - "IDM Nova downloads" reads "IDM downloads" (stale persisted labels migrate automatically).
 
 ### Fixed
+- Qur'an passages now come from the Tanzil Project's Uthmani text (CC BY 3.0, copied
+  unchanged, notice shipped, source and link in Settings › Features and on every verse card)
+  instead of text with no explicit licence; all 25 passages were verified letter by letter
+  against the official download.
 - Open-Meteo is credited with a link next to the weather (System tab, Settings › Location),
   as its CC BY 4.0 licence asks; the prayer-time core is attributed to PrayTimes.js (LGPL-3.0)
   in the code and in the notices; `THIRD_PARTY_NOTICES.md` ships the licence texts of every

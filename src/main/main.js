@@ -945,6 +945,7 @@ const SUPPORT_LINKS = {
   developer: 'https://github.com/rami-hakimi',
   license: 'https://www.gnu.org/licenses/gpl-3.0.html',
   openmeteo: 'https://open-meteo.com/', // weather and city search data (CC BY 4.0)
+  tanzil: 'https://tanzil.net/', // source of the Qur'an text (CC BY 3.0)
 };
 ipcMain.on('open-support', (_e, key) => {
   if (isStr(key, 32) && Object.hasOwn(SUPPORT_LINKS, key)) shell.openExternal(SUPPORT_LINKS[key]);

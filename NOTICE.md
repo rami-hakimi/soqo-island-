@@ -28,21 +28,16 @@ maintainer.
 | PrayTimes.js calculation core (ported in `src/main/prayer.js`) | Copyright (C) 2007-2011 PrayTimes.org, Hamid Zarrabi-Zadeh | LGPL-3.0, combined under LGPL §4 | header of `prayer.js`, LGPL text in `THIRD_PARTY_NOTICES.md` |
 | Open-Meteo weather and geocoding data | Open-Meteo.com | CC BY 4.0; free API for non-commercial use | credit link next to the weather (System tab) and under Settings › Location; this file |
 | KFGQPC HAFS Uthmanic Script v3.0 (font) | Copyright (c) 2010 King Fahd Glorious Quran Printing Complex | KFGQPC EULA: use, copy, distribute free of charge; no selling or modification. **Not** covered by the GPL | `assets/fonts/KFGQPC-LICENSE.txt`, included unmodified (same file as upstream) |
-| Qur'an verse text (about 20 short passages) | KFGQPC Hafs 'an 'Asim Unicode text, obtained upstream through the Quran.com API field `text_qpc_hafs` | see the status note below | `src/renderer/island/views/reminders-data.js`, unchanged from upstream and protected by a checksum test |
+| Qur'an verse text (25 short passages) | Tanzil Quran Text (Uthmani, version 1.1), Copyright (C) 2007-2026 Tanzil Project, https://tanzil.net | CC BY 3.0: verbatim copies only, source named, link to tanzil.net, notice kept | `src/renderer/island/views/reminders-data.js` (pinned by a checksum test), `assets/quran/TANZIL-LICENSE.txt`, credit and link under Settings › Features, tooltip on every verse card |
 | Contributor Covenant 2.1 | Coraline Ada Ehmke and contributors | CC BY 4.0 | `CODE_OF_CONDUCT.md` |
 
 ### Qur'an text: status
-The verses are scripture in the KFGQPC Hafs script; the digitised text is KFGQPC's own
-developer data (the field the Quran.com API calls `text_qpc_hafs`, which KFGQPC publishes as
-`aya_text_unicode` with its Hafs font package). As of 2 November 2026 no explicit licence for
-that text could be found: KFGQPC's developer page states none, and the Quran Foundation's API
-portal publishes no terms for API text. **This is unresolved.** Options under consideration:
-written confirmation from KFGQPC (info@qurancomplex.gov.sa), or replacing the passages with the
-Tanzil Project's Uthmani text, which carries an explicit licence (CC BY 3.0: verbatim copies
-only, "Tanzil Project" named as source, link to tanzil.net, copyright notice kept). Until one of
-these is done the text stays as inherited from upstream and the question is flagged here.
-A verified, ready-to-apply comparison with the Tanzil text (all 25 passages match letter for
-letter) is in `docs/QURAN_TEXT_PROPOSAL.md`; it is applied only on the owner's approval.
+Resolved on 2 November 2026. The passages inherited from upstream (KFGQPC text obtained
+through the Quran.com API, no explicit licence found) were replaced, word for word, by the
+same verses from the Tanzil Project's Uthmani text, which carries an explicit licence. Every
+passage was compared letter by letter with the Tanzil download before and after the change
+(`docs/QURAN_TEXT_PROPOSAL.md`). The text is shown in the KFGQPC Hafs font, which is a separate
+component under its own licence (above).
 
 ## Artwork
 - **Application screenshots** (`assets/screenshots/app/`) were captured from the running

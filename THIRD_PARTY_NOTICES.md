@@ -1199,6 +1199,49 @@ Copyright (c) 2010 King Fahd Glorious Quran Printing Complex. Included unmodifie
 end-user licence agreement, `assets/fonts/KFGQPC-LICENSE.txt` (free to use, copy and
 distribute; no selling or modification). Not covered by the GPL.
 
+### Qur'an text — Tanzil Project (CC BY 3.0)
+
+The Qur'anic passages in `src/renderer/island/views/reminders-data.js` are verbatim words of
+the Tanzil Quran Text (Uthmani, version 1.1), Copyright (C) 2007-2026 Tanzil Project,
+https://tanzil.net, Creative Commons Attribution 3.0. The text is unchanged; verse numbers
+shown after complete verses are added by the application. Tanzil's notice follows and also
+ships as `assets/quran/TANZIL-LICENSE.txt`.
+
+```
+Tanzil Quran Text (Uthmani, Version 1.1) - copyright notice, reproduced verbatim from the
+file downloaded from https://tanzil.net/download/ on 2026-11-02. Soqo Island ships about 25
+short passages of this text, unchanged, in src/renderer/island/views/reminders-data.js.
+
+# PLEASE DO NOT REMOVE OR CHANGE THIS COPYRIGHT BLOCK
+#====================================================================
+#
+#  Tanzil Quran Text (Uthmani, Version 1.1)
+#  Copyright (C) 2007-2026 Tanzil Project
+#  License: Creative Commons Attribution 3.0
+#
+#  This copy of the Quran text is carefully produced, highly
+#  verified and continuously monitored by a group of specialists
+#  at Tanzil Project.
+#
+#  TERMS OF USE:
+#
+#  - Permission is granted to copy and distribute verbatim copies
+#    of this text, but CHANGING IT IS NOT ALLOWED.
+#
+#  - This Quran text can be used in any website or application,
+#    provided that its source (Tanzil Project) is clearly indicated,
+#    and a link is made to tanzil.net to enable users to keep
+#    track of changes.
+#
+#  - This copyright notice shall be included in all verbatim copies
+#    of the text, and shall be reproduced appropriately in all files
+#    derived from or containing substantial portion of this text.
+#
+#  Please check updates at: http://tanzil.net/updates/
+#
+#====================================================================
+```
+
 ### Open-Meteo (weather and geocoding data)
 
 Weather data by Open-Meteo.com, https://open-meteo.com/, Creative Commons Attribution 4.0

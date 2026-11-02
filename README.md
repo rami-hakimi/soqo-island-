@@ -125,7 +125,8 @@ Windows Settings › Apps removes the program, its shortcuts and the startup ent
 - A small C# helper (`helper/`) for Windows media sessions, audio, brightness, UI Automation
   and the Start-menu catalogue
 - electron-builder (NSIS installer), electron-updater, node-ical
-- Weather and city search data by [Open-Meteo.com](https://open-meteo.com/) (CC BY 4.0)
+- Weather and city search data by [Open-Meteo.com](https://open-meteo.com/) (CC BY 4.0);
+  Qur'an text by the [Tanzil Project](https://tanzil.net/) (CC BY 3.0)
 - ESLint and `node:test`; GitHub Actions for CI and a tag-gated release workflow
 
 ```bash

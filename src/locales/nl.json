@@ -411,7 +411,7 @@
   "p.islamic.locationHint": "Wijzig de stad onder Algemeen",
   "p.islamic.active": "Actief: {city} · {method}",
   "p.islamic.inactive": "Nog niet berekend",
-  "p.islamic.sources": "Korantekst in het KFGQPC Hafs-schrift (King Fahd Glorious Quran Printing Complex); gebedstijden worden op deze pc berekend met de PrayTimes-methode.",
+  "p.islamic.sources": "Korantekst: Tanzil Project (tanzil.net), Uthmani-tekst, ongewijzigd overgenomen onder CC BY 3.0 en weergegeven in het KFGQPC Hafs-lettertype (King Fahd Glorious Quran Printing Complex). Gebedstijden worden op deze pc berekend met de PrayTimes-methode.",
   "onboarding.badge": "Welkom",
   "onboarding.title": "Welkom bij Soqo Island",
   "onboarding.sub": "Muziek, downloads, apps, een plank voor bestanden en slimme meldingen wonen in dit kleine eiland. Druk op <b>Ctrl+Alt+I</b> om het te openen, rechtsklik voor het menu. Optionele functies zoals gebedstijden vind je onder Instellingen › Functies.",
@@ -452,7 +452,7 @@
   "p.support.developerHint": "Nederland · gratis en open source",
   "p.support.license": "Licentie",
   "p.support.thirdParty": "Van derden",
-  "p.support.thirdPartyHint": "KFGQPC Hafs-lettertype (King Fahd Glorious Quran Printing Complex), Electron, node-ical, Open-Meteo, PrayTimes-methode",
+  "p.support.thirdPartyHint": "KFGQPC Hafs-lettertype (King Fahd Glorious Quran Printing Complex), Korantekst van het Tanzil Project, Electron, node-ical, Open-Meteo, PrayTimes-methode",
   "p.dl.idmHint": "Live voortgang en bediening wanneer de downloadmanager IDM is geïnstalleerd",
   "p.nav.timer": "Timer",
   "p.timer.running": "Lopende timer",
@@ -474,5 +474,7 @@
   "soqi.aria": "Soqi de dolfijn. Klik om hallo te zeggen",
   "weather.credit": "Weergegevens van Open-Meteo.com",
   "p.location.openMeteoHint": "Stedenzoeker en verwachtingen komen van Open-Meteo (CC BY 4.0, gratis voor niet-commercieel gebruik)",
-  "p.location.openMeteo": "Open-Meteo.com"
+  "p.location.openMeteo": "Open-Meteo.com",
+  "p.islamic.tanzil": "tanzil.net",
+  "reminder.source": "Korantekst: Tanzil Project, tanzil.net"
 }

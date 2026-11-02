@@ -49,7 +49,7 @@ applicable on this machine (note why).
 | P3 | Prayer tab RTL / i18n | Visual | ⏳ | | ✅ CDP screenshots EN + AR (Stage 5) |
 | P4 | Adhan alerts + scene | Set PC clock near a prayer | ⏳ | | |
 | P5 | Reminders cards, quiet hours | Settings → Show one now | ⏳ (quiet hours 🤖) | | |
-| P6 | Religious text unchanged | Checksum test | 🤖 | | |
+| P6 | Religious text unchanged | Checksum test | 🤖 | | 🤖 re-pinned 2026-11-02 after the reviewed switch to the Tanzil text (25/25 passages verified against the official download) |
 | L1 | Dutch interface (nl-NL): strings, dates, plurals, language switch, installer language | Settings › General › Nederlands; island + Settings pages | ⏳ | | ✅ Stage 16: 473/473 keys (gate + test), live switch en→nl→ar→en, `ma 2 nov` / `14:05`, dismissal 4/4 in nl; NSIS nl_NL added; native review pending |
 | C8 | Soqi click reaction, idle motion, no island opening from Soqi | Rest pointer on Soqi beside the pill, click, move onto the pill | ⏳ | | ✅ Stage 16 real mouse: pointer on Soqi → window interactive, island stays closed (`soqiHot`); click → swim animation + happy/excited; pointer onto the pill → opens; Settings › "Say hi" works; reduced-motion CSS |
 | S14 | Glass pauses and content protection drops while a screen recorder runs; back afterwards | Start a process named obs64/nvsphelper64, watch the log and the static pane; stop it | ⏳ | | ✅ Stage 17 (simulated with a renamed process) |

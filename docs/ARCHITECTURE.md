@@ -30,14 +30,22 @@ src/
 │  ├─ prefs/        settings window
 │  └─ mini/         mini player page (YouTube iframe API)
 ├─ shared/          i18n.js (translation core), soqi-state.js (Soqi's mood machine) — UMD,
-│                   used by main, renderers and tests
+│                   used by main, renderers and tests; timer-pill.js (pill sizes), hover-policy.js (when
+│                   the click-through window takes the mouse)
 └─ locales/         en.json, ar.json
 helper/             SoqoHelper.cs, Apps.cs, YtUrl.cs, AddressBar.cs, build.cmd → soqo-helper.exe
-assets/             approved originals (not shipped), soqi/ sprites, fonts/ (KFGQPC)
-build/              icon.ico / icon.png / tray-color.png (derived by scripts/prepare-art.py)
+assets/
+├─ soqi/            Soqi sprites + sheet.json (shipped)
+├─ fonts/           KFGQPC Hafs Qur'an font + its licence (shipped)
+├─ branding/        approved icon and brand-sheet originals (not shipped)
+├─ mascot/          approved mascot and expression-sheet originals (not shipped)
+├─ ui/              design references (not shipped)
+└─ screenshots/     app/ genuine screenshots · promo/ concept illustrations (+ web/ copies)
+build/              icon.ico / icon.png / tray.png (derived by scripts/prepare-art.py), installer.nsh
 test/               node:test suites; helpers/electron-stub.js lets main modules load under Node
-scripts/            check-syntax, i18n-check, prepare-art
+scripts/            check-syntax, i18n-check, prepare-art, dev-setup.cmd
 docs/               plan, status, checklist, security audit, art requests, this file, …
+.github/            CI workflow (verify + helper + unsigned installer), issue and PR templates
 ```
 
 ## Processes and trust boundaries

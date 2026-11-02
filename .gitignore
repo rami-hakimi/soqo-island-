@@ -1,8 +1,38 @@
+# dependencies and build output
 node_modules/
 dist/
+*.tsbuildinfo
+
+# local runs and logs
 *.log
-__pycache__/
-promo/src/out/
-promo/src/scenes/_*.html
-promo/src/prefs.html
 setup-log.txt
+.soqo-dev/
+*.local.json
+
+# secrets and private configuration (never commit certificates or tokens)
+.env
+.env.*
+*.pfx
+*.p12
+*.pem
+*.key
+*.snk
+
+# helper build intermediates (the compiled helper itself is tracked on purpose)
+helper/obj/
+helper/*.pdb
+
+# Python tooling (scripts/prepare-art.py)
+__pycache__/
+*.pyc
+.venv/
+
+# editors and operating systems
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini

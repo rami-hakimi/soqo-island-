@@ -24,6 +24,10 @@ First Soqo Island build, a rebrand and rebuild of Nova Island 1.4.0 (GPL-3.0, by
   never modified); an imported profile with the prayer features at their defaults asks once
   whether to keep them.
 - Redesigned music view: artwork with reflection, waveform, centred transport, Soqi.
+- Running-timer pill in three sizes (Small / Medium / Large) with inline pause and reset on
+  hover, and a switch to keep a running timer visible over full-screen apps.
+- *Launch at Windows startup* survives upgrades and reinstalls; the uninstaller removes it.
+- GitHub community files: issue and pull-request templates, Code of Conduct.
 - Arabic and English installer languages.
 - Documentation: architecture, localisation, privacy, security policy, releasing, art assets.
 
@@ -33,6 +37,21 @@ First Soqo Island build, a rebrand and rebuild of Nova Island 1.4.0 (GPL-3.0, by
 - Project structure under `src/` (main, preload, renderer, shared, locales) with a
   TypeScript `checkJs` gate, ESLint, i18n parity gate and 43 unit tests (`npm run verify`).
 - The native helper is `soqo-helper.exe`, rebuilt from source with a version resource.
+- Repository layout: artwork under `assets/branding`, `assets/mascot`, `assets/ui`;
+  genuine screenshots under `assets/screenshots/app`, promotional concept illustrations
+  under `assets/screenshots/promo`; the development setup script moved to `scripts/`.
+- "IDM Nova downloads" reads "IDM downloads" (stale persisted labels migrate automatically).
+
+### Fixed
+- Qur'an, du'a, dhikr and scene cards close on the **first** click of their × and hand the
+  mouse back at once: cards and scenes take the pointer without the hover-intent delay,
+  the cursor poll runs faster while one is open, the live-glass capture pauses meanwhile
+  (it used to starve the poll), and a press on a card's header can no longer start a drag.
+  After closing, the island stays click-through over the card's area until the pointer
+  leaves, so it never pops open under the cursor or blocks the window underneath.
+- First Start-menu scan sometimes came back empty: the helper's output was read on `exit`
+  before stdout had drained; both spawn sites now wait for `close`.
+- Startup registration was lost when an installer re-ran over an existing copy.
 
 ### Security
 - All renderers sandboxed with strict CSP; Electron fuses (RunAsNode off, NODE_OPTIONS off,
@@ -48,3 +67,5 @@ First Soqo Island build, a rebrand and rebuild of Nova Island 1.4.0 (GPL-3.0, by
 - Arabic strings await a native-speaker review (`docs/TRANSLATION_REVIEW.md`).
 - The "adhan sound" is a soft chime, not a recorded adhan.
 - The IDM download-manager bridge is kept as an optional third-party integration.
+- Soqi reacts to events only; there are no click gestures yet.
+- Only English and Arabic ship; Dutch is not available.

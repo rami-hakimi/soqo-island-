@@ -1,0 +1,42 @@
+name: Feature request
+description: Suggest an improvement or a new idea for Soqo Island or Soqi
+title: "[Idea] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would you like to do that you cannot do today?
+      description: Describe the situation rather than the solution; it helps find the best fit.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: How should it work? Where would it live (island, Settings page, tray menu, Soqi)?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Island and modes
+        - Music and media
+        - Timer and focus
+        - Downloads, apps, shelf
+        - Clipboard and system utilities
+        - Soqi the companion
+        - Notifications and reminders
+        - Optional Islamic Features
+        - Languages and right-to-left
+        - Settings, startup, installer
+        - Other
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Please confirm
+      options:
+        - label: This should stay optional (a switch in Settings) if it changes default behaviour
+        - label: I am happy for this idea to be implemented under the GPL-3.0 licence

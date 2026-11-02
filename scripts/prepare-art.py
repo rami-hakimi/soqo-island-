@@ -2,12 +2,12 @@
 
 The originals are never modified. Outputs:
   build/icon.png (256), build/icon.ico (16..256), build/icon-512.png, build/icon-master.png (1024)
-      from "Cute Dolphin Splash App Icon.png": the rounded navy square is cropped out of its
+      from assets/branding/soqo-splash-icon.png: the rounded navy square is cropped out of its
       light backdrop and given a rounded-corner alpha.
   build/tray.png (32, white silhouette) and build/tray-color.png (32)
       the dolphin silhouette from the icon, for the Windows tray at 16 px.
   assets/soqi/<state>.png (10 states, 256x256, transparent)
-      from "Glossy Soqi Dolphin Emotion Sticker Sheet.png": each cell is cut above its label,
+      from assets/mascot/soqi-expression-sheet.png: each cell is cut above its label,
       the white backdrop is removed by a flood fill from the border (so the white belly stays),
       and the sprite is centred on a square canvas.
   assets/soqi/soqi-full.png (512, transparent)
@@ -23,9 +23,9 @@ ROOT = os.path.join(os.path.dirname(__file__), '..')
 SRC = os.path.join(ROOT, 'assets')
 BUILD = os.path.join(ROOT, 'build')
 OUT = os.path.join(SRC, 'soqi')
-ICON_SRC = os.path.join(SRC, 'Cute Dolphin Splash App Icon.png')
-SHEET_SRC = os.path.join(SRC, 'Glossy Soqi Dolphin Emotion Sticker Sheet.png')
-MASCOT_SRC = os.path.join(SRC, 'Cute Glossy Blue Dolphin Mascot.png')
+ICON_SRC = os.path.join(SRC, 'branding', 'soqo-splash-icon.png')
+SHEET_SRC = os.path.join(SRC, 'mascot', 'soqi-expression-sheet.png')
+MASCOT_SRC = os.path.join(SRC, 'mascot', 'soqi-mascot.png')
 
 STATES = ['idle', 'happy', 'excited', 'curious', 'listening', 'music', 'sleeping', 'notification', 'download', 'warning']
 
@@ -214,8 +214,11 @@ def stickers():
     mascot = mascot.crop(mascot.getbbox())
     mascot = ImageOps.pad(mascot, (max(mascot.size),) * 2, color=(0, 0, 0, 0))
     mascot.resize((512, 512), Image.LANCZOS).save(os.path.join(OUT, 'soqi-full.png'), optimize=True)
-    with open(os.path.join(OUT, 'sheet.json'), 'w', encoding='utf-8') as f:
-        json.dump({'source': os.path.basename(SHEET_SRC), 'states': atlas, 'full': 'soqi-full.png'}, f, indent=2)
+    with open(os.path.join(OUT, 'sheet.json'), 'w', encoding='utf-8', newline='
+') as f:
+        json.dump({'source': '../mascot/soqi-expression-sheet.png', 'states': atlas, 'full': 'soqi-full.png'}, f, indent=2)
+        f.write('
+')
     print('stickers:', ', '.join(STATES), '-> assets/soqi/')
 
 

@@ -46,8 +46,10 @@
       "build/icon.png",
       "build/icon.ico",
       "build/tray.png",
-      "!assets/*.png",
-      "!promo/**",
+      "!assets/branding/**",
+      "!assets/mascot/**",
+      "!assets/ui/**",
+      "!assets/screenshots/**",
       "!dist/**",
       "!docs/**",
       "!test/**",
@@ -122,5 +124,20 @@
   },
   "bugs": {
     "url": "https://github.com/rami-hakimi/soqo-island-/issues"
-  }
+  },
+  "keywords": [
+    "windows",
+    "desktop",
+    "electron",
+    "dynamic-island",
+    "companion",
+    "productivity",
+    "arabic",
+    "rtl",
+    "music",
+    "timer",
+    "notifications",
+    "soqo-island",
+    "soqi"
+  ]
 }

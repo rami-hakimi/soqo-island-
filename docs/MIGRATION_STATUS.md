@@ -1,7 +1,7 @@
 # Migration Status
 
 Branch: `rebuild/soqo-island` (from upstream `main` 7e3c4ee, Nova Island 1.4.0).
-Remotes: `origin` → github.com/rami-hakimi/soqo-island- (empty, nothing pushed yet),
+Remotes: `origin` → github.com/rami-hakimi/soqo-island- (first push: Stage 15),
 `upstream` → github.com/NOVA-TECH-KIT/nova-island (push disabled).
 
 Legend for checks: **ran** = executed on this Windows 11 machine with the output recorded;
@@ -504,3 +504,57 @@ read "IDM downloads / Browser downloads …", About reads "Developed by Rami al-
 "تطوير رامي الحكيمي". The only remaining upstream mention in the interface is the
 attribution behind About › Credits (GPL notice), plus `NOTICE.md`, README licence section
 and the copyright line.
+
+## Stage 15 — Card dismissal, repository cleanup, README, publication prep (2026-11-02) ✅
+- **Reminder / scene cards could not be dismissed reliably.** Reproduced with a real mouse
+  (`SetCursorPos` + `mouse_event`, positions read over the DevTools protocol): the click on a
+  Qur'an card's × fell through to the desktop. Three causes, all fixed:
+  1. the click-through window only took the pointer after the 280 ms hover-intent delay, so a
+     pointer arriving at the × from outside the island was not yet "active" when it clicked;
+  2. the live-glass capture (`desktopCapturer.getSources`, every 700 ms for 2 s after a resize
+     and while active) stalls the main thread and starved the 40 ms cursor poll: with glass
+     on, 2 of 7 first clicks were lost, with glass off 0 of 8;
+  3. a press near the × on the card body could start an island drag.
+  Fix: `src/shared/hover-policy.js` (unit-tested) decides activation: cards, scenes and action
+  toasts activate at once with a 10 px pad and a 16 ms poll; pills keep the intent delay.
+  `interactive` / `release` IPC from the renderer; after a close the window stays
+  click-through over the island *and the card's former area* until the pointer leaves (a
+  prayer slide appearing there used to pop the island open); glass capture pauses while a
+  card is open; close buttons release the mouse; `.rm-head` / `.sc-x` never start a drag and
+  the drag threshold on cards is 12 px; × enlarged to 28/30 px with an 8 px halo.
+  Result (dev build, live glass on): 22/22 first clicks closed a Qur'an card (travel-in,
+  60 ms and 200 ms teleport cases), the scene card closes, the second click reaches the
+  window underneath (foreground → explorer), the island does not reopen under the pointer.
+  Finding during the test: the **installed app must be quit** while testing a dev build;
+  both islands sit at the same spot and the installed one swallows the clicks.
+- **Repository layout**: `assets/branding/` (splash icon, brand sheet), `assets/mascot/`
+  (mascot, expression sheet), `assets/ui/` (player reference), `assets/screenshots/app/`
+  (genuine captures, moved from `docs/screenshots/`), `assets/screenshots/promo/` (the five
+  approved concept illustrations, renamed `01-soqo-overview` … `05-windows-experience`, plus
+  1400 px JPEG copies under `web/` for the README); `scripts/dev-setup.cmd` (was the
+  root-level `Setup Soqo Island.cmd`). `prepare-art.py` reads the new paths and reproduces
+  byte-identical icons and sprites; electron-builder excludes the new folders; on-disk folder
+  case normalised to `assets` in Git (Windows kept the mixed-case name; harmless).
+- **README** rewritten for GitHub visitors: introduction, feature table, nine-step install
+  with an honest SmartScreen note, how-to for every area, gallery that separates concept art
+  from genuine screenshots, privacy, developer guide (commands checked against package.json),
+  contributing, known limitations (Dutch absent, Soqi has no click gestures), credits and
+  licensing (GPL, upstream authorship, KFGQPC font), Arabic summary.
+- **Community files**: `.github/ISSUE_TEMPLATE/bug_report.yml`, `feature_request.yml`,
+  `config.yml`, `.github/pull_request_template.md`, `CODE_OF_CONDUCT.md` (Contributor
+  Covenant 2.1), `CONTRIBUTING.md` rewritten, `.gitignore` rewritten (secrets, certificates,
+  helper intermediates, editor files; lockfile and tracked helper binary kept).
+- **Checks**: `npm run verify` green after the moves (69 scripts, lint clean, tsc clean, i18n
+  468/475, 50 tests). Installer rebuilt (`dist\Soqo-Island-Setup-2.0.0-beta.1.exe`,
+  113,394,330 bytes, 01:28) and installed silently over the previous copy (27 s): all eight
+  JSON data files byte-identical before and after, `islamic=true`, `timerSize=medium` and
+  the other preferences kept, HKCU `Run` value present; the upgraded build passed the same
+  dismissal set (11/11 + 8/8 first clicks) and was relaunched normally (4 processes + helper,
+  no errors in the log).
+- **New genuine screenshots** (DevTools-protocol page captures of the dev build, composited on
+  the ocean background like the earlier ones): `timer-small/medium/large.png`,
+  `timer-medium-hover.png`, `timer-large-hover.png`, `reminder-ayah.png` under
+  `assets/screenshots/app/`; the README's gallery uses them next to the labelled concept art.
+- Not done / owner items: Dutch translation (not started; README says so), Soqi click
+  gestures (not a feature; concept art only), tray menu by automation, multi-monitor, code
+  signing, GitHub Release.

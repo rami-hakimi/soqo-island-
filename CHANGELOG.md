@@ -1,9 +1,9 @@
 # Changelog
 
 All notable changes to Soqo Island. The format follows Keep a Changelog; versions follow
-semver. Nothing below has been published yet.
+semver.
 
-## [2.0.0-beta.3] — unreleased
+## [2.0.0-beta.3] — 2026-11-02
 
 Fixes from the first days of the public beta.
 

@@ -33,7 +33,8 @@ environment of the build; never commit certificates.
 ## CI
 `.github/workflows/windows.yml` runs verify, rebuilds the helper, and builds the installer
 on every push and pull request, uploading `dist/` as a workflow artifact for inspection. It
-does not publish. Publishing from CI would need a `GH_TOKEN` with release rights and the
+does not publish (`--publish never`; without it electron-builder on CI looks for a GitHub
+release to attach to and fails for lack of a token). Publishing from CI would need a `GH_TOKEN` with release rights and the
 owner's explicit go-ahead.
 
 ## Rollback

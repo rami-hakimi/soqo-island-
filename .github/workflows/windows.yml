@@ -38,8 +38,10 @@ jobs:
           Write-Host "catalogue entries: $count"
           if ($count -lt 1) { exit 1 }
 
+      # --publish never: on CI electron-builder would otherwise look for a GitHub release to
+      # attach to (publish config in package.json) and fail without a token; CI never publishes
       - name: Build installer (unsigned, not published)
-        run: npm run dist
+        run: npm run dist -- --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
 

@@ -50,6 +50,7 @@ applicable on this machine (note why).
 | P4 | Adhan alerts + scene | Set PC clock near a prayer | ⏳ | | |
 | P5 | Reminders cards, quiet hours | Settings → Show one now | ⏳ (quiet hours 🤖) | | |
 | P6 | Religious text unchanged | Checksum test | 🤖 | | |
+| P7 | Card × closes on first click and releases the mouse | Show a Qur'an card and a scene; click × once with a real mouse; click again where it was | ⏳ | | ✅ Stage 15: 22/22 first clicks (live glass on), scene card too, second click reaches the window underneath, island does not reopen under the pointer; `hover-policy` 🤖 |
 | C1 | Companion peek (Soqi, was eyes) | Rest cursor beside pill 3 s | ⏳ | ✅ CDP screenshot (curious/happy beside pill, over top when floating) | |
 | C2 | Scenes (Soqi porthole + card) | Adhan / water / focus | ⏳ | ✅ CDP screenshots adhan + focus | |
 | C3 | Welcome back / brief / care | Idle 5 min then move | ⏳ | | |

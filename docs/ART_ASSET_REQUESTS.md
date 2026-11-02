@@ -4,16 +4,19 @@ Soqo Island ships only original artwork. Upstream's Nova logo and the Nova chara
 (`promo/`) have been removed from the tree (they remain in Git history under the upstream
 commits) and nothing in the app references them.
 
-## Approved originals (kept untouched in `assets/`)
+## Approved originals (kept untouched)
 | File | Size | Used for |
 |---|---|---|
-| `Cute Dolphin Splash App Icon.png` | 1254×1254 RGB | App icon, installer icon, tray silhouette |
-| `Cute Glossy Blue Dolphin Mascot.png` | 1254×1254 RGBA | Settings › Companion hero |
-| `Glossy Soqi Dolphin Emotion Sticker Sheet.png` | 1536×1024 RGB | Soqi's ten states |
-| `Soqo Island Dolphin Brand Sheet.png` | 1536×1024 RGBA | Reference: palette `#0B1B2B #00C9BB #00A8FF #7FD7FF #F5FAFF`, logo lockup, UI direction |
-| `Soqo Island Ocean Breeze Player.png` | 1672×941 RGB | Reference for the music view redesign (Stage 7) |
+| `assets/branding/soqo-splash-icon.png` | 1254×1254 RGB | App icon, installer icon, tray silhouette, Settings logo |
+| `assets/mascot/soqi-mascot.png` | 1254×1254 RGBA | Settings › Companion hero (`assets/soqi/soqi-full.png`) |
+| `assets/mascot/soqi-expression-sheet.png` | 1536×1024 RGB | Soqi's ten states |
+| `assets/branding/soqo-brand-sheet.png` | 1536×1024 RGBA | Reference: palette `#0B1B2B #00C9BB #00A8FF #7FD7FF #F5FAFF`, logo lockup, UI direction |
+| `assets/ui/ocean-breeze-player-reference.png` | 1672×941 RGB | Reference for the music view redesign (Stage 7) |
+| `assets/screenshots/promo/0[1-5]-*.png` (+ `web/*.jpg`, 1400 px, for the README) | 1672×941 RGB | Promotional **concept illustrations** for the README and the GitHub page. They are not screenshots of the running application and are labelled as concept art wherever they appear |
 
-The originals are excluded from the installer (`!assets/*.png`); only the derived files ship.
+Genuine screenshots of the running application live in `assets/screenshots/app/`.
+The originals, references and screenshots are excluded from the installer
+(`!assets/branding/**`, `!assets/mascot/**`, `!assets/ui/**`, `!assets/screenshots/**`); only the derived files ship.
 
 ## Derived, application-ready files (`python scripts/prepare-art.py`, reproducible)
 | Output | From | Notes |
@@ -40,9 +43,7 @@ cursor). They are not rigged 3D models and are not described as such anywhere in
 4. **Hero / store imagery** — seven 1600×1000 PNG scenes (hero, Soqi, music, downloads, smart
    clipboard, prayer, settings) will be rendered from the real app after the visual refresh.
    Nothing to draw by hand unless you want illustrated backgrounds.
-5. **Settings window logo** — the title bar still uses a small CSS pill as its mark. A 20×20 /
-   40×40 PNG of the dolphin silhouette (cyan on transparent) would replace it:
-   `assets/brand/mark-20.png`, `assets/brand/mark-40.png`.
+5. ~~Settings window logo~~ — done in Stage 14: the title bar and About row use `build/icon.png`.
 
 ## Rules
 - No copyrighted or trademarked characters, no reuse of Nova artwork.

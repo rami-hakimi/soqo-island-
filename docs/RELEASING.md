@@ -5,7 +5,8 @@ Nothing is published automatically. A release is a deliberate, owner-approved st
 ## Before a release
 1. `npm run verify` green on a clean checkout; `npm run helper:build` reproduces
    `helper/soqo-helper.exe` (commit it if the sources changed).
-2. `python scripts/prepare-art.py` if any artwork changed.
+2. `python scripts/prepare-art.py` if any artwork changed (inputs under `assets/branding` and
+   `assets/mascot`).
 3. Walk `docs/REGRESSION_CHECKLIST.md` on a real Windows desktop (media controls, mini
    player, address-bar slot, multi-monitor, Arabic + RTL).
 4. Bump `version` in `package.json` (semver; pre-releases as `2.0.0-beta.1`), update

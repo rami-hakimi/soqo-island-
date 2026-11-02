@@ -17,6 +17,12 @@ Island project.
   IPC validation.
 - A redesigned music view, the ocean palette, Windows media integration, mini player,
   download tracking, smart clipboard, privacy dots, shelf, timer and focus sessions.
+- **Timer pill in three sizes** (Settings › Timer) with pause/reset on hover and an option
+  to stay visible over full-screen apps.
+- **Installed-app behaviour**: launch at sign-in without a console window, startup kept
+  across upgrades, removed by the uninstaller.
+- **Fixes**: reminder and scene cards close on the first click of their × and release the
+  mouse; the Start-menu catalogue no longer comes back empty on the first scan.
 
 ## Requirements
 Windows 10 or 11, 64-bit.
@@ -36,6 +42,7 @@ them.
 - Arabic text awaits native-speaker review.
 - The adhan sound is a soft chime.
 - Tested on one Windows 11 machine; multi-monitor and high-DPI reports welcome.
+- Soqi reacts to events, not to clicks. English and Arabic only.
 
 ## Thanks
 Nova Island by AmerTech (GPL-3.0) for the foundation; the King Fahd Glorious Quran Printing

@@ -75,7 +75,7 @@ Legend for checks: **ran** = executed on this Windows 11 machine with the output
 - User-facing strings: window titles, tray tooltip, menu, settings window brand, Support
   page (Star → new repo; upstream project and its author's Ko-fi/InstaPay kept under
   "Based on Nova Island" pending owner decision), `Pictures\Soqo Island`, log `soqo.log`,
-  setup script "Setup Soqo Island.cmd", preload bridge `window.soqo`, font alias
+  setup script "Setup Soqo Island.cmd" (now `scripts/dev-setup.cmd`), preload bridge `window.soqo`, font alias
   "Soqo Quran", scene classes `sc-soqi`, companion script `views/soqi.js`.
 - Not renamed: IDM Nova (third-party product) and its token header; internal helper
   `novaHeaders` → `idmHeaders` for clarity.
@@ -354,7 +354,7 @@ upstream); the helper's Start-menu scan logged one empty first answer and succee
 - "Launch at Windows startup" toggle (Settings › General) with an explanatory hint.
 - `CHANGELOG.md`, `CONTRIBUTING.md`, `docs/TRANSLATION_REVIEW.md`,
   `docs/RELEASE_NOTES_2.0.0-beta.1.md`, `docs/LAUNCH_ANNOUNCEMENT.md`, README rewritten with
-  real screenshots (`docs/screenshots/`, composited from DevTools captures on a plain
+  real screenshots (`assets/screenshots/app/`, composited from DevTools captures on a plain
   navy backdrop).
 - Final branding pass: the third-party download manager is called "IDM" in every
   user-facing string (EN + AR), the import question no longer names the old app, About says

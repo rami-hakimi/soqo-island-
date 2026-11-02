@@ -12,10 +12,10 @@ applicable on this machine (note why).
 | S4 | Vertical mode left/right | Menu → Vertical, drag across centre | ⏳ | | |
 | S5 | Multi-monitor layout | Move to second display, unplug | ➖ one display here | | |
 | S6 | Address-bar slot in Chromium (opt-in since beta.3) | Settings › General › Browser address bar on; focus Chrome, type in omnibox | ⏳ | | ✅ beta.2 reproduced the island following a half-off-screen Chrome window to mid-screen; beta.3: off by default, skipped when the slot is off screen, page text fields ignored |
-| S7 | Hide in fullscreen / while maximized (opt-in); Show/Hide menu | Chrome F11; maximize with the option on; toggle menu | ⏳ | | 🤖 visibility.test.js; ✅ beta.3 real Chrome (see status) |
+| S7 | Hide in fullscreen / while maximized (opt-in); Hide/Show island menu; second launch reveals | Chrome F11; maximize with the option on; menu Hide island → tray Show island → Hide → start the app again | ⏳ | | 🤖 visibility.test.js (hide→restore, tray, second launch, restart, Focus Mode); ✅ beta.4 real mouse: right-click › Hide island, tray flyout › Show island, hidden + second launch revealed, F11 + second launch logged the reason, back after F11 |
 | S8 | Live glass backdrop | Move island over coloured window | ⏳ | | |
 | S9 | Ctrl+Alt+I toggles; pin | Press shortcut | ⏳ | | |
-| S10 | Tray menu items | Click tray | ⏳ | | ⏳ icon not reachable via UI Automation in this session; same menu tested via island right-click (Stage 11) |
+| S10 | Tray menu items | Click tray | ⏳ | | ✅ beta.4: icon found in the hidden-icons flyout by UI Automation; menu lists Show/Hide island, Vertical, Reset position, Launch at startup, Expand/collapse, Focus Mode, Settings, Quit; Show island restored the island |
 | S11 | Single instance | Launch twice | ⏳ | ⏳ (launch reached island-ready) | |
 | S12 | Reduced motion | Windows Settings → Animation effects off | ⏳ | | 🤖 CSS rule present; Soqi Movement switch |
 | S13 | Input focus only while typing | Apps → Add → type | ⏳ | | |
@@ -30,7 +30,8 @@ applicable on this machine (note why).
 | A1 | App catalogue, pins, reorder, launch | Apps tab | 🤖 helper `apps` returns 183 entries | | |
 | A2 | App icons | Visual | ⏳ | | |
 | F1 | Shelf drop/drag-out/open/reveal/clear/expiry | Drop a file | ⏳ | | |
-| T1 | Timer presets, sounds, pill sizes | Timer tab; Settings › Timer | ⏳ | | ✅ Small/Medium/Large pills, hover controls, pause/resume accuracy, AR (Stage 12); sounds ⏳ |
+| T1 | Timer presets, sounds, pill sizes | Timer tab; Settings › Timer | ⏳ | | ✅ Small/Medium/Large pills, hover controls, pause/resume accuracy, AR (Stage 12); ✅ beta.4: Large 400 × 88 / 64 px, mini 168 × 28 over Chrome and Explorer, Large back after Win+D, no flicker on rapid switching, 0 s drift over 49 s; sounds ⏳ |
+| T2 | Focus Mode | Timer tab › full-screen button; Esc; Pause / Resume / Cancel; presets | ⏳ | | ✅ beta.4 real mouse: opened by click, full screen on the island's display, island hidden while in front and back after Esc / Exit / Alt+Tab to Chrome (mini pill); Pause held the countdown for 3 s, Space toggles, Cancel, preset 25 and Focus session drive the island's timer; ar (RTL) and nl strings |
 | T2 | Focus sessions + scenes | Focus button | ⏳ | | |
 | Y1 | CPU/RAM | Idle slide | ⏳ | | |
 | Y2 | Weather + location fallbacks | System tab; set manual city | ⏳ | | |

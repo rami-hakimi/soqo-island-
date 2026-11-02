@@ -34,7 +34,7 @@ module.exports = [
     },
   },
   {
-    files: ['src/renderer/prefs/prefs.js', 'src/renderer/mini/mini.js'],
+    files: ['src/renderer/prefs/prefs.js', 'src/renderer/mini/mini.js', 'src/renderer/focus/focus.js'],
     languageOptions: { sourceType: 'script', globals: { ...globals.browser, mini: 'readonly', I18n: 'readonly' } },
     rules: { 'no-unused-vars': ['warn', { args: 'none', caughtErrors: 'none', varsIgnorePattern: '^(LOCALE|t)$' }] },
   },

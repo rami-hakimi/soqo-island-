@@ -21,7 +21,7 @@ error log (`soqo.log`, ≤ 1 MB, no clipboard text, no links, no file contents).
   screen recorder (NVIDIA Share, OBS, Streamlabs) is running; in the last case the island also
   stops asking Windows to hide it from captures, so recordings are not affected. The helper
   only looks at process names for this, every two seconds.
-- **The window in front**: its process name, title, whether it is full screen or maximized, and
+- **The window in front**: its process name, title, whether it is full screen or maximized, whether it is the desktop or the taskbar, and
   (only with the opt-in address-bar slot) the position of a Chromium browser's address bar. Used
   to hide or place the island; nothing is stored or sent.
 - **Weather and city search** come from Open-Meteo (CC BY 4.0, free for non-commercial use);

@@ -500,8 +500,8 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .presets button.sel { background: rgba(255, 159, 10, .22); color: var(--orange); }
 .presets button.sel small { color: rgba(255, 159, 10, .7); }
 .tm-actions { display: flex; gap: 8px; }
-#tm-reset { width: 44px; padding: 0; flex: none; }
-#tm-reset svg { width: 19px; height: 19px; }
+#tm-reset, #tm-focus-mode { width: 44px; padding: 0; flex: none; }
+#tm-reset svg, #tm-focus-mode svg { width: 19px; height: 19px; }
 #tm-start { flex: 1; }
 
 /* ---------- prayer ---------- */
@@ -597,15 +597,21 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 /* running-timer pill sizes (shared/timer-pill.js keeps the same numbers) */
 #island:not(.vertical).compact.t-sm { --h: 38px; --r: 19px; }
 #island:not(.vertical).compact.t-md { --w: 260px; --h: 50px; --r: 25px; }
-#island:not(.vertical).compact.t-lg { --w: 324px; --h: 66px; --r: 33px; }
+#island:not(.vertical).compact.t-lg { --w: 400px; --h: 88px; --r: 44px; }
 #island:not(.vertical).compact.t-md.t-hover { --w: 332px; }
-#island:not(.vertical).compact.t-lg.t-hover { --w: 408px; }
-#island.t-md .l-compact, #island.t-lg .l-compact { justify-content: center; gap: 10px; }
+#island:not(.vertical).compact.t-lg.t-hover { --w: 504px; }
+/* the mini pill: a running timer while an application is in front; clear of tabs and toolbars */
+#island:not(.vertical).compact.t-mini { --w: 168px; --h: 28px; --r: 14px; }
+#island.t-md .l-compact, #island.t-lg .l-compact, #island.t-mini .l-compact { justify-content: center; gap: 10px; }
 #island.t-sm .l-compact .c-ico { width: 20px; height: 20px; }
 #island.t-md .l-compact .c-time { font-size: 28px; font-weight: 700; letter-spacing: .01em; line-height: 1; }
-#island.t-lg .l-compact .c-time { font-size: 48px; font-weight: 700; letter-spacing: .01em; line-height: 1; }
+#island.t-lg .l-compact { gap: 18px; }
+#island.t-lg .l-compact .c-time { font-size: 64px; font-weight: 800; letter-spacing: -.01em; line-height: 1; }
 #island.t-md .l-compact .c-ico { width: 24px; height: 24px; }
-#island.t-lg .l-compact .c-ico { width: 30px; height: 30px; }
+#island.t-lg .l-compact .c-ico { width: 36px; height: 36px; }
+#island.t-mini .l-compact { gap: 7px; padding: 0 10px; }
+#island.t-mini .l-compact .c-ico { width: 15px; height: 15px; margin-left: 0; }
+#island.t-mini .l-compact .c-time { font-size: 15px; font-weight: 700; letter-spacing: .01em; line-height: 1; }
 /* inline pause / resume and reset, shown only while hovering a medium or large pill */
 .c-tctl { display: none; align-items: center; gap: 6px; margin-inline-start: 8px; }
 #island.t-hover .l-compact .c-tctl { display: flex; }
@@ -617,8 +623,8 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .ct.paused .ct-pause { display: none; }
 .ct.paused .ct-play { display: block; }
 #island.t-md .ct { width: 32px; height: 32px; }
-#island.t-lg .ct { width: 38px; height: 38px; }
-#island.t-lg .ct svg { width: 19px; height: 19px; }
+#island.t-lg .ct { width: 44px; height: 44px; }
+#island.t-lg .ct svg { width: 22px; height: 22px; }
 
 /* ============ IDM downloads ============ */
 :root { --dl-rgb: 0, 201, 187; }

@@ -42,6 +42,8 @@ const i18n = require('./i18n');
 const HoverPolicy = require('../shared/hover-policy');
 const Placement = require('../shared/placement');
 const Visibility = require('../shared/visibility');
+const Front = require('../shared/front');
+const focusWindow = require('./focus-window');
 i18n.setSetting(features.get().lang);
 const t = (key, params) => i18n.t(key, params);
 
@@ -56,8 +58,15 @@ let win = null;
 let tray = null;
 let media = null;
 let quitting = false;
-let userHidden = false;
 let fullscreenHidden = false;
+// The island's visibility (shared/visibility.js, unit-tested): the user's Show / Hide, Focus Mode in
+// front, the full-screen and maximized rules. Never saved: every start shows the island.
+const vis = Visibility.controller((show) => {
+  if (!win || win.isDestroyed()) return;
+  if (show && !win.isVisible()) win.showInactive();
+  if (!show && win.isVisible()) win.hide();
+  send('visibility', show);
+});
 let prefs = Object.assign(
   { ax: null, ay: null, docked: false, vertical: false, side: 'right' },
   settings.load('settings.json', {})
@@ -305,10 +314,20 @@ ipcMain.on('drag-end', () => {
   send('hover', false);
 });
 
-let timerRunning = false; // reported by the island; with timerOnTop a running timer stays visible in full screen
-ipcMain.on('timer-state', (_e, on) => {
-  if (typeof on !== 'boolean' || on === timerRunning) return;
-  timerRunning = on;
+// The island reports its timer (the single source of truth): with timerOnTop a running timer
+// stays visible in full screen, and the Focus Mode view mirrors the same numbers.
+let timerRunning = false;
+let timerSnap = { total: 0, remaining: 0, endAt: 0, running: false, phase: null, round: 0 };
+ipcMain.on('timer-sync', (_e, tm) => {
+  if (!isObj(tm)) return;
+  const num = (v) => (Number.isFinite(v) && v >= 0 ? v : 0);
+  timerSnap = {
+    total: num(tm.total), remaining: num(tm.remaining), endAt: num(tm.endAt), running: tm.running === true,
+    phase: tm.phase === 'focus' || tm.phase === 'break' ? tm.phase : null, round: isInt(tm.round, 0, 999) ? tm.round : 0,
+  };
+  focusWindow.send('timer', timerSnap);
+  if (timerSnap.running === timerRunning) return;
+  timerRunning = timerSnap.running;
   updateVisibility();
 });
 
@@ -316,17 +335,64 @@ ipcMain.on('timer-state', (_e, on) => {
 let maximizedFront = false;
 let frontProc = '';
 const OWN_PROC = path.basename(process.execPath, '.exe').toLowerCase();
+let focusFront = false; // the Focus Mode view is the window in front
 function updateVisibility() {
   if (!win) return;
   const f = features.get();
-  const shouldShow = Visibility.shouldShow({
-    userHidden, fullscreen: fullscreenHidden, maximized: maximizedFront,
+  vis.update({
+    fullscreen: fullscreenHidden, maximized: maximizedFront, focusMode: focusFront,
     hideFullscreen: f.hideFullscreen, hideMaximized: f.hideMaximized, timerRunning, timerOnTop: f.timerOnTop,
   });
-  if (shouldShow && !win.isVisible()) win.showInactive();
-  if (!shouldShow && win.isVisible()) win.hide();
-  send('visibility', shouldShow);
 }
+
+// What is in front: the desktop or an application (shared/front.js, unit-tested). A running timer
+// shrinks to the mini pill over an application and returns to its Settings size on the desktop;
+// the value must hold for a moment before it is taken over, so Alt+Tab never makes it flicker.
+const front = Front.settled('desktop');
+let frontShell = true;
+let frontTimer = null;
+function onFront() {
+  clearTimeout(frontTimer);
+  const value = Front.classify({ shell: frontShell, proc: frontProc, own: OWN_PROC });
+  if (front.feed(value)) send('front', front.value === 'app');
+  else if (front.pending !== null) frontTimer = setTimeout(onFront, front.settleMs + 20);
+}
+
+// The user started Soqo Island while it was already running, or asked the tray for it: bring the
+// island back wherever it was (hidden from the menu, or parked where a display used to be).
+function revealIsland(why) {
+  if (!win) return;
+  lastLayout = '';
+  layout(); // the saved anchor is kept, clamped onto a display that exists now
+  const shown = vis.reveal();
+  log.info(`${why}: island ${shown ? 'revealed' : `still hidden (${vis.reason()})`}`);
+  if (shown) send('reveal');
+  else if (tray) {
+    try { tray.displayBalloon({ title: t('app.name'), content: t(`tray.hidden.${vis.reason()}`), iconType: 'info' }); } catch {}
+  }
+  notifyGeneral();
+}
+
+// --- Focus Mode: a full-screen countdown on the island's display (src/main/focus-window.js) ---
+function openFocusMode() {
+  if (!win || !anchor) return;
+  const display = screen.getDisplayNearestPoint({ x: Math.round(anchor.x), y: Math.round(anchor.y) });
+  focusWindow.open(display, timerSnap);
+}
+ipcMain.on('focus-open', openFocusMode);
+// The island waits only while the Focus Mode view is the window in front. Electron's focus / blur
+// events give the quick answer; the helper's foreground report (every poll) is the authority, so a
+// missed blur after Alt+Tab never keeps the island hidden behind another app.
+function syncFocusFront(hint) {
+  const ownInFront = !frontShell && frontProc.toLowerCase() === OWN_PROC;
+  const on = focusWindow.isOpen() && (typeof hint === 'boolean' ? hint : ownInFront);
+  if (on === focusFront) return;
+  focusFront = on;
+  updateVisibility();
+}
+focusWindow.onFront((on) => syncFocusFront(on));
+// the view's buttons act on the island's timer; nothing is counted twice
+focusWindow.onCommand((cmd) => send('timer-cmd', cmd));
 
 function createWindow() {
   win = new BrowserWindow({
@@ -372,6 +438,7 @@ function createWindow() {
   win.webContents.on('did-finish-load', () => {
     lastLayout = '';
     layout();
+    send('front', front.value === 'app');
   });
   win.once('ready-to-show', () => win.showInactive());
 }
@@ -424,6 +491,11 @@ function startMedia() {
           updateVisibility();
         }
         if (typeof data.fgProc === 'string') frontProc = data.fgProc;
+        if (typeof data.fgShell === 'boolean') {
+          frontShell = data.fgShell;
+          onFront();
+          if (focusWindow.isOpen() || focusFront) syncFocusFront();
+        }
         if (typeof data.fgMax === 'boolean') {
           const m = data.fgMax && frontProc.toLowerCase() !== OWN_PROC;
           if (m !== maximizedFront) {
@@ -894,6 +966,7 @@ function runSetup() {
 
 app.on('second-instance', (_e, argv) => {
   if (argv.includes('--setup')) runSetup();
+  else revealIsland('second launch');
 });
 
 // --- menus ---
@@ -901,12 +974,8 @@ function appMenu() {
   return Menu.buildFromTemplate([
     { label: t('app.name'), enabled: false },
     { type: 'separator' },
-    {
-      label: t('menu.show'),
-      type: 'checkbox',
-      checked: !userHidden,
-      click: (item) => { userHidden = !item.checked; updateVisibility(); notifyGeneral(); },
-    },
+    // one entry that names the action available now: "Hide island" or "Show island"
+    { label: t(vis.menuKey()), click: () => { vis.toggle(); notifyGeneral(); } },
     {
       label: t('menu.vertical'),
       type: 'checkbox',
@@ -921,6 +990,7 @@ function appMenu() {
       click: (item) => { setStartWithWindows(item.checked); notifyGeneral(); },
     },
     { label: t('menu.toggle'), click: () => send('toggle') },
+    { label: t('menu.focusMode'), click: openFocusMode },
     { label: t('menu.settings'), click: () => prefsWindow.open() },
     { type: 'separator' },
     { label: t('menu.quit'), click: () => app.quit() },
@@ -932,7 +1002,7 @@ ipcMain.on('context-menu', () => appMenu().popup({ window: win }));
 // --- Settings window ---
 // General options live in main (position, startup); feature switches live in features.js.
 function generalState() {
-  return { shown: !userHidden, vertical: !!prefs.vertical, startWithWindows: startsWithWindows(), version: app.getVersion() };
+  return { shown: !vis.hidden, vertical: !!prefs.vertical, startWithWindows: startsWithWindows(), version: app.getVersion() };
 }
 function notifyGeneral() {
   prefsWindow.send('general', generalState());
@@ -1040,8 +1110,8 @@ ipcMain.on('general-set', (_e, key, value) => {
   if (!isStr(key, 32)) return;
   const on = !!value;
   if (key === 'shown') {
-    userHidden = !on;
-    updateVisibility();
+    if (on) vis.show();
+    else vis.hide();
   } else if (key === 'vertical') setVertical(on);
   else if (key === 'startWithWindows') setStartWithWindows(on);
   else if (key === 'resetPosition') resetPosition();
@@ -1054,6 +1124,7 @@ features.onChange((f) => {
     const payload = i18n.payload();
     send('i18n', payload);
     prefsWindow.send('i18n', payload);
+    focusWindow.send('i18n', payload);
     if (tray) tray.setToolTip(t('app.name'));
   }
   if (!f.addrIsland && omni) {
@@ -1111,6 +1182,7 @@ function buildTray() {
   tray.setToolTip(t('app.name'));
   tray.on('click', () => tray.popUpContextMenu(appMenu()));
   tray.on('right-click', () => tray.popUpContextMenu(appMenu()));
+  tray.on('double-click', () => revealIsland('tray double-click'));
 }
 
 // Startup entries. The installed app uses a login item under its own name, a dev run a

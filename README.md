@@ -49,6 +49,8 @@ Genuine captures of the running application (Windows 11, 125 % scaling).
 |---|---|
 | ![Screenshot: music view with a live media session and Soqi](assets/screenshots/app/music.png) | ![Screenshot: Large running-timer pill on hover with pause and reset](assets/screenshots/app/timer-large-hover.png) |
 | Music view | Large timer pill on hover |
+| ![Screenshot: Focus Mode, the full-screen countdown](assets/screenshots/app/focus-mode.png) | ![Screenshot: the compact mini pill shown over other applications](assets/screenshots/app/timer-mini.png) |
+| Focus Mode | Mini pill over an application |
 | ![Screenshot: Soqi peeking over the collapsed island](assets/screenshots/app/island-soqi.png) | ![Screenshot: Qur'an verse card from the optional reminders](assets/screenshots/app/reminder-ayah.png) |
 | Soqi beside the island | Qur'an verse card (optional Islamic Features) |
 | ![Screenshot: Settings › Features with the Islamic Features switch](assets/screenshots/app/settings-features.png) | ![Screenshot: Settings › Companion in Dutch](assets/screenshots/app/settings-companion-nl.png) |
@@ -62,9 +64,9 @@ More captures are in [`assets/screenshots/app/`](assets/screenshots/app/).
 
 | | |
 |---|---|
-| **Floating desktop island** | Click-through glass capsule that opens on hover, horizontal or vertical, docked at the top centre or placed anywhere (and kept there), hides in full screen or, if you choose, while an app is maximized, optional browser address-bar slot, `Ctrl + Alt + I` to pin |
+| **Floating desktop island** | Click-through glass capsule that opens on hover, horizontal or vertical, docked at the top centre or placed anywhere (and kept there), hides in full screen or, if you choose, while an app is maximized, optional browser address-bar slot, `Ctrl + Alt + I` to pin; hidden from the menu, it comes back from the tray or by starting the app again |
 | **Music and media controls** | Whatever Windows is playing: artwork, title, play/pause/skip, volume and brightness, floating YouTube mini player |
-| **Timer and focus tools** | Preset timers and focus/break sessions; a running-timer pill in three sizes that can stay visible over full-screen or maximized apps |
+| **Timer and focus tools** | Preset timers and focus/break sessions; a running-timer pill in three desktop sizes that shrinks to a compact mini pill while another app is in front and can stay visible over full-screen or maximized apps; Focus Mode, a full-screen countdown with Pause, Exit (Esc) and Cancel |
 | **Download monitoring** | Browser downloads with progress and speed; live control of the IDM download manager when installed |
 | **Clipboard tools** | History kept in memory only; smart actions for copied links, colours and sums |
 | **Notifications** | Cards inside the island for downloads, screenshots, battery, keyboard language, Caps Lock, network changes and upcoming meetings (iCal) |
@@ -106,9 +108,16 @@ Windows Settings › Apps removes the program, its shortcuts and the startup ent
   dock it.
 - **Music**: when something plays, the Music view shows artwork and controls; the scroll wheel
   over the pill changes the volume.
-- **Timer**: open the Timer tab, pick a duration or start a focus session. Choose the size of
-  the running-timer pill under Settings › Timer; Medium and Large show pause and reset on
-  hover.
+- **Timer**: open the Timer tab, pick a duration or start a focus session. Choose the desktop
+  size of the running-timer pill under Settings › Timer; Medium and Large show pause and reset
+  on hover. While another application is in front the pill shrinks to a compact mini pill at
+  the same spot and grows back on the desktop.
+- **Focus Mode**: the Timer tab's full-screen button, or *Focus Mode* in the island or tray
+  menu, fills the screen with the countdown. Esc or *Exit Focus Mode* returns to the island
+  with the timer still running; *Cancel timer* stops it.
+- **Hidden island**: *Hide island* in the menu hides it; bring it back with *Show island* from
+  the tray icon (in the hidden-icons area), a double-click on that icon, or by starting Soqo
+  Island again.
 - **Notifications**: cards appear in the island and the × closes them at once. Each kind can
   be switched off under Settings › Alerts & Privacy.
 - **Soqi**: click her for a reaction; adjust or hide her under Settings › Companion.

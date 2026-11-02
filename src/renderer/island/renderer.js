@@ -33,6 +33,7 @@ const state = {
   dl: { active: false, title: '', tab: false }, // IDM, filled by views/downloads.js
   features: {}, // switches from the Settings window; a missing key means on
   visible: true, // false while hidden (fullscreen app, or hidden from the menu)
+  frontApp: false, // an application window is in front (main, shared/front.js): a running timer shows the mini pill
   reminderUntil: 0, // a dhikr / du'a / verse card is on screen until then (views/reminders.js)
   reminderSize: [500, 140],
   sceneUntil: 0, // the island is a character (views/scene.js) until then
@@ -100,9 +101,10 @@ const SIZE = { idle: 1, compact: 2, toast: 3, peek: 4, reminder: 4, scene: 4, ex
 function timerActive() {
   return state.timer.running || state.timer.remaining > 0;
 }
-const timerSize = () => TimerPill.normalize(state.features.timerSize);
+// the pill drawn now: the Settings size on the desktop, the mini pill while an app is in front
+const pillSize = () => TimerPill.displaySize(state.features.timerSize, { frontApp: state.frontApp });
 // a medium / large timer pill shows its own controls on hover instead of opening the island
-const timerHoverPill = () => !anchor.vertical && !anchor.addr && compactKind() === 'timer' && TimerPill.inlineControls(timerSize(), timerActive());
+const timerHoverPill = () => !anchor.vertical && !anchor.addr && compactKind() === 'timer' && TimerPill.inlineControls(pillSize(), timerActive());
 
 // What the compact pill shows, by priority: timer, playing media, a running download.
 function compactKind() {
@@ -163,16 +165,12 @@ function render() {
     island.classList.toggle('c-wide', wide);
     if (typeof positionIsland === 'function') positionIsland();
   }
-  // running-timer pill size and its hover state (inline controls)
-  const tsm = kind === 'timer' && timerSize() === 'small';
-  const tmd = kind === 'timer' && timerSize() === 'medium';
-  const tlg = kind === 'timer' && timerSize() === 'large';
+  // running-timer pill size (desktop size, or mini over an app) and its hover state (inline controls)
+  const ps = kind === 'timer' ? pillSize() : '';
   const thover = mode === 'compact' && state.hover && !state.pinned && timerHoverPill();
-  if (tsm !== island.classList.contains('t-sm') || tmd !== island.classList.contains('t-md') || tlg !== island.classList.contains('t-lg') || thover !== island.classList.contains('t-hover')) {
-    island.classList.toggle('t-sm', tsm);
-    island.classList.toggle('t-md', tmd);
-    island.classList.toggle('t-lg', tlg);
-    island.classList.toggle('t-hover', thover);
+  const want = { 't-sm': ps === 'small', 't-md': ps === 'medium', 't-lg': ps === 'large', 't-mini': ps === 'mini', 't-hover': thover };
+  if (Object.entries(want).some(([cls, on]) => on !== island.classList.contains(cls))) {
+    for (const [cls, on] of Object.entries(want)) island.classList.toggle(cls, on);
     if (typeof positionIsland === 'function') positionIsland();
   }
   setCompactTitle(!showTitle ? '' : kind === 'media' ? state.media.title : state.dl.title);
@@ -341,7 +339,7 @@ function positionIsland() {
   let [w, h] = (anchor.vertical ? VDIMS : DIMS)[lastMode] || DIMS.idle;
   if (lastMode === 'compact' && !anchor.vertical && island.classList.contains('c-wide')) w = COMPACT_WIDE;
   if (lastMode === 'compact' && !anchor.vertical && compactKind() === 'timer') {
-    const d = TimerPill.dims(timerSize(), { hover: island.classList.contains('t-hover') });
+    const d = TimerPill.dims(pillSize(), { hover: island.classList.contains('t-hover') });
     if (d) [w, h] = d;
   }
   if (lastMode === 'reminder') [w, h] = state.reminderSize;
@@ -974,7 +972,7 @@ function setTimer(min, phase = null) {
   render();
 }
 
-let reportedRunning = null;
+let reportedTimer = '';
 function drawTimer() {
   const tm = state.timer;
   const rem = tm.running ? Math.max(0, (tm.endAt - Date.now()) / 1000) : tm.remaining;
@@ -992,10 +990,12 @@ function drawTimer() {
   const ct = $('#ct-toggle');
   ct.classList.toggle('paused', !tm.running);
   ct.setAttribute('aria-label', tm.running ? t('timer.pause') : t('timer.resume'));
-  // main keeps a running timer visible in full screen when asked (Settings › Timer)
-  if (tm.running !== reportedRunning) {
-    reportedRunning = tm.running;
-    bridge.timerState(tm.running);
+  // main mirrors the timer to the Focus Mode view and keeps a running timer visible in full
+  // screen when asked (Settings › Timer); sent when something other than the tick changed
+  const key = `${tm.running}|${tm.total}|${tm.endAt}|${tm.phase || ''}|${tm.running ? '' : Math.ceil(tm.remaining)}|${focus.round}`;
+  if (key !== reportedTimer) {
+    reportedTimer = key;
+    bridge.timerSync({ total: tm.total, remaining: rem, endAt: tm.endAt, running: tm.running, phase: tm.phase || null, round: focus.round });
   }
   return rem;
 }
@@ -1028,6 +1028,24 @@ function beep() {
 }
 
 $$('[data-min]').forEach((b) => b.addEventListener('click', () => setTimer(Number(b.dataset.min))));
+// Focus Mode: the countdown fills the screen (src/main/focus-window.js); opened only by this click or the menu
+$('#tm-focus-mode').addEventListener('click', (e) => {
+  e.stopPropagation();
+  bridge.openFocus();
+});
+// Focus Mode's buttons and presets act on this very timer; main relays them
+bridge.onTimerCmd((cmd) => {
+  if (cmd === 'toggle') $('#tm-start').click();
+  else if (cmd === 'cancel') $('#tm-reset').click();
+  else if (cmd === 'session') {
+    if (state.timer.phase) return;
+    focus.round = 0;
+    startPhase('focus');
+  } else if (cmd && Number.isInteger(cmd.start)) {
+    setTimer(cmd.start);
+    $('#tm-start').click();
+  }
+});
 // inline controls on the running-timer pill (same actions as the Timer tab)
 $('#ct-toggle').addEventListener('click', (e) => { e.stopPropagation(); $('#tm-start').click(); });
 $('#ct-reset').addEventListener('click', (e) => { e.stopPropagation(); $('#tm-reset').click(); });
@@ -1167,6 +1185,19 @@ bridge.onI18n((payload) => {
   render();
 });
 bridge.onVisibility((v) => { state.visible = !!v; });
+// an application window came to the front or went away: the running timer changes size
+bridge.onFront((v) => {
+  if (state.frontApp === !!v) return;
+  state.frontApp = !!v;
+  render();
+});
+// the app was started again (or the tray asked): show where the island is
+bridge.onReveal(() => {
+  state.pinned = false;
+  showToast('kbd', t('island.here'), '', 0, 3200);
+  window.soqi?.react('happy');
+  wake(1200);
+});
 bridge.features().then(applyFeatures);
 $('#open-settings').addEventListener('click', () => bridge.openSettings());
 $('#wx-credit').addEventListener('click', (e) => {

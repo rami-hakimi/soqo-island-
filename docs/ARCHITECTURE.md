@@ -23,7 +23,7 @@ src/
 │  ├─ calendar.js   iCal meetings, join links
 │  ├─ network.js    link kind + Windows connectivity probe
 │  ├─ mini.js       floating YouTube mini player (loopback server, secret path)
-│  ├─ prefs-window.js, updater.js, log.js
+│  ├─ prefs-window.js, focus-window.js (full-screen Focus Mode view), updater.js, log.js
 ├─ preload/         context-bridge APIs: island.js (window.soqo), prefs.js, mini.js
 ├─ renderer/
 │  ├─ island/       index.html, style.css, renderer.js (shell + shared helpers), views/*
@@ -32,7 +32,9 @@ src/
 ├─ shared/          i18n.js (translation core), soqi-state.js (Soqi's mood machine) — UMD,
 │                   used by main, renderers and tests; timer-pill.js (pill sizes), hover-policy.js (when
 │                   the click-through window takes the mouse), placement.js (anchor and
-│                   window position), visibility.js (when the island is shown)
+│                   window position), visibility.js (when the island is shown, and the
+│                   Show / Hide state holder), front.js (desktop vs application in front,
+│                   with a settle time; drives the mini timer pill)
 └─ locales/         en.json, ar.json, nl.json
 helper/             SoqoHelper.cs, Apps.cs, YtUrl.cs, AddressBar.cs, build.cmd → soqo-helper.exe
 assets/

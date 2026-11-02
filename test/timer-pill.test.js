@@ -12,18 +12,35 @@ test('three sizes with the required widths; small is the compact pill', () => {
   assert.ok(mw >= 230 && mw <= 260, `medium width ${mw}`);
   assert.ok(mh > 32);
   const [lw, lh] = T.dims('large');
-  assert.ok(lw >= 290 && lw <= 330, `large width ${lw}`);
-  assert.ok(lh > mh);
-  assert.ok(T.FONT_PX.large >= 40 && T.FONT_PX.large <= 48, 'large countdown 40–48 px');
+  // beta.4: Large is genuinely large (was 324 × 66 with 48 px digits), still inside the 640 px window
+  assert.ok(lw >= 380 && lw + T.HOVER_EXTRA.large <= 640 - 8, `large width ${lw} (+${T.HOVER_EXTRA.large} on hover)`);
+  assert.ok(lh >= mh * 1.6, `large height ${lh} clearly above medium ${mh}`);
+  assert.ok(T.FONT_PX.large >= 56 && T.FONT_PX.large <= 72, 'large countdown 56–72 px');
+  assert.ok(T.FONT_PX.large >= T.FONT_PX.medium * 2, 'large digits at least twice the medium digits');
   assert.ok(T.FONT_PX.medium > T.FONT_PX.small);
   assert.deepEqual(T.dims('nonsense'), [300, 38], 'unknown size falls back to small');
+});
+
+test('over an application a running timer shrinks to the mini pill; the Settings size is the desktop size', () => {
+  const [w, h] = T.dims(T.MINI);
+  assert.ok(w <= 180 && h <= 30, `mini pill ${w} × ${h} stays clear of browser tabs`);
+  assert.ok(h < T.dims('small')[1], 'smaller than Small');
+  assert.ok(T.FONT_PX.mini >= 14, 'still readable');
+  for (const size of T.SIZES) {
+    assert.equal(T.displaySize(size, { frontApp: true }), 'mini', `${size} over an app`);
+    assert.equal(T.displaySize(size, { frontApp: false }), size, `${size} on the desktop`);
+  }
+  assert.equal(T.displaySize('mini', {}), 'small', 'mini is never a saved setting');
+  assert.deepEqual(T.dims(T.MINI, { hover: true }), [w, h], 'no inline controls on the mini pill');
+  assert.equal(T.inlineControls(T.MINI, true), false);
+  assert.ok(!T.SIZES.includes(T.MINI), 'Settings offers the three desktop sizes only');
 });
 
 test('hover: medium and large grow for inline controls, small keeps the original behaviour', () => {
   assert.deepEqual(T.dims('small', { hover: true }), [300, 38]);
   assert.equal(T.dims('medium', { hover: true })[0], 260 + T.HOVER_EXTRA.medium);
-  assert.equal(T.dims('large', { hover: true })[0], 324 + T.HOVER_EXTRA.large);
-  assert.equal(T.dims('large', { hover: true })[1], 66, 'height never changes on hover');
+  assert.equal(T.dims('large', { hover: true })[0], T.DIMS.large[0] + T.HOVER_EXTRA.large);
+  assert.equal(T.dims('large', { hover: true })[1], T.DIMS.large[1], 'height never changes on hover');
   assert.equal(T.inlineControls('small', true), false);
   assert.equal(T.inlineControls('medium', true), true);
   assert.equal(T.inlineControls('large', true), true);

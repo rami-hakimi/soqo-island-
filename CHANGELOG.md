@@ -3,6 +3,37 @@
 All notable changes to Soqo Island. The format follows Keep a Changelog; versions follow
 semver.
 
+## [2.0.0-beta.4] — unreleased
+
+Timer and visibility update after the owner's beta.3 testing.
+
+### Fixed
+- **A hidden island can always be brought back.** Launching Soqo Island while it already runs
+  reveals the island (the single-instance guard used to quit the second copy silently), the
+  island and tray menus offer **Hide island** / **Show island** by state instead of a checkbox,
+  a double-click on the tray icon reveals the island, and a second launch under a full-screen
+  or maximized rule explains itself in a tray notification. The user's Hide is never
+  persisted: every start shows the island. Regression tests: `test/visibility.test.js`
+  (hide → restore, tray Show, second launch, quit/restart, Focus Mode and maximized rules).
+- Focus Mode in front and the maximized-window rule are transient: the island returns as soon
+  as the view closes or loses the front, or the window in front changes.
+
+### Added
+- **Adaptive timer pill** (`src/shared/front.js`, `shared/timer-pill.js`): the Settings size
+  is the desktop size; over an application window a running timer shrinks to the 168 × 28
+  mini pill at the same anchor and grows back on the desktop. The helper reports whether the
+  desktop / taskbar is in front; changes settle for 220 ms so Alt+Tab never flickers; the
+  explicit full-screen / maximized rules and the timer opt-in keep precedence.
+- **Focus Mode** (`src/main/focus-window.js`, `src/renderer/focus/`): a full-screen countdown
+  on the island's display with Pause / Resume, Exit (Esc) and Cancel, presets and a
+  focus-session start when nothing runs, mirrored from the island's timer (single source of
+  truth) through `timer-sync` / `timer-cmd`. Opened from the Timer tab or the menus only.
+- Settings › Timer explains Focus Mode and the desktop-size rule; new strings in en / ar / nl.
+
+### Changed
+- Large running-timer pill: 400 × 88 with 64 px digits and 44 px controls (was 324 × 66 /
+  48 px); Small and Medium unchanged.
+
 ## [2.0.0-beta.3] — 2026-11-02
 
 Fixes from the first days of the public beta.

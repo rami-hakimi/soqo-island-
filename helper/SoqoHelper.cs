@@ -159,6 +159,19 @@ static class Win {
     return IsZoomed(h);
   }
 
+  // nothing or the shell itself (desktop, taskbar) is in front: the running timer may show at its
+  // desktop size; only the window class is read
+  public static bool ForegroundIsShell() {
+    IntPtr h = GetForegroundWindow();
+    if (h == IntPtr.Zero) return true;
+    string cls = ClassOf(h);
+    // the desktop, the taskbars, the hidden-icons flyout (Windows 11 and 10) and the shell's
+    // XAML hosts (Start, search, notification centre)
+    return cls == "Progman" || cls == "WorkerW" || cls == "Shell_TrayWnd" || cls == "Shell_SecondaryTrayWnd"
+      || cls == "TopLevelWindowForOverflowXamlIsland" || cls == "XamlExplorerHostIslandWindow" || cls == "NotifyIconOverflowWindow"
+      || cls == "Windows.UI.Core.CoreWindow";
+  }
+
   public static void Foreground(out string proc, out string title) {
     proc = ""; title = "";
     IntPtr h = GetForegroundWindow();
@@ -406,6 +419,7 @@ static class Program {
       o.Add("bright", brightOk ? bright : -1);
       try { o.Add("fs", Win.IsFullscreen()); } catch { o.Add("fs", false); }
       try { o.Add("fgMax", Win.ForegroundMaximized()); } catch { o.Add("fgMax", false); }
+      try { o.Add("fgShell", Win.ForegroundIsShell()); } catch { o.Add("fgShell", false); }
       try { o.Add("kl", Win.KeyboardLayout()).Add("caps", Win.CapsLock()); } catch { }
       try { long seq = Win.ClipboardSeq(); o.Add("clip", (double)seq).Add("clipPriv", Win.ClipboardPrivate(seq)); } catch { }
       try { o.Add("idle", Win.IdleSeconds()); } catch { }

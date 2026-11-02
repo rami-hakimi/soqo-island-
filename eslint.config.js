@@ -10,7 +10,7 @@ const islandGlobals = {
   note: 'readonly', happenings: 'readonly', fmt: 'readonly', playTones: 'readonly', focusing: 'readonly',
   compactKind: 'readonly', internalDrag: 'writable', ICON_X: 'readonly', ICON_PLUS: 'readonly', REMINDERS: 'readonly',
   playScene: 'readonly', sceneShowing: 'readonly', endScene: 'readonly', cardShowing: 'readonly', showCard: 'readonly',
-  movedKey: 'readonly', SoqiState: 'readonly', Islamic: 'readonly', TimerPill: 'readonly', HoverPolicy: 'readonly', I18n: 'readonly', I18N: 'writable', t: 'readonly', LOCALE: 'readonly',
+  movedKey: 'readonly', SoqiState: 'readonly', Islamic: 'readonly', TimerPill: 'readonly', HoverPolicy: 'readonly', Battery: 'readonly', I18n: 'readonly', I18N: 'writable', t: 'readonly', LOCALE: 'readonly',
 };
 
 module.exports = [

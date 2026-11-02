@@ -8,6 +8,9 @@ contextBridge.exposeInMainWorld('focusMode', {
   timer: () => ipcRenderer.invoke('focus-timer'),
   onTimer: on('timer'),
   features: () => ipcRenderer.invoke('features-get'),
+  // a coding agent needs the user (only when Settings allow alerts in Focus Mode)
+  onAgentAlert: on('agent-alert'),
+  openAgent: (key) => ipcRenderer.send('agents-open', key),
   // 'toggle' | 'cancel' | 'session' | 'exit' | { start: minutes }
   cmd: (c) => ipcRenderer.send('focus-cmd', c),
 });

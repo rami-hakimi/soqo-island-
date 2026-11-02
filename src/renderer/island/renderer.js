@@ -269,7 +269,7 @@ bridge.onToggle(() => {
 
 // ---------------- drag to move (docks when dropped at the top edge) ----------------
 // a card's header row and close button never start a drag: a click there must close the card
-const NO_DRAG = 'button, input, .slider, .file, .app, .pick, .picker, .clip-item, .shelf-items, .rm-head, .sc-x, #soqi';
+const NO_DRAG = 'button, input, .slider, .file, .app, .pick, .picker, .clip-item, .shelf-items, .rm-head, .sc-x, #soqi, .act-list, .wx-pop';
 let press = null;
 let justMoved = false;
 
@@ -901,27 +901,7 @@ function showHud(kind, value, muted) {
   }
 }
 
-// ---------------- battery ----------------
-if (navigator.getBattery) {
-  navigator.getBattery().then((b) => {
-    let lowShown = false;
-    const pct = () => `${Math.round(b.level * 100)}%`;
-    b.addEventListener('chargingchange', () => {
-      if (!feat('battery')) return;
-      if (b.charging) showToast('charging', t('battery.charging'), pct(), b.level);
-      else showToast(b.level <= 0.2 ? 'low' : 'battery', t('battery.onBattery'), pct(), b.level);
-      if (!b.charging && b.level <= 0.2) window.soqi?.react('warning');
-    });
-    b.addEventListener('levelchange', () => {
-      if (!b.charging && b.level <= 0.2 && !lowShown && feat('battery')) {
-        lowShown = true;
-        showToast('low', t('battery.low'), pct(), b.level, 4500);
-        window.soqi?.react('warning');
-      }
-      if (b.level > 0.2) lowShown = false;
-    });
-  });
-}
+// battery: the helper reports it (views/system.js shows the row and the toasts)
 
 // ---------------- file drag & drop (routes to the shelf) ----------------
 const hasFiles = (e) => Array.from(e.dataTransfer?.types || []).includes('Files');
@@ -1142,7 +1122,7 @@ setInterval(() => {
 }, 250);
 
 // ---------------- settings ----------------
-const TAB_FEATURE = { media: 'tabMedia', apps: 'tabApps', shelf: 'tabShelf', prayer: 'tabPrayer', timer: 'tabTimer', system: 'tabSystem' };
+const TAB_FEATURE = { media: 'tabMedia', apps: 'tabApps', shelf: 'tabShelf', prayer: 'tabPrayer', timer: 'tabTimer', system: 'tabSystem', activity: 'tabActivity' };
 
 // Hide tabs that are switched off (Downloads shows itself only around download activity).
 function refreshTabs() {
@@ -1200,10 +1180,6 @@ bridge.onReveal(() => {
 });
 bridge.features().then(applyFeatures);
 $('#open-settings').addEventListener('click', () => bridge.openSettings());
-$('#wx-credit').addEventListener('click', (e) => {
-  e.stopPropagation();
-  bridge.openSupport('openmeteo');
-});
 
 selectTab('media');
 drawTimer();

@@ -69,8 +69,9 @@ More captures are in [`assets/screenshots/app/`](assets/screenshots/app/).
 | **Timer and focus tools** | Preset timers and focus/break sessions; a running-timer pill in three desktop sizes that shrinks to a compact mini pill while another app is in front and can stay visible over full-screen or maximized apps; Focus Mode, a full-screen countdown with Pause, Exit (Esc) and Cancel |
 | **Download monitoring** | Browser downloads with progress and speed; live control of the IDM download manager when installed |
 | **Clipboard tools** | History kept in memory only; smart actions for copied links, colours and sums |
-| **Notifications** | Cards inside the island for downloads, screenshots, battery, keyboard language, Caps Lock, network changes and upcoming meetings (iCal) |
-| **System shortcuts and utilities** | Pinned app launcher with Start-menu search, a shelf for files, CPU/RAM, weather, screenshots straight to the shelf |
+| **Notifications** | Cards inside the island for downloads, screenshots, battery, keyboard language, Caps Lock, network changes and upcoming meetings (iCal); optionally the notifications Windows shows (Chrome / WhatsApp Web included), through Windows' own notification listener |
+| **Coding agents** | Opt-in: Claude Code and Codex CLI sessions on the Activity tab — working, finished, failed, *needs your approval* — with a jump back to the terminal. Local only, through the agents' official hooks; approvals are always given in the terminal ([details](docs/CODING_AGENTS.md)) |
+| **System shortcuts and utilities** | Pinned app launcher with Start-menu search, a shelf for files, CPU/RAM, battery, weather (Open-Meteo, credited in the card), screenshots straight to the shelf |
 | **Soqi, the animated dolphin** | Ten moods driven by real events, a playful reaction when clicked, gentle idle motion, a bob to the music; switchable off, follows reduced-motion |
 | **Privacy controls** | No account, no telemetry; microphone and camera indicators; the live-glass screen capture can be turned off ([details](docs/PRIVACY.md)) |
 | **Appearance customization** | Orientation, docking, live or static glass, timer size, Soqi options |

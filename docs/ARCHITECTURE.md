@@ -23,6 +23,9 @@ src/
 │  ├─ calendar.js   iCal meetings, join links
 │  ├─ network.js    link kind + Windows connectivity probe
 │  ├─ mini.js       floating YouTube mini player (loopback server, secret path)
+│  ├─ agents.js     coding agents: named-pipe bridge for the hooks, session store, hook-file
+│  │                connect / disconnect with backups, "open terminal" via the helper
+│  ├─ notifications.js  Windows notifications (helper listener): opt-in list in memory, quiet state
 │  ├─ prefs-window.js, focus-window.js (full-screen Focus Mode view), updater.js, log.js
 ├─ preload/         context-bridge APIs: island.js (window.soqo), prefs.js, mini.js
 ├─ renderer/
@@ -34,9 +37,14 @@ src/
 │                   the click-through window takes the mouse), placement.js (anchor and
 │                   window position), visibility.js (when the island is shown, and the
 │                   Show / Hide state holder), front.js (desktop vs application in front,
-│                   with a settle time; drives the mini timer pill)
+│                   with a settle time; drives the mini timer pill), battery.js (Windows
+│                   power status → words), agent-events.js (hook payload → session state,
+│                   validation, de-duplication), agent-config.js (the hook entries and how
+│                   they are added to / removed from an agent's user-level file)
 └─ locales/         en.json, ar.json, nl.json
-helper/             SoqoHelper.cs, Apps.cs, YtUrl.cs, AddressBar.cs, build.cmd → soqo-helper.exe
+helper/             SoqoHelper.cs, Apps.cs, YtUrl.cs, AddressBar.cs, Power.cs (battery), Agents.cs
+                    (hook relay subcommand, parent-process chain → terminal window, focus),
+                    Notifications.cs (Windows notification listener), build.cmd → soqo-helper.exe
 assets/
 ├─ soqi/            Soqi sprites + sheet.json (shipped)
 ├─ fonts/           KFGQPC Hafs Qur'an font + its licence (shipped)
@@ -64,13 +72,19 @@ docs/               architecture, localisation, privacy, security audit, releasi
 - **Helper** (`soqo-helper.exe`) runs as a child process speaking JSON lines over stdio: media
   session (SMTC), volume, brightness, fullscreen, foreground window, keyboard layout, Caps
   Lock, clipboard sequence + password-manager privacy flag, idle time, Chromium omnibox via
-  UI Automation. One-shot subcommands: `apps` (catalogue), `yturl` (tab URL).
+  UI Automation, battery (every 2 s), and — while the island asked for it — new Windows
+  notifications. Commands: media, volume, brightness, `focus <hwnd>` / `focusproc <name>`
+  (bring an existing window to the front), `notif on|off`. One-shot subcommands: `apps`
+  (catalogue), `yturl` (tab URL), `hook claude|codex` (run by the agent: whitelists the hook
+  payload and posts it to the island's named pipe; see `CODING_AGENTS.md`).
 
 ## Data flow
 Helper → main (`media` lines, ~2/s) → island (`onMedia`) and the companion/state machine.
 Main modules push snapshots over named channels (`stats`, `weather`, `prayer`, `downloads`,
-`shelf`, `apps`, `calendar`, `privacy`, `network`, `features`, `i18n`); the island asks for a
-snapshot on load (`*-snapshot`/`*-get` handles).
+`shelf`, `apps`, `calendar`, `privacy`, `network`, `features`, `i18n`, `battery`, `agents`,
+`notif`); the island asks for a snapshot on load (`*-snapshot`/`*-get` handles). Coding-agent
+hooks reach main over `\\.\pipe\soqo-island-agents-<hash>` (token in
+`agents-bridge.json`), one bounded JSON line per connection.
 
 ## Soqi
 `shared/soqi-state.js` computes the mood: short reactions (download, warning, notification,

@@ -3,6 +3,54 @@
 All notable changes to Soqo Island. The format follows Keep a Changelog; versions follow
 semver.
 
+## [2.0.0-beta.5] — unreleased
+
+Battery, weather credit, coding agents, Activity tab, Windows notifications.
+
+### Added
+- **Battery** under Brightness in the System tab: percentage, charging / plugged in / on
+  battery / fully charged, low and critical states, time left when Windows reports it; read
+  from `GetSystemPowerStatus` through the helper every 2 s (`helper/Power.cs`,
+  `shared/battery.js`); the row is omitted on PCs without a battery and an unknown reading is
+  shown as unknown. The battery toasts now come from the same source.
+- **Coding Agents** (opt-in, Settings › Connections): Claude Code and Codex CLI sessions on the
+  new **Activity** tab — started, working (with the current tool), idle, finished, failed,
+  **needs your approval** (prominent toast with a safe one-line summary of the request, agent,
+  project and time; optional island expansion; optional banner in Focus Mode) — and a jump
+  back to the terminal window the session runs in. Connect edits the agent's user-level hook
+  file after a confirmation dialog, with a backup next to it; Disconnect removes exactly Soqo
+  Island's entries. Hooks talk to the island over a token-checked local named pipe; prompts,
+  replies and transcripts never leave the hook; approvals are always given in the terminal.
+  `src/main/agents.js`, `shared/agent-events.js`, `shared/agent-config.js`, `helper/Agents.cs`,
+  `docs/CODING_AGENTS.md`.
+- **Activity tab**: coding-agent sessions (most important first) and recent notifications.
+- **Windows notifications on the island** (opt-in): the toasts Windows keeps in its
+  notification centre — Chrome web notifications such as WhatsApp Web included — through
+  Windows' official notification listener, polled by the helper (`helper/Notifications.cs`,
+  `src/main/notifications.js`). Windows' permission is requested and shown, previews can be
+  switched off, nothing is stored, Windows' do-not-disturb state is respected, dismissed
+  notifications disappear here too. Works on Windows 11 for the unpackaged build; findings and
+  the package-identity fallback in `docs/WINDOWS_NOTIFICATIONS.md`.
+- `docs/FUTURE_ROADMAP.md`: completed integrations versus deferred work.
+
+### Changed
+- **Weather card credit**: the large underlined "Weather data by Open-Meteo.com" button became
+  a small "Weather by Open-Meteo" link plus an ⓘ information control that opens an accessible
+  popover with the provider, the CC BY 4.0 licence, the licence details and the GeoNames
+  city-search credit. Open-Meteo's licence requires a link next to the data, so the small
+  link stays visible. The popover lives inside the island and closes on Escape (focus returns
+  to ⓘ), on a click elsewhere, on blur and when the island collapses. Credits in Settings and
+  the legal files are unchanged.
+- Helper build gains `Power.cs`, `Agents.cs`, `Notifications.cs` and references
+  `System.Web.Extensions`, `Windows.UI.winmd`, `Windows.ApplicationModel.winmd`.
+
+### Tests
+- New: `battery`, `agent-events` (parsing, validation, hostile payloads, several sessions,
+  duplicates, pruning), `agent-config` (connect / disconnect / idempotence / formatting),
+  `agents-bridge` (token over the real pipe, refused dialog, backups, broken files),
+  `notifications` (opt-in, permission, previews, duplicates, gone, quiet, open restricted),
+  `weather-attribution`.
+
 ## [2.0.0-beta.4] — unreleased
 
 Timer and visibility update after the owner's beta.3 testing.

@@ -265,6 +265,58 @@ $('#dl-folder-add').addEventListener('click', async () => {
 });
 api.downloadFolders().then(showFolders);
 
+// ---- coding agents ----
+let lastAgents = null;
+function agentLine(a) {
+  if (!a) return t('p.agents.checking');
+  if (a.error) return t('p.agents.fileError', { error: a.error });
+  if (!a.connected) return a.installed ? t('p.agents.notConnected') : t('p.agents.notFound');
+  if (!a.current) return t('p.agents.outdated');
+  return a.sessions ? t('p.agents.connectedSessions', { count: a.sessions, n: a.sessions }) : t('p.agents.connected');
+}
+function showAgents(st) {
+  lastAgents = st;
+  for (const agent of ['claude', 'codex']) {
+    const a = st && st[agent];
+    $(`#ag-${agent}-status`).textContent = agentLine(a);
+    const btn = $(`[data-agent-connect="${agent}"]`);
+    btn.textContent = a && a.connected && a.current ? t('p.agents.disconnect') : a && a.connected ? t('p.agents.update') : t('p.agents.connect');
+    btn.classList.toggle('accent', !(a && a.connected && a.current));
+    btn.dataset.mode = a && a.connected && a.current ? 'disconnect' : 'connect';
+    $(`[data-agent-backups="${agent}"]`).hidden = !(a && a.connected);
+  }
+}
+async function refreshAgents() { try { showAgents(await api.agentsStatus()); } catch {} }
+$$('[data-agent-connect]').forEach((b) => b.addEventListener('click', async () => {
+  const agent = b.dataset.agentConnect;
+  b.disabled = true;
+  try {
+    const r = b.dataset.mode === 'disconnect' ? await api.agentsDisconnect(agent) : await api.agentsConnect(agent);
+    if (r && r.ok) saved(b.dataset.mode === 'disconnect' ? t('p.agents.savedDisconnected') : t('p.agents.savedConnected'));
+    else if (r && !r.cancelled) saved(t('p.agents.failed'));
+  } finally {
+    b.disabled = false;
+    refreshAgents();
+  }
+}));
+$$('[data-agent-backups]').forEach((b) => b.addEventListener('click', () => api.agentsBackups(b.dataset.agentBackups)));
+api.onAgents(() => refreshAgents());
+refreshAgents();
+setInterval(() => { if (features.agents) refreshAgents(); }, 20000);
+
+// ---- Windows notifications: the permission Windows gave ----
+let lastNotif = null;
+function showNotif(n) {
+  lastNotif = n;
+  const el = $('#nf-access');
+  const key = { allowed: 'p.notif.allowed', denied: 'p.notif.denied', unspecified: 'p.notif.waiting', waiting: 'p.notif.waiting', unavailable: 'p.notif.unavailable' }[n && n.access] || 'p.notif.off';
+  el.textContent = t(key);
+  el.classList.toggle('warn', n && n.access === 'denied');
+}
+api.onNotif(showNotif);
+api.notifSnapshot().then(showNotif);
+$('#nf-settings').addEventListener('click', () => api.openNotifSettings());
+
 // ---- media bridge health ----
 async function showBridge() {
   const s = await api.bridgeStatus();
@@ -365,6 +417,8 @@ api.onI18n((payload) => {
   showBridge();
   fillMethods();
   showPrayer(lastPrayer);
+  if (lastAgents) showAgents(lastAgents);
+  showNotif(lastNotif);
 });
 api.onFeatures(showFeatures);
 api.onGeneral(showGeneral);

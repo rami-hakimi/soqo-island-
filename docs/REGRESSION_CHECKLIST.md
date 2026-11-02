@@ -70,4 +70,9 @@ applicable on this machine (note why).
 | G5 | Auto-update | Needs a published release | ➖ until release | | |
 | G6 | Log rotation / report | Unit test; Copy report | 🤖 | | |
 | G7 | Support links | Settings → Support | ⏳ owner decision | | |
+| Y9 | Battery row in the System tab (percentage, state, low / critical, omitted without a battery) | Laptop: unplug, plug in; desktop: row hidden | ⏳ | | 🤖 battery.test.js; ✅ beta.5 dev + installed: 100 % "Fully charged" row from the helper; desktop case by unit test |
+| Y10 | Weather data credit: visible Open-Meteo link + info popover (Escape, outside click, collapse close it; focus returns) | System tab › ⓘ | ⏳ | | 🤖 weather-attribution.test.js; ✅ beta.5 CDP: opens inside the island, Escape returns focus to ⓘ, outside click and collapse close it |
+| AG1 | Coding agents: Connect / Disconnect edit only Soqo entries with a backup; refused dialog changes nothing | Settings › Connections | ⏳ | | 🤖 agents-bridge.test.js, agent-config.test.js; ✅ beta.5: real ~/.claude/settings.json connected through the dialog, backup identical to the original |
+| AG2 | Agent events: start / working / needs approval / finished / failed, several sessions, duplicates folded, Open terminal | Real Claude Code and Codex sessions | ⏳ | | 🤖 agent-events.test.js; ✅ beta.5: see docs/releases/2.0.0-beta.5.md › Verification |
+| N1 | Windows notifications: opt-in, Windows permission shown, toast + Activity row, previews off, dismissed in Windows → gone | Settings › Connections; send a toast | ⏳ | | 🤖 notifications.test.js; ✅ beta.5 dev island: PowerShell toast shown within 4 s, listed on the Activity tab |
 | G8 | Installer / uninstaller | `npm run dist`, silent install | ⏳ | | ✅ silent install 22 s to %LOCALAPPDATA%\Programs, shortcuts, GUI subsystem, uninstall removes exe/shortcuts/Run value (Stage 11) |

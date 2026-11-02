@@ -32,6 +32,8 @@ const clipboard = {
   _set: (t) => { clipText = t; },
 };
 const shell = { openExternal: async () => {}, openPath: async () => '', showItemInFolder: () => {} };
+// dialogs answer with whatever a test set on the stub (default: the cancel button, index 1)
+const dialog = { showMessageBox: async () => ({ response: module.exports._dialogResponse ?? 1 }) };
 const nativeImage = { createEmpty: () => ({ isEmpty: () => true, toDataURL: () => '' }), createFromPath: () => ({ isEmpty: () => true }) };
 
 // enough of the window APIs for modules that register handlers at load time
@@ -39,4 +41,4 @@ const ipcMain = { on() {}, handle() {} };
 class BrowserWindow { static fromWebContents() { return null; } }
 const screen = { getPrimaryDisplay: () => ({ workArea: { x: 0, y: 0, width: 1920, height: 1040 } }), getCursorScreenPoint: () => ({ x: 0, y: 0 }) };
 
-module.exports = { app, clipboard, shell, nativeImage, ipcMain, BrowserWindow, screen, _root: root, _dirs: dirs };
+module.exports = { app, clipboard, shell, nativeImage, ipcMain, BrowserWindow, screen, dialog, _root: root, _dirs: dirs, _dialogResponse: 1 };

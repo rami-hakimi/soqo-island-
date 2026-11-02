@@ -61,3 +61,26 @@ Severity: **High** (exploitable or privacy-breaking), **Medium** (defence in dep
   only). Main withdraws content protection and pauses the glass while it is true, and pauses
   the glass on `powerMonitor` lock-screen. New read-only IPC `island-features`; the island
   preload can ask main to open the fixed Open-Meteo link (`open-support`, allow-listed key).
+- 2026-11-02 (2.0.0-beta.5): **coding-agent bridge** — main listens on a Windows named pipe
+  (`soqo-island-agents-<sha256(user|data dir)[:16]>`) only while Settings › Connections ›
+  Coding Agents is on; a 256-bit random token is written to `agents-bridge.json` in the data
+  folder (user-profile ACL) and checked with a constant-time compare; one JSON line per
+  connection, ≤ 256 KB, 3 s socket timeout, 32 concurrent connections; the payload is reduced
+  to known fields with bounded lengths (`shared/agent-events.js`) and is never executed. The
+  hook relay (`helper/Agents.cs`) whitelists fields before sending (no prompts, replies, file
+  contents or transcript paths). "Open terminal" sends `focus <hwnd>` to the bridge helper,
+  which activates an existing window and nothing else. No HTTP service, no network port.
+  Connect / Disconnect edit the agent's **user-level** hook file only after a confirmation
+  dialog, write a timestamped backup first, add or remove only entries whose command is the
+  helper's `hook` subcommand, and never touch project-level files (`shared/agent-config.js`).
+  Approvals are read-only: the island never returns a hook decision.
+- 2026-11-02 (2.0.0-beta.5): **Windows notifications** — opt-in; the helper uses
+  `UserNotificationListener` (official API; polled, as the change event is not delivered to
+  unpackaged apps), reports app name / AppUserModelId / title / body (body only with previews
+  on) of toasts newer than the moment the feature was enabled; main keeps 30 items in memory,
+  dedups by id and by app+title+body within 5 s, drops ids Windows dropped, and respects
+  Windows' "quiet" state. "Open app" is restricted to a fixed table of process names
+  (`focusproc <name>`, `[A-Za-z0-9_.-]{1,64}`); no link or command from a notification is ever
+  run. New IPC: `agents-status/connect/disconnect/snapshot/open/backups`,
+  `notif-snapshot/open/dismiss/clear`, `open-notif-settings` (fixed `ms-settings:` URI);
+  helper line gained `batt`, `notif`, `notifGone`, `notifAccess`, `quiet`.

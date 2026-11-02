@@ -44,7 +44,7 @@ for (const f of files) {
   }
 }
 // keys built dynamically (prefix + variable): declared here so the unused check skips them
-const DYNAMIC_PREFIXES = ['prayer.', 'weather.', 'reminder.', 'p.trouble.helper', 'unit.', 'dl.', 'greet.', 'care.', 'p.saved', 'p.location.', 'p.cal.', 'tray.hidden.', 'menu.show', 'menu.hide'];
+const DYNAMIC_PREFIXES = ['prayer.', 'weather.', 'reminder.', 'p.trouble.helper', 'unit.', 'dl.', 'greet.', 'care.', 'p.saved', 'p.location.', 'p.cal.', 'tray.hidden.', 'menu.show', 'menu.hide', 'act.', 'p.notif.', 'battery.left'];
 for (const k of enBase) {
   if (used.has(k)) continue;
   if (DYNAMIC_PREFIXES.some((p) => k.startsWith(p))) continue;
@@ -52,7 +52,7 @@ for (const k of enBase) {
 }
 
 // 3. hardcoded visible text in pages: text nodes with letters outside data-i18n elements
-const ALLOW = new Set(['Ctrl', 'Alt', 'I', 'CPU', 'RAM', 'm', 'Soqo Island', 'Soqo Island Settings', 'Focus Mode', 'Mini Player', 'Google:', 'Outlook:', 'GitHub', 'IDM Nova', 'Wi-Fi']);
+const ALLOW = new Set(['Ctrl', 'Alt', 'I', 'CPU', 'RAM', 'm', 'Soqo Island', 'Soqo Island Settings', 'Focus Mode', 'Mini Player', 'Google:', 'Outlook:', 'GitHub', 'IDM Nova', 'Wi-Fi', 'Open-Meteo.com', 'CC BY 4.0', 'GeoNames', 'Claude Code', 'Codex CLI']);
 for (const f of files.filter((x) => x.endsWith('.html'))) {
   let s = fs.readFileSync(f, 'utf8').replace(/<svg[\s\S]*?<\/svg>/g, '').replace(/<!--[\s\S]*?-->/g, '').replace(/<script[\s\S]*?<\/script>/g, '');
   // drop elements that carry a translation attribute (their text is replaced at runtime)

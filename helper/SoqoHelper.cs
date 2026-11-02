@@ -3,6 +3,9 @@
 // window in front, keyboard layout, Caps Lock, screen recorder present (rec).
 // Reads commands on stdin: toggle | next | prev | seek <sec> | vol <0-1> | mute | bright <0-100>
 //   | pauseapp <appId> | playapp <appId> | seekapp <appId> <sec>
+//   | focus <hwnd> | focusproc <name> (bring a window to the front, see Agents.cs)
+//   | notif on [nopreview] | notif off (Windows notifications, see Notifications.cs)
+// Every 2 s the line carries the battery (Power.cs); with notifications on, new toasts.
 // Build: helper/build.cmd (uses the C# compiler that ships with Windows).
 using System;
 using System.Collections.Concurrent;
@@ -296,9 +299,16 @@ static class Program {
   static double Num(string s) { return double.Parse(s, CultureInfo.InvariantCulture); }
 
   static int bright = -1;
+  static readonly Regex FocusCmd = new Regex(@"^focus (\d{1,12})$");
+  static readonly Regex FocusProc = new Regex(@"^focusproc ([A-Za-z0-9_.-]{1,64})$");
+  static string notifAccessPending = null;
 
   static void Handle(string cmd) {
     Match m;
+    if ((m = FocusCmd.Match(cmd)).Success) { Agents.Focus(new IntPtr(long.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture))); return; }
+    if ((m = FocusProc.Match(cmd)).Success) { Agents.FocusProcess(m.Groups[1].Value); return; }
+    if (cmd == "notif on" || cmd == "notif on nopreview") { Notifications.Enable(cmd == "notif on"); return; }
+    if (cmd == "notif off") { Notifications.Disable(); return; }
     if ((m = AppCmd.Match(cmd)).Success) {
       var t = Find(m.Groups[2].Value);
       if (t != null) Await(m.Groups[1].Value == "pauseapp" ? t.TryPauseAsync() : t.TryPlayAsync());
@@ -344,8 +354,10 @@ static class Program {
   //   soqo-helper                    -> the media/system bridge (JSON lines, commands on stdin)
   //   soqo-helper apps               -> Start menu apps as JSON
   //   soqo-helper yturl <proc> <title> -> URL of the browser tab playing that video
+  //   soqo-helper hook claude|codex [bridge.json] -> run by the agent as a lifecycle hook (Agents.cs)
   [MTAThread]
   static int Main(string[] args) {
+    if (args.Length >= 2 && args[0] == "hook") return Agents.Hook(args[1], args.Length > 2 ? args[2] : null);
     Win.PerMonitorDpi();
     if (args.Length >= 1 && args[0] == "apps") return RunSta(w => Apps.Print(w));
     if (args.Length >= 2 && args[0] == "yturl") return RunSta(w => YtUrl.Print(w, args[1], args.Length > 2 ? args[2] : ""));
@@ -428,6 +440,10 @@ static class Program {
       string fgProc = "";
       try { string t; Win.Foreground(out fgProc, out t); o.Add("fgProc", fgProc).Add("fgTitle", t); } catch { }
       try { o.Raw("omni", AddressBar.Json(Win.ForegroundHandle(), fgProc, Win.IsFullscreen())); } catch { o.Raw("omni", "null"); }
+      // battery every 2 s (the first line too), Windows notifications every 1.5 s while enabled
+      if (loop == 1 || loop % 4 == 2) { try { o.Raw("batt", Power.Json()); } catch { } }
+      if (notifAccessPending != null) { o.Add("notifAccess", notifAccessPending); notifAccessPending = null; }
+      Notifications.Poll(o);
 
       try { outw.WriteLine(o.ToString()); } catch (IOException) { return 0; }
     }

@@ -44,6 +44,8 @@ const Placement = require('../shared/placement');
 const Visibility = require('../shared/visibility');
 const Front = require('../shared/front');
 const focusWindow = require('./focus-window');
+const agents = require('./agents');
+const notifications = require('./notifications');
 i18n.setSetting(features.get().lang);
 const t = (key, params) => i18n.t(key, params);
 
@@ -437,6 +439,7 @@ function createWindow() {
   win.loadFile(path.join(ROOT, 'src', 'renderer', 'island', 'index.html'));
   win.webContents.on('did-finish-load', () => {
     lastLayout = '';
+    lastBatt = ''; // the page is new: the next helper line brings the battery again
     layout();
     send('front', front.value === 'app');
   });
@@ -457,8 +460,11 @@ function bridgeStatus() {
   return { state: fresh ? 'ok' : bridge.state === 'starting' ? 'starting' : 'failed', detail: bridge.detail, engine: bridge.engine };
 }
 
+let helperStarts = 0;
 function startMedia() {
   media = spawn(HELPER(), [], { windowsHide: true });
+  // a restarted helper forgot what it was asked for: say it again
+  if (helperStarts++) notifications.helperRestarted();
   let buffer = '';
   media.on('error', (err) => {
     console.error('[media] failed to start:', err.message);
@@ -503,6 +509,8 @@ function startMedia() {
             updateVisibility();
           }
         }
+        if ('batt' in data) onBattery(data.batt);
+        notifications.onHelper(data);
         send('media', data);
       } catch {}
     }
@@ -592,6 +600,15 @@ async function shotToShelf(until = 0) {
   }
 }
 ipcMain.on('shot-to-shelf', () => shotToShelf());
+
+// --- battery (helper, every 2 s): the island shows it and toasts on changes; unchanged readings are not re-sent
+let lastBatt = '';
+function onBattery(b) {
+  const key = JSON.stringify(b);
+  if (key === lastBatt) return;
+  lastBatt = key;
+  send('battery', b);
+}
 
 const MEDIA_CMD = /^(toggle|next|prev|mute|seek \d+(\.\d+)?|vol [01](\.\d+)?|bright \d{1,3})$/;
 ipcMain.on('media-cmd', (_e, cmd) => {
@@ -1026,7 +1043,11 @@ const SUPPORT_LINKS = {
   github: 'https://github.com/rami-hakimi/soqo-island-',
   developer: 'https://github.com/rami-hakimi',
   openmeteo: 'https://open-meteo.com/', // weather and city search data (CC BY 4.0)
+  openmeteoLicence: 'https://open-meteo.com/en/licence',
+  ccby: 'https://creativecommons.org/licenses/by/4.0/',
+  geonames: 'https://www.geonames.org/', // city search data behind Open-Meteo's geocoding
   tanzil: 'https://tanzil.net/', // source of the Qur'an text (CC BY 3.0)
+  agentsDocs: 'https://github.com/rami-hakimi/soqo-island-/blob/main/docs/CODING_AGENTS.md',
 };
 // Settings › Legal notices: the licence and notice files shipped inside this copy
 const legalFile = (name) => {
@@ -1037,6 +1058,25 @@ ipcMain.on('open-support', (_e, key) => {
   if (isStr(key, 32) && Object.hasOwn(SUPPORT_LINKS, key)) shell.openExternal(SUPPORT_LINKS[key]);
 });
 ipcMain.handle('bridge-status', () => bridgeStatus());
+// --- coding agents and Windows notifications (src/main/agents.js, src/main/notifications.js) ---
+ipcMain.handle('agents-status', () => agents.status());
+ipcMain.handle('agents-connect', (e, agent) => (isStr(agent, 16) ? agents.connect(agent, e.sender) : { ok: false, error: 'bad-agent' }));
+ipcMain.handle('agents-disconnect', (_e, agent) => (isStr(agent, 16) ? agents.disconnect(agent) : { ok: false, error: 'bad-agent' }));
+ipcMain.handle('agents-snapshot', () => agents.snapshot());
+ipcMain.on('agents-open', (_e, key) => { if (isStr(key, 160)) agents.openSession(key); });
+ipcMain.on('agents-backups', (_e, agent) => { if (isStr(agent, 16)) agents.openBackups(agent); });
+ipcMain.handle('notif-snapshot', () => notifications.snapshot());
+ipcMain.on('notif-open', (_e, id) => { if (isInt(id, 0, 2 ** 31)) notifications.open(id); });
+ipcMain.on('notif-dismiss', (_e, id) => { if (isInt(id, 0, 2 ** 31)) notifications.dismiss(id); });
+ipcMain.on('notif-clear', () => notifications.clear());
+// Windows Settings › Privacy & security › Notifications: the page that grants or revokes access
+ipcMain.on('open-notif-settings', () => shell.openExternal('ms-settings:privacy-notifications'));
+// an agent needs the user: the island shows it; the Focus Mode view only when the user allowed that
+agents.onAlert((alert) => {
+  send('agent-alert', alert);
+  if ((alert.kind === 'approval' || alert.kind === 'question') && focusWindow.isOpen() && features.get().agentsInFocus) focusWindow.send('agent-alert', alert);
+});
+notifications.onFresh((item) => send('notif-fresh', item));
 ipcMain.on('open-log', () => {
   if (log.logPath() && fs.existsSync(log.logPath())) shell.openPath(log.logPath());
 });
@@ -1151,6 +1191,9 @@ features.onChange((f) => {
     updater.setEnabled(autoUpdate);
   }
   if (!f.clipboardHistory) system.clearClips();
+  agents.setEnabled(f.agents);
+  agents.setHideDetails(f.agentsHideDetails);
+  notifications.configure({ enabled: f.notifMirror, preview: f.notifPreview });
   if (f.liveGlass) {
     lastCaptureKey = '';
     scheduleCapture(60);
@@ -1241,6 +1284,13 @@ app.whenReady().then(() => {
   privacy.start(send, features.get().privacyDots);
   network.start(send, features.get().netToasts);
   updater.start(send, autoUpdate);
+  {
+    const f = features.get();
+    // development runs with their own data folder tell the hook where the bridge file is
+    const bridgeArg = !app.isPackaged && process.env.SOQO_USER_DATA ? path.join(DATA_DIR, 'agents-bridge.json') : '';
+    agents.start(send, { helperWrite: mediaWrite, helperPath: HELPER(), bridgeArg, enabled: f.agents, hideDetails: f.agentsHideDetails });
+    notifications.start(send, { helperWrite: mediaWrite, enabled: f.notifMirror, preview: f.notifPreview });
+  }
   // waking from sleep or getting the internet back: weather, prayer times and a failed update
   // check catch up at once instead of waiting for their next timer (5 s for Wi-Fi to reconnect)
   let wakeTimer = null;
@@ -1282,6 +1332,7 @@ app.whenReady().then(() => {
 app.on('before-quit', () => {
   quitting = true;
   globalShortcut.unregisterAll();
+  agents.stop();
   if (media) media.kill();
 });
 

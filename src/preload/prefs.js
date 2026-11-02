@@ -33,4 +33,14 @@ contextBridge.exposeInMainWorld('prefs', {
   downloadFolders: () => ipcRenderer.invoke('dl-folders'),
   addDownloadFolder: () => ipcRenderer.invoke('dl-folder-add'),
   removeDownloadFolder: (p) => ipcRenderer.invoke('dl-folder-remove', p),
+  // coding agents: status, connect (asks first, backs up first) and disconnect
+  agentsStatus: () => ipcRenderer.invoke('agents-status'),
+  agentsConnect: (agent) => ipcRenderer.invoke('agents-connect', agent),
+  agentsDisconnect: (agent) => ipcRenderer.invoke('agents-disconnect', agent),
+  agentsBackups: (agent) => ipcRenderer.send('agents-backups', agent),
+  onAgents: on('agents'),
+  // Windows notifications: access state, and the Windows settings page that governs it
+  notifSnapshot: () => ipcRenderer.invoke('notif-snapshot'),
+  onNotif: on('notif'),
+  openNotifSettings: () => ipcRenderer.send('open-notif-settings'),
 });

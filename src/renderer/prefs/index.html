@@ -93,6 +93,7 @@
             <label class="chip" data-needs="islamic"><input type="checkbox" data-feature="tabPrayer" data-tab><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><b data-i18n="tabs.prayer">Prayer</b></label>
             <label class="chip"><input type="checkbox" data-feature="tabTimer" data-tab><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg><b data-i18n="tabs.timer">Timer</b></label>
             <label class="chip"><input type="checkbox" data-feature="tabSystem" data-tab><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><b data-i18n="tabs.system">System</b></label>
+            <label class="chip"><input type="checkbox" data-feature="tabActivity" data-tab><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><b data-i18n="tabs.activity">Activity</b></label>
           </div>
           <p class="hint warn" id="tabs-warn" data-i18n="p.island.keepOne" hidden>Keep at least one tab</p>
         </div>
@@ -300,6 +301,34 @@
             <div id="dl-folders"></div>
             <div class="row"><div class="txt"><b data-i18n="p.dl.folders">Download folders</b><small data-i18n="p.dl.foldersHint">Where your browser saves files</small></div><button class="btn" id="dl-folder-add" data-i18n="p.dl.addFolder">Add folder</button></div>
           </div>
+        </div>
+        <div class="group">
+          <h2 data-i18n="p.agents.title">Coding Agents</h2>
+          <div class="card">
+            <label class="row"><div class="txt"><b data-i18n="p.agents.enable">Show coding agents on the island</b><small data-i18n="p.agents.enableHint">Claude Code and Codex CLI sessions: working, waiting for your approval, finished or failed. Local only, through the agents' own hooks. Approvals are always given in the terminal, never here.</small></div><input type="checkbox" class="sw" data-feature="agents"></label>
+          </div>
+          <div class="card" data-needs="agents">
+            <div class="row"><div class="txt"><b>Claude Code</b><small id="ag-claude-status" data-i18n="p.agents.checking">Checking…</small></div><div class="btns"><button class="btn" data-agent-backups="claude" data-i18n="p.agents.showFile" hidden>Show file</button><button class="btn accent" data-agent-connect="claude" data-i18n="p.agents.connect">Connect</button></div></div>
+            <div class="row"><div class="txt"><b>Codex CLI</b><small id="ag-codex-status" data-i18n="p.agents.checking">Checking…</small></div><div class="btns"><button class="btn" data-agent-backups="codex" data-i18n="p.agents.showFile" hidden>Show file</button><button class="btn accent" data-agent-connect="codex" data-i18n="p.agents.connect">Connect</button></div></div>
+            <label class="row"><div class="txt"><b data-i18n="p.agents.expand">Open the island on an approval request</b><small data-i18n="p.agents.expandHint">For the alert's duration, on the Activity tab; collapses again by itself</small></div><input type="checkbox" class="sw" data-feature="agentsExpand"></label>
+            <div class="row"><b data-i18n="p.agents.alertFor">Approval alert stays</b>
+              <div class="stepper" data-num="agentAlertSec" data-steps="5,10,15,20,30,45,60,90,120" data-unit="s"><button data-dir="-1" aria-label="Less" data-i18n-aria="common.less">−</button><output></output><button data-dir="1" aria-label="More" data-i18n-aria="common.more">+</button></div>
+            </div>
+            <label class="row"><div class="txt"><b data-i18n="p.agents.inFocus">Also in Focus Mode</b><small data-i18n="p.agents.inFocusHint">Approval requests also appear on the full-screen Focus Mode view</small></div><input type="checkbox" class="sw" data-feature="agentsInFocus"></label>
+            <label class="row"><div class="txt"><b data-i18n="p.agents.hideDetails">Hide command details</b><small data-i18n="p.agents.hideDetailsHint">Show only the tool's name, never the command or the file</small></div><input type="checkbox" class="sw" data-feature="agentsHideDetails"></label>
+            <label class="row"><b data-i18n="p.agents.sound">Alert sound</b><input type="checkbox" class="sw" data-feature="agentsSound"></label>
+          </div>
+          <p class="hint" data-i18n="p.agents.note">Connect adds Soqo Island's entries to the agent's user-level hook file after asking you and keeps a backup next to it; Disconnect removes exactly those entries. Codex asks you to trust new hooks once with /hooks. Nothing is sent to any server.</p>
+          <p class="hint"><button class="btn" data-support="agentsDocs" data-i18n="p.agents.docs">How it works</button></p>
+        </div>
+        <div class="group">
+          <h2 data-i18n="p.notif.title">Windows notifications</h2>
+          <div class="card">
+            <label class="row"><div class="txt"><b data-i18n="p.notif.enable">Show Windows notifications on the island</b><small data-i18n="p.notif.enableHint">The notifications Windows shows in its notification centre, including Chrome web notifications such as WhatsApp Web. Read through Windows' own notification listener; nothing is read from the apps themselves and nothing is stored.</small></div><input type="checkbox" class="sw" data-feature="notifMirror"></label>
+            <div class="row" data-needs="notifMirror"><div class="txt"><b data-i18n="p.notif.access">Windows permission</b><small id="nf-access"></small></div><button class="btn" id="nf-settings" data-i18n="p.notif.openSettings">Windows settings</button></div>
+            <label class="row" data-needs="notifMirror"><div class="txt"><b data-i18n="p.notif.preview">Show message previews</b><small data-i18n="p.notif.previewHint">Off: app and title only, never the message text</small></div><input type="checkbox" class="sw" data-feature="notifPreview"></label>
+          </div>
+          <p class="hint" data-i18n="p.notif.note">Quiet while Windows is in do-not-disturb, during a focus session and while an app is full screen. Chrome has to deliver its notifications through Windows (its default). The island is never shown on the lock screen.</p>
         </div>
         <div class="group">
           <h2 data-i18n="p.trouble.title">Troubleshooting</h2>

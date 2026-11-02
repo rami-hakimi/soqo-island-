@@ -59,6 +59,23 @@ $('#exit').addEventListener('click', () => api.cmd('exit'));
 $('#session').addEventListener('click', () => api.cmd('session'));
 document.querySelectorAll('[data-min]').forEach((b) => b.addEventListener('click', () => api.cmd({ start: Number(b.dataset.min) })));
 
+// a coding agent needs the user: a small banner for a while (main only sends this when allowed)
+let alertTimer = null;
+let alertKey = '';
+function hideAlert() { $('#fm-alert').hidden = true; alertKey = ''; }
+api.onAgentAlert(({ kind, session }) => {
+  if (!session || (kind !== 'approval' && kind !== 'question')) return;
+  alertKey = session.key;
+  const who = session.project ? `${session.short || session.name} · ${session.project}` : session.name;
+  $('#fm-alert-text').textContent = `${who}: ${kind === 'question' ? t('act.asksYou') : t('act.needsApproval')}`;
+  $('#fm-alert-open').hidden = !session.canOpen;
+  $('#fm-alert').hidden = false;
+  clearTimeout(alertTimer);
+  alertTimer = setTimeout(hideAlert, 20000);
+});
+$('#fm-alert-open').addEventListener('click', () => { if (alertKey) api.openAgent(alertKey); hideAlert(); });
+$('#fm-alert-x').addEventListener('click', hideAlert);
+
 // Esc leaves the view (the timer keeps running); Space pauses / resumes a set timer
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {

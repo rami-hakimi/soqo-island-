@@ -13,6 +13,13 @@
       <button id="exit" class="ghost" data-i18n-title="fm.exit" title="Exit Focus Mode"><span data-i18n="fm.exit">Exit Focus Mode</span><kbd data-i18n="fm.esc">Esc</kbd></button>
     </header>
 
+    <!-- a coding agent needs you (only with Settings › Connections › Also in Focus Mode) -->
+    <div id="fm-alert" class="fm-alert" role="status" aria-live="polite" hidden>
+      <span id="fm-alert-text" dir="auto"></span>
+      <button id="fm-alert-open" class="btn" hidden><span data-i18n="act.openTerminalBtn">Open terminal</span></button>
+      <button id="fm-alert-x" class="ghost" aria-label="Close" data-i18n-aria="common.close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+
     <section class="stage" aria-live="polite">
       <div id="label" class="label" data-i18n="fm.timer">Timer</div>
       <div id="digits" class="digits" role="timer" aria-live="off">0:00</div>

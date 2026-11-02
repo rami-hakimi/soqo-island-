@@ -17,6 +17,7 @@ const DEFAULTS = {
   tabPrayer: true,
   tabTimer: true,
   tabSystem: true,
+  tabActivity: true,
   // idle pill slides
   slideClock: true,
   slideStats: true,
@@ -99,6 +100,16 @@ const DEFAULTS = {
   focusMin: 25,
   breakMin: 5,
   longBreakMin: 15,
+  // coding agents (Claude Code, Codex CLI): opt-in; each agent is connected separately in Settings
+  agents: false,
+  agentsExpand: false, // an approval request opens the island on the Activity tab for a moment
+  agentsInFocus: false, // approval requests also reach the Focus Mode view
+  agentsHideDetails: false, // show only the tool's name, never the command or file
+  agentsSound: true,
+  agentAlertSec: 15, // how long an approval alert stays on the island
+  // Windows notifications on the island (Windows' notification listener): opt-in
+  notifMirror: false,
+  notifPreview: true, // off: app and title only, never the message text
 };
 
 // string settings and their allowed values
@@ -106,7 +117,7 @@ const ENUMS = { lang: ['auto', 'en', 'ar', 'nl'], prayerMethod: ['auto', ...Obje
 // number settings and their allowed range
 const RANGES = {
   remindEvery: [1, 240], remindFor: [5, 300], quietFrom: [0, 1439], quietTo: [0, 1439],
-  focusMin: [5, 120], breakMin: [1, 60], longBreakMin: [5, 60], hijriAdjust: [-2, 2], waterEvery: [15, 240], waterGoal: [4, 16], shotShelfMinutes: [5, 1440],
+  focusMin: [5, 120], breakMin: [1, 60], longBreakMin: [5, 60], hijriAdjust: [-2, 2], waterEvery: [15, 240], waterGoal: [4, 16], shotShelfMinutes: [5, 1440], agentAlertSec: [5, 120],
 };
 
 // settings saved by Nova Island keep working: renamed keys are mapped once and saved back

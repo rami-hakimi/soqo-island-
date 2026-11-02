@@ -32,6 +32,22 @@ error log (`soqo.log`, ≤ 1 MB, no clipboard text, no links, no file contents).
 - **Microphone / camera usage** from Windows' CapabilityAccessManager registry, to show the
   privacy dots.
 - **Download folders**: file names and sizes of partial files; no file is opened or read.
+- **Battery** (System tab): Windows' power status (percentage, charging, time left), every 2 s
+  through the helper; shown, never stored.
+- **Coding agents** (opt-in, Settings › Connections): when you connect Claude Code or Codex
+  CLI, their own hooks run `soqo-helper.exe hook <agent>`, which forwards to the island only
+  the session id, the event name, the working directory, the tool's name and the single field
+  that describes the request (the command line, file path, URL or search pattern, cut at 400
+  characters). Prompts, replies, file contents, transcripts and the transcript path never leave
+  the hook. The island keeps the sessions in memory (at most 32, forgotten after two hours),
+  never on disk, and never answers an approval — that stays in the terminal. The hook also
+  reports which terminal window the agent runs in (its parent processes and window title) so
+  the island can bring it to the front. See `docs/CODING_AGENTS.md`.
+- **Windows notifications** (opt-in, Settings › Connections): the toasts Windows keeps in its
+  notification centre, read through Windows' notification listener — the sending app's name,
+  title and body (body only with previews on). Nothing is read from the apps themselves, the
+  list lives in memory (30 items), nothing is written to disk, and Windows' own permission
+  governs access. See `docs/WINDOWS_NOTIFICATIONS.md`.
 
 ## Sent over the network
 | To | What | Why | Switch |
@@ -45,11 +61,22 @@ error log (`soqo.log`, ≤ 1 MB, no clipboard text, no links, no file contents).
 | youtube.com | the embedded video | mini player | only when you pop a video out |
 | 127.0.0.1:17890 | local only | IDM Nova, if installed | IDM Nova downloads |
 
-Nothing else. No request carries an identifier of you or of your installation.
+Nothing else. Coding-agent events and Windows notifications never leave the PC: the hooks talk
+to the island over a local named pipe (no network port), and the island sends nothing on. No request carries an identifier of you or of your installation.
 
 ## Permissions
-The app never asks Windows or Chromium for microphone, camera, location or notification
-permissions; all web-content permission requests are denied by design.
+The app never asks Windows or Chromium for microphone, camera or location permissions; all
+web-content permission requests are denied by design. The only permission it asks Windows for
+is **notification access**, and only when you turn *Show Windows notifications on the island*
+on (Windows governs it under Settings › Privacy & security › Notifications).
+
+## Files outside the data folder
+Connecting a coding agent edits that agent's user-level hook file after asking you —
+`%USERPROFILE%\.claude\settings.json` (Claude Code) or `%USERPROFILE%\.codex\hooks.json`
+(Codex CLI) — adds only Soqo Island's own entries, keeps a timestamped backup next to the file
+and removes exactly those entries on Disconnect. Project-level agent configuration is never
+touched. The bridge the hooks talk to is a named pipe whose name and token are written to
+`%APPDATA%\soqo-island\agents-bridge.json` while the feature is on.
 
 ## Third-party content
 Religious texts and the KFGQPC font are included locally; nothing is fetched for them.

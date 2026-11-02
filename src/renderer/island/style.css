@@ -1047,3 +1047,85 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 @media (prefers-reduced-motion: reduce) {
   #soqi, .m-soqi, #sc-img { animation: none !important; }
 }
+
+/* ============ weather data credit (Open-Meteo asks for a link next to its data) ============ */
+.wx { position: relative; }
+.wx-top { position: relative; }
+.wx-info { position: absolute; inset-inline-end: -6px; top: -8px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; color: var(--text-3); transition: color var(--dur-fast), background var(--dur-fast); }
+.wx-info:hover, .wx-info[aria-expanded="true"] { color: var(--text-1); background: var(--fill-1); }
+.wx-info svg { width: 15px; height: 15px; }
+.wx-src { display: inline-block; align-self: flex-start; margin-top: 4px; font-size: 10.5px; color: var(--text-3); white-space: nowrap; transition: color var(--dur-fast); }
+.wx-src:hover { color: var(--text-2); text-decoration: underline; }
+.sys { position: relative; }
+.wx-pop {
+  position: absolute; inset-inline-start: 0; top: -40px; width: 340px; max-height: 214px; overflow: auto; z-index: 6; padding: 9px 12px 10px; border-radius: 16px;
+  background: rgba(10, 20, 33, .97); box-shadow: 0 12px 32px rgba(0, 0, 0, .5), inset 0 0 0 .5px rgba(255, 255, 255, .14);
+  animation: viewin .25s var(--spring); user-select: text;
+}
+.wx-pop-head { display: flex; align-items: center; justify-content: space-between; font-size: 13px; margin-bottom: 2px; }
+.wx-pop p { margin: 0 0 7px; font-size: 11.5px; line-height: 1.35; color: var(--text-2); }
+.wx-pop-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.wx-pop-links button { height: 24px; padding: 0 9px; border-radius: 99px; background: var(--fill-1); font-size: 11px; font-weight: 600; transition: background var(--dur-fast); }
+.wx-pop-links button:hover { background: var(--fill-2); }
+
+/* ============ battery (System tab, only when the PC has one) ============ */
+.batt-row .meter-row .batt { width: 22px; height: 11px; padding: 1.5px; }
+.batt-row .meter-row .batt b { width: 0; }
+.batt-state { font-size: 10.5px; color: var(--text-3); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.batt-row .bar b { background: #fff; }
+.batt-row.charging .bar b, .batt-row.charging .batt b { background: var(--green); }
+.batt-row.low .bar b, .batt-row.low .batt b { background: var(--orange); }
+.batt-row.critical .bar b, .batt-row.critical .batt b { background: var(--red); }
+.batt-row.unknown .bar b { background: var(--text-3); }
+
+/* ============ activity: coding agents + recent notifications ============ */
+.act { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; min-height: 0; }
+.act-col { display: flex; flex-direction: column; min-height: 0; min-width: 0; padding: 8px 6px 6px 10px; }
+.act-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 12px; color: var(--text-2); margin-bottom: 4px; padding-inline-end: 4px; }
+.act-head > span { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.act-head .sub { margin: 0; font-size: 11px; }
+.act-head svg { width: 14px; height: 14px; flex: none; }
+.act-list { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; padding-inline-end: 4px; }
+.act-list::-webkit-scrollbar { width: 6px; }
+.act-list::-webkit-scrollbar-thumb { background: var(--fill-2); border-radius: 3px; }
+.act-row {
+  flex: none; display: flex; align-items: center; gap: 8px; width: 100%; padding: 5px 7px; border-radius: 12px; text-align: start;
+  transition: background var(--dur-fast); animation: viewin .3s var(--spring);
+}
+button.act-row:hover { background: var(--fill-1); }
+.act-ico { position: relative; width: 26px; height: 26px; border-radius: 8px; flex: none; display: grid; place-items: center; background: var(--fill-1); font-size: 13px; color: var(--text-1); }
+.act-ico svg { width: 15px; height: 15px; }
+.act-dot { position: absolute; inset-inline-end: -2px; bottom: -2px; width: 8px; height: 8px; border-radius: 50%; background: var(--text-3); box-shadow: 0 0 0 2px rgba(10, 20, 33, .9); }
+.st-working .act-dot { background: var(--green); animation: act-pulse 1.4s ease-in-out infinite; }
+.st-attention .act-dot { background: var(--orange); animation: act-pulse .9s ease-in-out infinite; }
+.st-error .act-dot { background: var(--red); }
+.st-done .act-dot { background: rgb(var(--accent-rgb)); }
+@keyframes act-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: .7; } }
+.act-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.act-title { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.act-sub { font-size: 11px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.act-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; flex: none; font-size: 10.5px; color: var(--text-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.act-state { font-weight: 600; }
+.st-attention .act-state { color: var(--orange); }
+.st-error .act-state { color: var(--red); }
+.st-working .act-state { color: var(--green); }
+.act-row.st-attention { background: rgba(255, 159, 10, .12); box-shadow: inset 0 0 0 .5px rgba(255, 159, 10, .35); }
+button.act-row.st-attention:hover { background: rgba(255, 159, 10, .2); }
+.act-empty { font-size: 12px; color: var(--text-3); padding: 8px 4px; line-height: 1.4; white-space: normal; }
+/* toasts: an agent needs you (orange), finished (green), failed (red); a Windows notification */
+.l-toast.agent-ask .ico-agent, .l-toast.agent-done .ico-check, .l-toast.agent-error .ico-err, .l-toast.notif .ico-bell { display: block; }
+.l-toast.agent-ask .ico-agent, .l-toast.agent-ask #t-value { color: var(--orange); }
+.l-toast.agent-done .ico-check, .l-toast.agent-done #t-value { color: var(--green); }
+.l-toast.agent-error .ico-err, .l-toast.agent-error #t-value { color: var(--red); }
+.l-toast.notif .ico-bell, .l-toast.notif #t-value { color: rgb(var(--accent-rgb)); }
+.l-toast.agent-ask .batt, .l-toast.agent-done .batt, .l-toast.agent-error .batt, .l-toast.notif .batt { display: none; }
+.l-toast.agent-ask .t-left, .l-toast.agent-done .t-left, .l-toast.agent-error .t-left, .l-toast.notif .t-left { min-width: 0; }
+.l-toast.agent-ask #t-label, .l-toast.agent-done #t-label, .l-toast.agent-error #t-label, .l-toast.notif #t-label { overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.l-toast.agent-ask #t-value, .l-toast.agent-done #t-value, .l-toast.agent-error #t-value, .l-toast.notif #t-value { max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
+.l-vtoast.agent-ask .ico-agent, .l-vtoast.agent-done .ico-check, .l-vtoast.agent-error .ico-err, .l-vtoast.notif .ico-bell { display: block; }
+.l-vtoast.agent-ask .ico-agent { color: var(--orange); }
+.l-vtoast.agent-done .ico-check { color: var(--green); }
+.l-vtoast.agent-error .ico-err { color: var(--red); }
+.l-vtoast.agent-ask .v-bar, .l-vtoast.agent-done .v-bar, .l-vtoast.agent-error .v-bar, .l-vtoast.notif .v-bar { display: none; }
+#island.toast.agent-flash .glow { opacity: 1; background: radial-gradient(120% 140% at 0% 50%, rgba(255, 159, 10, .4), transparent 65%); }
+#island.toast.agent-flash .sheen { box-shadow: inset 0 0 0 1px rgba(255, 159, 10, .6); }

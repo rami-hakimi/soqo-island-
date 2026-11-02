@@ -6,7 +6,7 @@ set "FW=%WINDIR%\Microsoft.NET\Framework64\v4.0.30319"
 set "WM=%WINDIR%\System32\WinMetadata"
 "%FW%\csc.exe" -nologo -optimize+ -platform:x64 -target:exe -out:soqo-helper.exe ^
   -r:"%FW%\System.Runtime.dll" -r:"%FW%\System.Management.dll" -r:"%FW%\System.Xml.dll" -r:"%FW%\System.Core.dll" ^
-  -r:"%FW%\Microsoft.CSharp.dll" -r:"%FW%\WPF\UIAutomationClient.dll" -r:"%FW%\WPF\UIAutomationTypes.dll" -r:"%FW%\WPF\WindowsBase.dll" ^
-  -r:"%WM%\Windows.Foundation.winmd" -r:"%WM%\Windows.Media.winmd" -r:"%WM%\Windows.Storage.winmd" ^
-  SoqoHelper.cs Apps.cs YtUrl.cs AddressBar.cs
+  -r:"%FW%\Microsoft.CSharp.dll" -r:"%FW%\System.Web.Extensions.dll" -r:"%FW%\WPF\UIAutomationClient.dll" -r:"%FW%\WPF\UIAutomationTypes.dll" -r:"%FW%\WPF\WindowsBase.dll" ^
+  -r:"%WM%\Windows.Foundation.winmd" -r:"%WM%\Windows.Media.winmd" -r:"%WM%\Windows.Storage.winmd" -r:"%WM%\Windows.UI.winmd" -r:"%WM%\Windows.ApplicationModel.winmd" ^
+  SoqoHelper.cs Apps.cs YtUrl.cs AddressBar.cs Power.cs Agents.cs Notifications.cs
 exit /b %errorlevel%

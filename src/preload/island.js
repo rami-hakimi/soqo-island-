@@ -96,4 +96,21 @@ contextBridge.exposeInMainWorld('soqo', {
     copyClip: (i) => ipcRenderer.send('clip-copy', i),
     clearClips: () => ipcRenderer.send('clip-clear'),
   },
+  // battery, straight from the helper (shared/battery.js turns it into words)
+  onBattery: on('battery'),
+  // coding agents (src/main/agents.js) and Windows notifications (src/main/notifications.js)
+  onAgents: on('agents'),
+  onAgentAlert: on('agent-alert'),
+  onNotif: on('notif'),
+  onNotifFresh: on('notif-fresh'),
+  agents: {
+    snapshot: () => ipcRenderer.invoke('agents-snapshot'),
+    open: (key) => ipcRenderer.send('agents-open', key),
+  },
+  notif: {
+    snapshot: () => ipcRenderer.invoke('notif-snapshot'),
+    open: (id) => ipcRenderer.send('notif-open', id),
+    dismiss: (id) => ipcRenderer.send('notif-dismiss', id),
+    clear: () => ipcRenderer.send('notif-clear'),
+  },
 });

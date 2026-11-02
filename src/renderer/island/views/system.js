@@ -1,4 +1,5 @@
-// System tab: weather (also in the header), CPU / memory meters, clipboard history.
+// System tab: weather (also in the header) with its data credit, CPU / memory meters, battery,
+// clipboard history.
 (() => {
   const CLOUD = '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>';
   const CLOUD_TOP = '<path d="M4 14.9A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.24"/>';
@@ -48,6 +49,33 @@
     }
   }
 
+  // ---- data credit: a small visible link (Open-Meteo asks for one next to its data) and an
+  // info button that opens a popover with the provider, the licence and the city-search source.
+  // The popover lives inside the island, closes on Escape, on a click elsewhere, when the
+  // island collapses, and never covers anything outside the island.
+  const pop = $('#wx-pop');
+  const infoBtn = $('#wx-info');
+  function openPop(on) {
+    const want = on ?? pop.hidden;
+    pop.hidden = !want;
+    infoBtn.setAttribute('aria-expanded', String(want));
+    if (want) pop.querySelector('button, [tabindex]')?.focus({ preventScroll: true });
+    else if (document.activeElement && pop.contains(document.activeElement)) infoBtn.focus({ preventScroll: true });
+  }
+  infoBtn.addEventListener('click', (e) => { e.stopPropagation(); openPop(); });
+  $('#wx-src').addEventListener('click', (e) => { e.stopPropagation(); bridge.openSupport('openmeteo'); });
+  pop.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const b = e.target.closest('[data-support]');
+    if (b) bridge.openSupport(b.dataset.support);
+    if (e.target.closest('#wx-pop-close')) openPop(false);
+  });
+  pop.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.stopPropagation(); openPop(false); } });
+  infoBtn.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) openPop(false); });
+  document.addEventListener('pointerdown', (e) => { if (!pop.hidden && !pop.contains(e.target) && e.target !== infoBtn) openPop(false); });
+  window.addEventListener('island:mode', (e) => { if (e.detail.mode !== 'expanded' && !pop.hidden) openPop(false); });
+  window.addEventListener('blur', () => { if (!pop.hidden) openPop(false); });
+
   function meter(bar, val, v) {
     const pct = Math.round(v * 100);
     bar.style.width = `${pct}%`;
@@ -60,6 +88,51 @@
     meter($('#cpu-bar'), $('#cpu-val'), s.cpu);
     meter($('#ram-bar'), $('#ram-val'), s.ram);
     $('#ram-val').title = `${(s.ramUsed / 2 ** 30).toFixed(1)} / ${(s.ramTotal / 2 ** 30).toFixed(1)} GB`;
+  });
+
+  // ---- battery: what Windows reports through the helper (shared/battery.js); the row is
+  // omitted on a PC without a battery, and a reading that is unknown says so
+  let batt = null; // last view
+  const row = $('#batt-row');
+  function stateText(v) {
+    if (v.state === 'unknown') return t('battery.unknown');
+    if (v.state === 'charging') return t('battery.chargingState');
+    if (v.state === 'full') return t('battery.full');
+    if (v.state === 'plugged') return t('battery.plugged');
+    if (v.critical) return t('battery.critical');
+    if (v.low) return t('battery.lowState');
+    const left = Battery.hm(v.minutes);
+    return left ? t(left.h ? 'battery.leftHM' : 'battery.leftM', left) : t('battery.onBatteryState');
+  }
+  function renderBattery(v) {
+    row.hidden = !v || !v.present;
+    if (!v || !v.present) return;
+    row.classList.toggle('charging', v.state === 'charging' || v.state === 'full');
+    row.classList.toggle('low', v.low);
+    row.classList.toggle('critical', v.critical);
+    row.classList.toggle('unknown', v.state === 'unknown');
+    $('#batt-val').textContent = v.pct >= 0 ? `${v.pct}%` : '—';
+    $('#batt-state').textContent = stateText(v);
+    const fill = $('#batt-bar');
+    fill.style.width = `${v.pct >= 0 ? v.pct : 0}%`;
+    $('#batt-fill').style.width = `${v.pct >= 0 ? v.pct : 0}%`;
+    row.setAttribute('aria-label', `${t('sys.battery')}: ${v.pct >= 0 ? `${v.pct}%` : t('battery.unknown')} · ${stateText(v)}`);
+  }
+  bridge.onBattery((raw) => {
+    const v = Battery.view(raw);
+    const change = Battery.transition(batt, v);
+    batt = v;
+    renderBattery(v);
+    if (!change || !feat('battery')) return;
+    const pct = v.pct >= 0 ? `${v.pct}%` : '';
+    const level = v.pct >= 0 ? v.pct / 100 : 0;
+    if (change.kind === 'charging') showToast('charging', t('battery.charging'), pct, level);
+    else if (change.kind === 'full') showToast('charging', t('battery.full'), pct, level);
+    else if (change.kind === 'battery') showToast('battery', t('battery.onBattery'), pct, level);
+    else if (change.kind === 'low') {
+      showToast('low', v.critical ? t('battery.critical') : t('battery.low'), pct, level, 4500);
+      window.soqi?.react('warning');
+    }
   });
 
   const clipList = $('#clip-list');
@@ -86,7 +159,7 @@
   }
   $('#clip-clear').addEventListener('click', () => bridge.system.clearClips());
 
-  window.addEventListener('island:i18n', () => { renderWeather(lastWeather); renderClips(lastClips); });
+  window.addEventListener('island:i18n', () => { renderWeather(lastWeather); renderClips(lastClips); renderBattery(batt); });
   bridge.onWeather(renderWeather);
   bridge.onClipboard(renderClips);
   bridge.system.snapshot().then((s) => {

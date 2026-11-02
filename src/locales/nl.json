@@ -471,5 +471,8 @@
   "p.soqi.clicks": "Reageert op klikken",
   "p.soqi.clicksHint": "Een klik op Soqi levert een speelse reactie op",
   "p.soqi.wave": "Zeg hallo tegen Soqi",
-  "soqi.aria": "Soqi de dolfijn. Klik om hallo te zeggen"
+  "soqi.aria": "Soqi de dolfijn. Klik om hallo te zeggen",
+  "weather.credit": "Weergegevens van Open-Meteo.com",
+  "p.location.openMeteoHint": "Stedenzoeker en verwachtingen komen van Open-Meteo (CC BY 4.0, gratis voor niet-commercieel gebruik)",
+  "p.location.openMeteo": "Open-Meteo.com"
 }

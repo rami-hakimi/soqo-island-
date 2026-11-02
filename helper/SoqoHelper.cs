@@ -1,6 +1,6 @@
 // Soqo Island system bridge, compiled (replaces media.ps1, same protocol).
 // Prints one JSON line about every 500 ms: media session (SMTC), volume, brightness, fullscreen,
-// window in front, keyboard layout, Caps Lock.
+// window in front, keyboard layout, Caps Lock, screen recorder present (rec).
 // Reads commands on stdin: toggle | next | prev | seek <sec> | vol <0-1> | mute | bright <0-100>
 //   | pauseapp <appId> | playapp <appId> | seekapp <appId> <sec>
 // Build: helper/build.cmd (uses the C# compiler that ships with Windows).
@@ -126,6 +126,19 @@ static class Win {
   public static bool CapsLock() { return (GetKeyState(0x14) & 1) != 0; }
 
   public static IntPtr ForegroundHandle() { return GetForegroundWindow(); }
+
+  // a screen recorder running: NVIDIA's capture helper (Instant Replay / recording), OBS,
+  // Streamlabs. Only the process names are looked at, every 2 s; nothing is read from them.
+  static readonly string[] Recorders = { "nvsphelper64", "nvsphelper", "obs64", "obs32", "obs", "Streamlabs OBS", "Streamlabs Desktop" };
+  public static bool RecorderRunning() {
+    foreach (var name in Recorders) {
+      var ps = System.Diagnostics.Process.GetProcessesByName(name);
+      bool any = ps.Length > 0;
+      foreach (var p in ps) p.Dispose();
+      if (any) return true;
+    }
+    return false;
+  }
   public static string ClassOf(IntPtr h) {
     var sb = new StringBuilder(64);
     GetClassName(h, sb, 64);
@@ -328,6 +341,7 @@ static class Program {
     string lastKey = null, prevThumb = "";
     bool thumbOk = false;
     int thumbTries = 0, loop = 0;
+    bool rec = false;
     bright = Brightness.Get();
     bool brightOk = bright >= 0;
     var next = DateTime.UtcNow;
@@ -383,6 +397,8 @@ static class Program {
       try { o.Add("kl", Win.KeyboardLayout()).Add("caps", Win.CapsLock()); } catch { }
       try { long seq = Win.ClipboardSeq(); o.Add("clip", (double)seq).Add("clipPriv", Win.ClipboardPrivate(seq)); } catch { }
       try { o.Add("idle", Win.IdleSeconds()); } catch { }
+      if (loop % 4 == 1) { try { rec = Win.RecorderRunning(); } catch { } }
+      o.Add("rec", rec);
       string fgProc = "";
       try { string t; Win.Foreground(out fgProc, out t); o.Add("fgProc", fgProc).Add("fgTitle", t); } catch { }
       try { o.Raw("omni", AddressBar.Json(Win.ForegroundHandle(), fgProc, Win.IsFullscreen())); } catch { o.Raw("omni", "null"); }

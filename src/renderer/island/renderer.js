@@ -1163,6 +1163,10 @@ bridge.onI18n((payload) => {
 bridge.onVisibility((v) => { state.visible = !!v; });
 bridge.features().then(applyFeatures);
 $('#open-settings').addEventListener('click', () => bridge.openSettings());
+$('#wx-credit').addEventListener('click', (e) => {
+  e.stopPropagation();
+  bridge.openSupport('openmeteo');
+});
 
 selectTab('media');
 drawTimer();

@@ -471,5 +471,8 @@
   "p.soqi.clicks": "Reacts to clicks",
   "p.soqi.clicksHint": "A click on Soqi gets a playful reaction",
   "p.soqi.wave": "Say hi to Soqi",
-  "soqi.aria": "Soqi the Dolphin. Click to say hi"
+  "soqi.aria": "Soqi the Dolphin. Click to say hi",
+  "weather.credit": "Weather data by Open-Meteo.com",
+  "p.location.openMeteoHint": "City search and forecasts come from Open-Meteo (CC BY 4.0, free for non-commercial use)",
+  "p.location.openMeteo": "Open-Meteo.com"
 }

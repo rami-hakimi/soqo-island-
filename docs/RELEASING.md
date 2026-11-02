@@ -1,42 +1,52 @@
 # Releasing
 
-Nothing is published automatically. A release is a deliberate, owner-approved step.
+Nothing is published from ordinary pushes. A release is a deliberate step: a version tag (or
+a manual run of the Release workflow naming an existing tag) that the maintainer creates.
 
-## Before a release
-1. `npm run verify` green on a clean checkout; `npm run helper:build` reproduces
-   `helper/soqo-helper.exe` (commit it if the sources changed).
-2. `python scripts/prepare-art.py` if any artwork changed (inputs under `assets/branding` and
-   `assets/mascot`).
-3. Walk `docs/REGRESSION_CHECKLIST.md` on a real Windows desktop (media controls, mini
-   player, address-bar slot, multi-monitor, Arabic + RTL).
-4. Bump `version` in `package.json` and `package-lock.json` (semver; pre-releases as
-   `2.0.0-beta.2`), update `CHANGELOG.md` and `docs/releases/<version>.md`, commit.
+## Workflows
+- **CI** (`.github/workflows/ci.yml`): pushes to `main` and to `rebuild/**`, `feature/**`,
+  `fix/**`, `release/**`, every pull request against `main`, and manual runs. Windows runner,
+  `npm ci` from the lockfile, `npm run verify` (syntax, ESLint, TypeScript `checkJs`,
+  English/Arabic/Dutch parity, unit tests), helper rebuilt from source and exercised,
+  `npm audit --omit=dev --audit-level=high`, unsigned installer, `scripts/release-check.js`,
+  installer uploaded as a 14-day artifact. Read-only token; actions pinned to commit SHAs.
+- **Release** (`.github/workflows/release.yml`): tags `v*` or a manual run with a tag. The
+  `build` job (read-only) checks that the tag equals `package.json` `version`, runs the same
+  gate, builds the installer, validates it and writes `SHA256SUMS.txt`. The `publish` job is
+  the only one with `contents: write`; it runs in the `release` environment (add required
+  reviewers there for a manual approval step), refuses to touch an existing release, and
+  creates a GitHub **pre-release** for tags containing `-` (beta, rc) with the installer, its
+  `.blockmap`, `latest.yml`, `SHA256SUMS.txt` and `docs/releases/<version>.md` as notes.
 
-## Build
+## Before tagging
+1. `npm run verify` green on a clean checkout.
+2. `version` in `package.json` and `package-lock.json` bumped (semver; pre-releases as
+   `2.0.0-beta.2`), `CHANGELOG.md` updated, `docs/releases/<version>.md` written.
+3. `python scripts/prepare-art.py` if artwork changed; `npm run helper:build` if `helper/*.cs`
+   changed (commit the rebuilt `soqo-helper.exe`).
+4. Local dry run: `npm run dist -- --publish never && node scripts/release-check.js --tag v<version>`.
+5. Walk `docs/REGRESSION_CHECKLIST.md` on a real Windows desktop for anything the unit tests
+   cannot cover.
+
+## Publish
 ```bash
-npm run dist            # dist/Soqo-Island-Setup-<version>.exe + latest.yml + blockmap
-npm run dist:portable   # dist/Soqo Island <version> portable.exe
+git checkout main && git pull
+git tag -a v2.0.0-beta.2 -m "Soqo Island 2.0.0-beta.2"
+git push origin v2.0.0-beta.2
 ```
-The build applies the Electron fuses from `package.json` → `build.electronFuses`. Without a
-code-signing certificate the installer is unsigned (SmartScreen warning on first run). To
-sign, set `CSC_LINK` / `CSC_KEY_PASSWORD` (or Azure Trusted Signing settings) in the
-environment of the build; never commit certificates.
+or: GitHub → Actions → Release → *Run workflow* → tag `v2.0.0-beta.2`. Then check the
+Release run, open the pre-release and download the installer once to confirm the files. The
+updater reads `latest.yml` from the latest (pre-)release; from a machine with the previous
+version installed, the island should offer the update within a minute of start when
+*Auto-update* is on.
 
-## Publish (owner only)
-1. Tag: `git tag v<version> && git push origin v<version>` (push requires authorisation).
-2. Create the GitHub release on `rami-hakimi/soqo-island-` and upload **all** files from
-   `dist/` that electron-builder produced for the target: the setup `.exe`, its `.blockmap`
-   and `latest.yml`. The updater reads `latest.yml` from the latest release.
-3. Verify from a machine with the previous version installed that the island offers the
-   update within ~1 minute of start (Auto-update on).
-
-## CI
-`.github/workflows/windows.yml` runs verify, rebuilds the helper, and builds the installer
-on every push and pull request, uploading `dist/` as a workflow artifact for inspection. It
-does not publish (`--publish never`; without it electron-builder on CI looks for a GitHub
-release to attach to and fails for lack of a token). Publishing from CI would need a `GH_TOKEN` with release rights and the
-owner's explicit go-ahead.
+## Signing
+The installer is **unsigned**; SmartScreen warns on first run. To sign, provide a certificate
+or an Azure Trusted Signing configuration to electron-builder through repository secrets
+(`CSC_LINK` / `CSC_KEY_PASSWORD`, or the Azure settings) and remove
+`CSC_IDENTITY_AUTO_DISCOVERY: 'false'` from the workflows. Never commit certificates.
 
 ## Rollback
-Delete or un-publish the faulty release's `latest.yml`; the updater then offers the previous
-latest release again. Users already updated can reinstall the older setup file.
+Un-publish or delete the faulty release's `latest.yml`; the updater then offers the previous
+release again. Users already updated can reinstall the older setup file. Never move or reuse
+a tag; publish a new patch version instead.

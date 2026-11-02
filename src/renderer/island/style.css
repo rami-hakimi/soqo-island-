@@ -293,6 +293,9 @@ svg.s { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: rou
 .clock-time { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.1; }
 .clock-time b { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .clock-time span { font-size: 11px; color: var(--text-3); }
+/* Open-Meteo's CC BY 4.0 asks for a link next to the weather */
+.wx-credit { display: block; margin-top: 4px; padding: 0; border: 0; background: none; font: inherit; font-size: 11px; color: var(--text-3); text-decoration: underline dotted; cursor: pointer; }
+.wx-credit:hover { color: var(--text-2); }
 .wx-mini { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-2); }
 .wx-mini svg { width: 16px; height: 16px; }
 .wx-mini b { font-weight: 600; color: var(--text-1); }

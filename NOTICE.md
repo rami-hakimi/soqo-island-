@@ -1,40 +1,65 @@
 # Notices and attribution
 
 Soqo Island is free software under the GNU General Public License v3.0 (see `LICENSE`).
+Copyright © 2026 Rami al-Hakimi and Soqo Island contributors. Licence texts of the bundled
+third-party components are in `THIRD_PARTY_NOTICES.md`.
 
 ## Based on Nova Island
 Soqo Island is a fork of **Nova Island** (https://github.com/NOVA-TECH-KIT/nova-island),
-Copyright © 2026 Nova Island by AmerTech, licensed under GPL-3.0-only. The original
-authors asked that modified versions use a different name and logo; "Nova Island", the
-Nova companion character and the Nova logo are their marks and are not used by this project.
-The upstream Git history is preserved in this repository.
+Copyright © 2026 Nova Island by AmerTech, licensed under GPL-3.0-only. The original authors
+asked that modified versions use a different name and logo; "Nova Island", the Nova companion
+character and the Nova logo are their marks and are not used by this project.
 
-**Modification notice (GPL-3.0 §5).** This program has been modified from Nova Island by
-Rami al-Hakimi, 2026 (rebrand, Soqi companion, Arabic and Dutch interfaces, optional Islamic
-features, timer sizes, security hardening, project structure). The commit history and
-`CHANGELOG.md` record what changed and when. Files added by this project carry the Soqo Island
-copyright; files inherited from upstream keep their origin as shown by `git log --follow`.
-Nothing here claims upstream code as the work of the current maintainer.
+**Modification notice (GPL-3.0 §5).** This program has been modified from Nova Island 1.4.0
+(upstream commit `7e3c4ee`) by Rami al-Hakimi, November 2026: rebrand, the Soqi companion,
+Arabic and Dutch interfaces, optional Islamic features, timer sizes, security hardening, project
+structure, and the fixes listed in `CHANGELOG.md`. A large part of the code base, including the
+island concept and the media, download, clipboard, shelf and prayer modules, was written by the
+upstream authors. This notice is the record of their authorship and stays in place whatever the
+shape of the Git history; nothing here claims upstream code as the work of the current
+maintainer.
 
 ## Third-party components
-| Component | Licence | Use |
-|---|---|---|
-| Electron | MIT | Application runtime |
-| electron-updater (electron-builder) | MIT | Update checks and installs |
-| node-ical | Apache-2.0 | iCal parsing for meeting reminders |
-| PrayTimes.org calculation method | LGPL-3.0 (algorithm reference; reimplemented in `prayer.js`) | Prayer-time maths |
-| Open-Meteo | CC BY 4.0 (data) | Weather and city search |
-| KFGQPC HAFS Uthmanic Script v3.0 | King Fahd Glorious Quran Printing Complex EULA (`assets/fonts/KFGQPC-LICENSE.txt`) | Qur'an text rendering. Included unmodified; **not** covered by the GPL |
-| Qur'an text | Quran.com API (`text_qpc_hafs`), KFGQPC script | `views/reminders-data.js`, unchanged from upstream |
-| Chromium, Node.js and the libraries bundled by Electron | Various (BSD, MIT, …) | Their notices ship inside the installed app as `LICENSES.chromium.html` and `LICENSE.electron.txt` |
-| Contributor Covenant 2.1 | CC BY 4.0 | `CODE_OF_CONDUCT.md` |
+| Component | Copyright / source | Licence | Where |
+|---|---|---|---|
+| Electron, Chromium, Node.js and bundled libraries | Various | MIT, BSD and others | `LICENSE.electron.txt`, `LICENSES.chromium.html` next to the installed executable |
+| electron-updater and its dependencies (14 packages) | electron-builder authors and others | MIT, ISC, BSD-3-Clause | `THIRD_PARTY_NOTICES.md` (full texts; `lazy-val` publishes no licence file, so its MIT text is reproduced there) |
+| node-ical and its dependencies | node-ical contributors and others | Apache-2.0, MIT | `THIRD_PARTY_NOTICES.md` |
+| PrayTimes.js calculation core (ported in `src/main/prayer.js`) | Copyright (C) 2007-2011 PrayTimes.org, Hamid Zarrabi-Zadeh | LGPL-3.0, combined under LGPL §4 | header of `prayer.js`, LGPL text in `THIRD_PARTY_NOTICES.md` |
+| Open-Meteo weather and geocoding data | Open-Meteo.com | CC BY 4.0; free API for non-commercial use | credit link next to the weather (System tab) and under Settings › Location; this file |
+| KFGQPC HAFS Uthmanic Script v3.0 (font) | Copyright (c) 2010 King Fahd Glorious Quran Printing Complex | KFGQPC EULA: use, copy, distribute free of charge; no selling or modification. **Not** covered by the GPL | `assets/fonts/KFGQPC-LICENSE.txt`, included unmodified (same file as upstream) |
+| Qur'an verse text (about 20 short passages) | KFGQPC Hafs 'an 'Asim Unicode text, obtained upstream through the Quran.com API field `text_qpc_hafs` | see the status note below | `src/renderer/island/views/reminders-data.js`, unchanged from upstream and protected by a checksum test |
+| Contributor Covenant 2.1 | Coraline Ada Ehmke and contributors | CC BY 4.0 | `CODE_OF_CONDUCT.md` |
 
-Sounds (timer, alerts, the prayer chime) are synthesised at runtime with the Web Audio API; no
-third-party audio files are bundled. All images (icon, Soqi, concept illustrations, screenshots)
-are original work made for Soqo Island and are covered by the GPL-3.0 like the rest of the
-repository, except where this file says otherwise.
+### Qur'an text: status
+The verses are scripture in the KFGQPC Hafs script; the digitised text is KFGQPC's own
+developer data (the field the Quran.com API calls `text_qpc_hafs`, which KFGQPC publishes as
+`aya_text_unicode` with its Hafs font package). As of 2 November 2026 no explicit licence for
+that text could be found: KFGQPC's developer page states none, and the Quran Foundation's API
+portal publishes no terms for API text. **This is unresolved.** Options under consideration:
+written confirmation from KFGQPC (info@qurancomplex.gov.sa), or replacing the passages with the
+Tanzil Project's Uthmani text, which carries an explicit licence (CC BY 3.0: verbatim copies
+only, "Tanzil Project" named as source, link to tanzil.net, copyright notice kept). Until one of
+these is done the text stays as inherited from upstream and the question is flagged here.
+
+## Artwork
+- **Application screenshots** (`assets/screenshots/app/`) were captured from the running
+  application by this project.
+- **Derived images** (`build/icon.*`, `build/tray*.png`, `assets/soqi/*.png`) are produced by
+  `scripts/prepare-art.py` from the originals below and are reproducible.
+- **Originals** (`assets/branding/`, `assets/mascot/`, `assets/ui/`) and the five **concept
+  illustrations** (`assets/screenshots/promo/`) were supplied by the maintainer for this project.
+  How they were made (hand-drawn, commissioned, or created with image-generation tools) is not
+  recorded in this repository yet; **the maintainer is to confirm and this paragraph will be
+  updated**. Until then they are described only as "provided for Soqo Island", no copyright
+  claim beyond that is made, and they are not described as licensed under the GPL. They contain
+  no Nova Island artwork; Soqi is not the Nova character.
+
+## Sounds
+Timer, alert and prayer-chime sounds are synthesised at runtime with the Web Audio API; no
+third-party audio files are bundled.
 
 ## Integrations
-The download manager shown as "IDM" in the interface is the upstream author's separate
-product (installed as "IDM Nova", bridge on 127.0.0.1:17890). Soqo Island talks to it over
-that local bridge when it is installed; the product is not part of this project's branding.
+The download manager shown as "IDM" in the interface is the upstream author's separate product
+(installed as "IDM Nova", bridge on 127.0.0.1:17890). Soqo Island talks to it over that local
+bridge when it is installed; the product is not part of this project's branding.

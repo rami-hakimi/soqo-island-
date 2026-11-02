@@ -17,6 +17,12 @@ error log (`soqo.log`, ≤ 1 MB, no clipboard text, no links, no file contents).
   private are never read. **Copied images** are kept in memory until you save them or they are
   auto-shelved; the saved file goes to `Pictures\Soqo Island`.
 - **Screen pixels under the island** (a low-resolution crop) to draw the live glass backdrop.
+  Not captured while the screen is locked, while the live glass is switched off, or while a
+  screen recorder (NVIDIA Share, OBS, Streamlabs) is running; in the last case the island also
+  stops asking Windows to hide it from captures, so recordings are not affected. The helper
+  only looks at process names for this, every two seconds.
+- **Weather and city search** come from Open-Meteo (CC BY 4.0, free for non-commercial use);
+  the credit link sits next to the weather in the System tab and under Settings › Location.
   They never leave the process and are not written anywhere.
 - **The foreground window's title and process**, keyboard layout and Caps Lock, idle time
   and fullscreen state, from the helper, to show media, toasts and to hide in full screen.

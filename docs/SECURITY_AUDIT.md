@@ -57,3 +57,7 @@ Severity: **High** (exploitable or privacy-breaking), **Medium** (defence in dep
   payload, only toggle the click-through state) and `soqi-wave` (Settings → main → island,
   no payload, triggers a cosmetic animation). `island-rect` gained an optional `soqi`
   rectangle, validated like the island rectangle. No new privileged capability.
+- 2026-11-02: helper line gained `rec` (boolean: a known screen-recorder process exists; names
+  only). Main withdraws content protection and pauses the glass while it is true, and pauses
+  the glass on `powerMonitor` lock-screen. New read-only IPC `island-features`; the island
+  preload can ask main to open the fixed Open-Meteo link (`open-support`, allow-listed key).

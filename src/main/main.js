@@ -350,8 +350,7 @@ function createWindow() {
   win.setAlwaysOnTop(true, 'screen-saver');
   win.setVisibleOnAllWorkspaces(true);
   win.setIgnoreMouseEvents(true);
-  // keep the island out of screen captures so the glass backdrop shows what is behind it
-  win.setContentProtection(true);
+  updateProtection();
   placeWindow();
   win.webContents.on('preload-error', (_e, p, err) => console.error('[preload-error]', p, err));
   win.webContents.on('console-message', (e, level, message, line, source) => {
@@ -414,6 +413,7 @@ function startMedia() {
         if (data.error) console.error('[media]', data.error);
         if (typeof data.clip === 'number') onClipboardSeq(data.clip, !!data.clipPriv);
         if ('omni' in data) onOmni(data.omni);
+        if (typeof data.rec === 'boolean') onRecorder(data.rec);
         if (typeof data.fs === 'boolean' && data.fs !== fullscreenHidden) {
           fullscreenHidden = data.fs;
           updateVisibility();
@@ -603,10 +603,44 @@ function scheduleCapture(ms) {
     scheduleCapture(period);
   }, ms);
 }
+// --- the glass, the lock screen and screen recorders ---
+// The island asks Windows to leave it out of screen captures only while the live glass needs
+// it (otherwise the glass would show the island itself). NVIDIA's Instant Replay treats that
+// request as protected video and switches itself off, so while a recorder is running (the
+// helper reports the NVIDIA Share, OBS or Streamlabs process) the glass pauses on the static
+// pane and the request is withdrawn; both come back when the recorder is gone. With the live
+// glass switched off nothing is captured and nothing is protected. Nothing is captured while
+// the screen is locked either: nobody can see the island then.
+let screenLocked = false;
+let recording = false;
+let protectedNow = null;
+const glassLive = () => !!features.get().liveGlass && !recording;
+function updateProtection() {
+  if (!win || win.isDestroyed()) return;
+  const on = glassLive();
+  if (on === protectedNow) return;
+  protectedNow = on;
+  win.setContentProtection(on);
+  if (on) {
+    lastCaptureKey = '';
+    scheduleCapture(150);
+  }
+}
+// what the island page sees: the live glass reads as off while a recorder runs
+const islandFeatures = () => (recording ? { ...features.get(), liveGlass: false } : features.get());
+function onRecorder(on) {
+  if (on === recording) return;
+  recording = on;
+  log.info(`screen recorder ${on ? 'running: live glass paused' : 'gone: live glass back'}`);
+  updateProtection();
+  send('features', islandFeatures());
+}
+
 async function captureBackdrop() {
   // skipped while dragging: a capture blocks the main thread and makes the move stutter;
-  // never while the user turned the live glass off (Settings › Privacy)
-  if (!features.get().liveGlass || capturing || drag || !win || win.isDestroyed() || !win.isVisible()) return;
+  // never while the user turned the live glass off (Settings › Privacy), while a screen
+  // recorder runs, or while the screen is locked
+  if (!glassLive() || screenLocked || capturing || drag || !win || win.isDestroyed() || !win.isVisible()) return;
   capturing = true;
   try {
     const display = screen.getDisplayMatching(win.getBounds());
@@ -895,6 +929,7 @@ ipcMain.on('open-settings', () => prefsWindow.open());
 ipcMain.on('island-ready', () => log.info('island ready'));
 ipcMain.on('update-install', () => updater.install());
 ipcMain.handle('features-get', () => features.get());
+ipcMain.handle('island-features', () => islandFeatures());
 ipcMain.on('features-set', (_e, patch) => { if (isObj(patch)) features.set(patch); });
 ipcMain.on('features-reset', () => features.reset());
 ipcMain.on('reminder-preview', () => send('reminder-now'));
@@ -909,6 +944,7 @@ const SUPPORT_LINKS = {
   upstream: 'https://github.com/NOVA-TECH-KIT/nova-island', // the project this app is based on
   developer: 'https://github.com/rami-hakimi',
   license: 'https://www.gnu.org/licenses/gpl-3.0.html',
+  openmeteo: 'https://open-meteo.com/', // weather and city search data (CC BY 4.0)
 };
 ipcMain.on('open-support', (_e, key) => {
   if (isStr(key, 32) && Object.hasOwn(SUPPORT_LINKS, key)) shell.openExternal(SUPPORT_LINKS[key]);
@@ -1014,7 +1050,8 @@ features.onChange((f) => {
     prayerCalc = calc;
     prayer.refresh();
   }
-  send('features', f);
+  updateProtection();
+  send('features', islandFeatures());
   prefsWindow.send('features', f);
   prefsWindow.send('prayer', prayer.info());
   downloads.setEnabled(f.downloads);
@@ -1127,6 +1164,13 @@ app.whenReady().then(() => {
     }, 5000);
   };
   powerMonitor.on('resume', wake);
+  // locked: nobody sees the island, so no glass capture and a slow cursor check until unlocked
+  powerMonitor.on('lock-screen', () => { screenLocked = true; });
+  powerMonitor.on('unlock-screen', () => {
+    screenLocked = false;
+    lastCaptureKey = '';
+    scheduleCapture(300);
+  });
   network.onBack(wake);
   calendar.start((ch, data) => {
     send(ch, data);
@@ -1137,7 +1181,7 @@ app.whenReady().then(() => {
   // faster while a card or scene is on screen, so the first click on its × is caught
   (function pollLoop() {
     pollCursor();
-    setTimeout(pollLoop, HoverPolicy.pollMs(instant));
+    setTimeout(pollLoop, screenLocked ? 600 : HoverPolicy.pollMs(instant));
   })();
   scheduleCapture(300);
   globalShortcut.register('CommandOrControl+Alt+I', () => send('toggle'));

@@ -478,5 +478,8 @@
   "p.soqi.clicks": "يتفاعل مع النقر",
   "p.soqi.clicksHint": "نقرة على سوقي تمنحه ردّة فعل مرحة",
   "p.soqi.wave": "ألقِ التحية على سوقي",
-  "soqi.aria": "سوقي الدلفين. انقر لإلقاء التحية"
+  "soqi.aria": "سوقي الدلفين. انقر لإلقاء التحية",
+  "weather.credit": "بيانات الطقس من Open-Meteo.com",
+  "p.location.openMeteoHint": "البحث عن المدن والتوقعات من Open-Meteo (رخصة CC BY 4.0، مجاني للاستخدام غير التجاري)",
+  "p.location.openMeteo": "Open-Meteo.com"
 }

@@ -2,13 +2,16 @@
 
 <img src="build/icon.png" alt="Soqo Island icon" width="96" height="96">
 
-# Soqo Island
+# Soqo Island — A Living Island for Windows
 
-**A Living Island for Windows**
+[![CI](https://github.com/rami-hakimi/soqo-island-/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/rami-hakimi/soqo-island-/actions/workflows/ci.yml)
+[![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
+![Windows 10 / 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 
-A floating desktop companion for Windows 10 and 11, with Soqi the Dolphin.
+A customizable floating desktop companion for Windows, with timers, music controls,
+notifications, productivity tools and Soqi the Dolphin.
 
-[Features](#key-features) · [Installation](#installation) · [How to use](#how-to-use) · [Documentation](docs/) · [Changelog](CHANGELOG.md)
+[Features](#key-features) · [Installation](#installation) · [How to use](#how-to-use) · [Docs](docs/) · [Changelog](CHANGELOG.md)
 
 </div>
 
@@ -18,77 +21,79 @@ Soqo Island is a small glass capsule that floats at the top of your screen, insp
 Dynamic Island-style interfaces. Collapsed, it shows what matters right now: the song that is
 playing, a running timer, a finished download, the next meeting. Rest the pointer on it and it
 opens into a panel with music controls, apps, files, downloads and system information; move
-away and it folds back without ever taking focus from your work. Soqi, an original dolphin
-character, lives beside the island and reacts to what happens on your PC. The interface is
-available in English, Arabic (right-to-left) and Dutch.
+away and it folds back without taking focus from your work. Soqi, an original dolphin
+character, lives beside the island and reacts to what happens on your PC and to a click. The
+interface is available in English, Arabic and Dutch.
 
-## Screenshots
+## Screenshots and promotional artwork
 
-The first image is a **promotional concept illustration**; the others are captures of the
-running application.
+### Concept artwork
 
-![Concept illustration of the Soqo Island capsule with Soqi and its main features](assets/screenshots/promo/web/01-soqo-overview.jpg)
+These five illustrations show the intended look and ideas. They are **concept artwork, not
+screenshots**, and may differ in detail from the application.
 
 | | |
 |---|---|
-| ![Music view with a live media session and Soqi](assets/screenshots/app/music.png) | ![Large running-timer pill on hover with pause and reset](assets/screenshots/app/timer-large-hover.png) |
-| Music view | Large timer pill on hover |
-| ![Soqi peeking over the collapsed island](assets/screenshots/app/island-soqi.png) | ![Qur'an verse card from the optional reminders](assets/screenshots/app/reminder-ayah.png) |
-| Soqi beside the island | Qur'an verse card (optional Islamic Features) |
-| ![Settings › Features with the Islamic Features switch](assets/screenshots/app/settings-features.png) | ![Prayer tab in Arabic with right-to-left layout](assets/screenshots/app/prayer-ar.png) |
-| Settings › Features | Arabic interface |
-| ![Settings › Companion in Dutch with the Soqi switches and the Say hi button](assets/screenshots/app/settings-companion-nl.png) | ![Welcome card in Arabic](assets/screenshots/app/welcome-ar.png) |
-| Dutch interface (Settings › Companion) | Welcome card, Arabic |
+| ![Concept artwork: the Soqo Island capsule with Soqi and its main features](assets/screenshots/promo/web/01-soqo-overview.jpg) | ![Concept artwork: the running-timer pill in three sizes with hover controls](assets/screenshots/promo/web/02-focus-timer.jpg) |
+| Overview | Focus timer |
+| ![Concept artwork: Soqi's moods around the island](assets/screenshots/promo/web/03-soqi-companion.jpg) | ![Concept artwork: Settings with the Islamic Features switch next to a prayer-times card and a Qur'an verse card](assets/screenshots/promo/web/04-islamic-features.jpg) |
+| Soqi the Dolphin | Optional Islamic Features |
+| ![Concept artwork: the installer, feature tiles and the Settings window](assets/screenshots/promo/web/05-windows-experience.jpg) | |
+| Windows experience | |
 
-More concept illustrations: [focus timer](assets/screenshots/promo/web/02-focus-timer.jpg) ·
-[Soqi](assets/screenshots/promo/web/03-soqi-companion.jpg) ·
-[Islamic features](assets/screenshots/promo/web/04-islamic-features.jpg) ·
-[Windows experience](assets/screenshots/promo/web/05-windows-experience.jpg).
-They show the intended look and may differ in detail from the application.
+### Application screenshots
+
+Genuine captures of the running application (Windows 11, 125 % scaling).
+
+| | |
+|---|---|
+| ![Screenshot: music view with a live media session and Soqi](assets/screenshots/app/music.png) | ![Screenshot: Large running-timer pill on hover with pause and reset](assets/screenshots/app/timer-large-hover.png) |
+| Music view | Large timer pill on hover |
+| ![Screenshot: Soqi peeking over the collapsed island](assets/screenshots/app/island-soqi.png) | ![Screenshot: Qur'an verse card from the optional reminders](assets/screenshots/app/reminder-ayah.png) |
+| Soqi beside the island | Qur'an verse card (optional Islamic Features) |
+| ![Screenshot: Settings › Features with the Islamic Features switch](assets/screenshots/app/settings-features.png) | ![Screenshot: Settings › Companion in Dutch](assets/screenshots/app/settings-companion-nl.png) |
+| Settings › Features | Settings › Companion, Dutch |
+| ![Screenshot: Prayer tab in Arabic with right-to-left layout](assets/screenshots/app/prayer-ar.png) | ![Screenshot: welcome card in Arabic](assets/screenshots/app/welcome-ar.png) |
+| Prayer tab, Arabic | Welcome card, Arabic |
+
+More captures are in [`assets/screenshots/app/`](assets/screenshots/app/).
 
 ## Key features
 
-- **Media controls** for whatever Windows is playing: artwork, title, play/pause/skip, volume
-  and brightness, and a floating mini player for YouTube.
-- **Timers and focus sessions**, with a running-timer pill in three sizes that can stay
-  visible over full-screen apps.
-- **Downloads**: browser downloads with progress and speed, plus live control of the IDM
-  download manager when installed.
-- **Notifications** inside the island for downloads, screenshots, battery, keyboard language,
-  Caps Lock, network changes and upcoming meetings from an iCal link.
-- **Clipboard tools**: history kept in memory only, and smart actions for copied links,
-  colours and sums.
-- **Shortcuts and utilities**: a pinned app launcher with Start-menu search, a shelf for files
-  you are working with, CPU/RAM, weather, screenshots straight to the shelf.
-- **Soqi the Dolphin**: ten moods driven by real events, a playful reaction when you click
-  her, gentle idle motion, a bob to the music. Switchable off; follows Windows' reduced-motion
-  setting.
-- **Customization**: horizontal or vertical, docked or floating, hide in full screen, live or
-  static glass, timer size, language.
-- **Privacy**: no account, no telemetry; microphone and camera indicators; the live-glass
-  screen capture can be turned off entirely. See [docs/PRIVACY.md](docs/PRIVACY.md).
-- **Automatic startup**: *Launch at Windows startup* starts the island quietly at sign-in.
-- **Languages**: English, Arabic and Dutch, switchable live.
-- **Optional Islamic Features**: prayer times calculated on your PC, notifications, dhikr,
-  du'a and Qur'an verses. **Disabled by default** for fresh installations; one switch under
-  Settings › Features turns them on.
+| | |
+|---|---|
+| **Floating desktop island** | Click-through glass capsule that opens on hover, horizontal or vertical, docked or floating, hides in full screen, `Ctrl + Alt + I` to pin |
+| **Music and media controls** | Whatever Windows is playing: artwork, title, play/pause/skip, volume and brightness, floating YouTube mini player |
+| **Timer and focus tools** | Preset timers and focus/break sessions; a running-timer pill in three sizes that can stay visible over full-screen apps |
+| **Download monitoring** | Browser downloads with progress and speed; live control of the IDM download manager when installed |
+| **Clipboard tools** | History kept in memory only; smart actions for copied links, colours and sums |
+| **Notifications** | Cards inside the island for downloads, screenshots, battery, keyboard language, Caps Lock, network changes and upcoming meetings (iCal) |
+| **System shortcuts and utilities** | Pinned app launcher with Start-menu search, a shelf for files, CPU/RAM, weather, screenshots straight to the shelf |
+| **Soqi, the animated dolphin** | Ten moods driven by real events, a playful reaction when clicked, gentle idle motion, a bob to the music; switchable off, follows reduced-motion |
+| **Privacy controls** | No account, no telemetry; microphone and camera indicators; the live-glass screen capture can be turned off ([details](docs/PRIVACY.md)) |
+| **Appearance customization** | Orientation, docking, live or static glass, timer size, Soqi options |
+| **Automatic startup** | *Launch at Windows startup* starts the island quietly at sign-in; removed by the uninstaller |
+| **English, Arabic and Dutch** | Switchable live, with full right-to-left layouts for Arabic |
+| **Optional Islamic Features** | Prayer times calculated on your PC, notifications, dhikr, du'a and Qur'an verses. **Disabled by default** for new installations; one switch under Settings › Features |
 
 ## Installation
 
-Requires Windows 10 or 11, 64-bit. No account is needed.
+Windows 10 or 11, 64-bit. No account is needed.
 
-1. Open the [Releases page](https://github.com/rami-hakimi/soqo-island-/releases). The first
-   public beta installer will be published there; until then, build from source (see
-   [Built with](#built-with)).
-2. Download `Soqo-Island-Setup-<version>.exe` and run it.
-3. The installer is not code-signed yet, so Microsoft SmartScreen may warn you. Only continue
-   if you downloaded the file from this repository's Releases page: choose *More info*, check
-   that the app is Soqo Island, then *Run anyway*.
-4. Follow the installer (English, Arabic or Dutch). It installs for the current user, without
-   administrator rights, and creates Start-menu and desktop shortcuts.
-5. The island appears at the top of your screen. Right-click it or the tray icon and choose
-   **Settings…** to pick your language and preferences, and turn on *Launch at Windows
-   startup* if you want it there every time you sign in.
+> **No installer has been published yet.** The first public beta (2.0.0-beta.2) will appear on
+> the Releases page below; until then you can build from source (see [Built with](#built-with)).
+
+1. Open the [Releases page](https://github.com/rami-hakimi/soqo-island-/releases).
+2. Download the latest Windows installer, `Soqo-Island-Setup-<version>.exe`.
+3. Run it. The installer is **not code-signed**, so Microsoft SmartScreen may show
+   "Windows protected your PC". Only continue (*More info → Run anyway*) for a file you
+   downloaded from this repository's Releases page; check that the app name reads Soqo Island.
+4. Complete the installation. It installs for the current user without administrator rights
+   and offers English, Arabic and Dutch.
+5. Launch Soqo Island from the installer's last page or the Start menu. The island appears at
+   the top of your screen with a dolphin icon in the notification area.
+6. Right-click the island or the tray icon and choose **Settings…** to pick the language and
+   your preferences, and turn on *Launch at Windows startup* if you want it at every sign-in.
 
 Installing a newer version over an existing one keeps your settings. Uninstalling from
 Windows Settings › Apps removes the program, its shortcuts and the startup entry.
@@ -103,11 +108,11 @@ Windows Settings › Apps removes the program, its shortcuts and the startup ent
 - **Timer**: open the Timer tab, pick a duration or start a focus session. Choose the size of
   the running-timer pill under Settings › Timer; Medium and Large show pause and reset on
   hover.
-- **Notifications**: cards appear in the island; the × closes them at once. Each kind can be
-  switched off under Settings › Alerts & Privacy.
+- **Notifications**: cards appear in the island and the × closes them at once. Each kind can
+  be switched off under Settings › Alerts & Privacy.
 - **Soqi**: click her for a reaction; adjust or hide her under Settings › Companion.
 - **Language**: Settings › General › Language (Automatic, English, العربية, Nederlands).
-- **Islamic Features**: Settings › Features › Islamic Features. Nothing related runs while the
+- **Islamic Features**: Settings › Features › Islamic Features; nothing related runs while the
   switch is off.
 - **Exit**: right-click the island or the tray icon › Quit. Startup can be turned off under
   Settings › General or in Windows Settings › Apps › Startup.
@@ -115,13 +120,13 @@ Windows Settings › Apps removes the program, its shortcuts and the startup ent
 ## Built with
 
 - [Electron](https://www.electronjs.org/) 44 and Node.js 22
-- JavaScript (CommonJS main process, classic-script renderers) with TypeScript `checkJs`
-  type checking, HTML and CSS; no bundler
+- JavaScript (CommonJS main process, classic-script renderers) checked with TypeScript
+  `checkJs`; HTML and CSS; no bundler
 - A small C# helper (`helper/`) for Windows media sessions, audio, brightness, UI Automation
   and the Start-menu catalogue
 - electron-builder (NSIS installer), electron-updater, node-ical
-- ESLint, `node:test`, and a GitHub Actions workflow that runs the checks and builds the
-  installer
+- Weather and city search data by [Open-Meteo.com](https://open-meteo.com/) (CC BY 4.0)
+- ESLint and `node:test`; GitHub Actions for CI and a tag-gated release workflow
 
 ```bash
 git clone https://github.com/rami-hakimi/soqo-island-.git
@@ -132,8 +137,8 @@ npm run verify     # syntax, lint, types, translations, tests
 npm run dist       # build the installer into dist/
 ```
 
-Architecture, localisation, privacy, security and release notes are in [`docs/`](docs/).
-Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md).
+Architecture, localisation, privacy, security, releasing and release notes are in
+[`docs/`](docs/). Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Developer
 
@@ -143,5 +148,6 @@ Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Soqo Island is free software under the [GNU General Public License v3.0](LICENSE).
 It is based on the GPL-licensed Nova Island project; upstream authorship, the modification
-notice and all third-party licences (including the KFGQPC Hafs Qur'an font, which is not
-covered by the GPL) are listed in [NOTICE.md](NOTICE.md).
+notice and all third-party credits (including the KFGQPC Hafs Qur'an font, which is not
+covered by the GPL) are in [NOTICE.md](NOTICE.md); the licence texts of bundled components
+are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

@@ -8,12 +8,13 @@
     "check": "node scripts/check-syntax.js",
     "lint": "eslint .",
     "test": "node --require ./test/helpers/setup.js --test \"test/*.test.js\"",
-    "verify": "npm run check && npm run lint && npm run typecheck && npm run i18n:check && npm test",
+    "verify": "npm run check && npm run lint && npm run typecheck && npm run i18n:check && npm test && npm run notices -- --check",
     "helper:build": "cmd /c helper\build.cmd",
     "dist": "electron-builder --win nsis",
     "dist:portable": "electron-builder --win portable",
     "typecheck": "tsc -p tsconfig.json",
-    "i18n:check": "node scripts/i18n-check.js"
+    "i18n:check": "node scripts/i18n-check.js",
+    "notices": "node scripts/third-party-notices.js"
   },
   "author": {
     "name": "Rami al-Hakimi",
@@ -52,6 +53,10 @@
       "!assets/ui/**",
       "!assets/screenshots/**",
       "!dist/**",
+      "!.github/**",
+      "!CONTRIBUTING.md",
+      "!CODE_OF_CONDUCT.md",
+      "!SECURITY.md",
       "!docs/**",
       "!test/**",
       "!scripts/**",

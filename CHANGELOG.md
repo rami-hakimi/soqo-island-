@@ -37,6 +37,10 @@ AmerTech). beta.1 was an internal build and was never published.
   hover, and a switch to keep a running timer visible over full-screen apps.
 - *Launch at Windows startup* survives upgrades and reinstalls; the uninstaller removes it.
 - GitHub community files: issue and pull-request templates, Code of Conduct.
+- CI on Windows for every push and pull request (verify gate, helper rebuild, production
+  dependency audit, unsigned installer as artifact; actions pinned to commit SHAs) and a
+  separate tag-gated Release workflow that validates the installer, update metadata and
+  packaged licence files, writes SHA-256 sums and publishes a GitHub pre-release.
 - Arabic and English installer languages.
 - Documentation: architecture, localisation, privacy, security policy, releasing, art assets.
 
@@ -52,6 +56,14 @@ AmerTech). beta.1 was an internal build and was never published.
 - "IDM Nova downloads" reads "IDM downloads" (stale persisted labels migrate automatically).
 
 ### Fixed
+- Open-Meteo is credited with a link next to the weather (System tab, Settings › Location),
+  as its CC BY 4.0 licence asks; the prayer-time core is attributed to PrayTimes.js (LGPL-3.0)
+  in the code and in the notices; `THIRD_PARTY_NOTICES.md` ships the licence texts of every
+  bundled package (one of them, `lazy-val`, publishes none in its npm package).
+- Live glass: no screen capture while the screen is locked; while a screen recorder (NVIDIA
+  Share, OBS, Streamlabs) is running the glass pauses on the static pane and the island stops
+  asking Windows to hide it from captures, so NVIDIA Instant Replay keeps working.
+- Start-menu scan: a helper that cannot start reports the error instead of hanging the scan.
 - Qur'an, du'a, dhikr and scene cards close on the **first** click of their × and hand the
   mouse back at once: cards and scenes take the pointer without the hover-intent delay,
   the cursor poll runs faster while one is open, the live-glass capture pauses meanwhile

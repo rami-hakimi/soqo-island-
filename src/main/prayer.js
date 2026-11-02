@@ -1,8 +1,14 @@
-// Prayer times calculated on this PC, no network: the PrayTimes method (praytimes.org, the same
-// one the AlAdhan service uses), with the calculation method each country follows (Egyptian
-// General Authority of Survey in Egypt, Umm al-Qura in Saudi Arabia, ...). The Hijri date comes
-// from the Umm al-Qura calendar built into Chromium. Recalculated just after midnight and when
-// the location or the settings change.
+// Prayer times calculated on this PC, no network, with the calculation method each country
+// follows (Egyptian General Authority of Survey in Egypt, Umm al-Qura in Saudi Arabia, ...).
+// The Hijri date comes from the Umm al-Qura calendar built into Chromium. Recalculated just
+// after midnight and when the location or the settings change.
+//
+// The calculation core below (julian, sunPosition, midDay, sunAngleTime, asrTime, the night
+// portions) is a port of PrayTimes.js, Prayer Times Calculator v2.3,
+// Copyright (C) 2007-2011 PrayTimes.org (Hamid Zarrabi-Zadeh), licensed under the GNU LGPL
+// v3.0 (https://praytimes.org). The port keeps the formulas; the method table lives in
+// prayer-methods.js. Combined with this GPL-3.0 program under LGPL-3.0 section 4; the LGPL
+// text ships in THIRD_PARTY_NOTICES.md.
 const settings = require('./settings');
 const features = require('./features');
 

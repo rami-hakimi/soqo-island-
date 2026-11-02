@@ -28,6 +28,12 @@ function scanOnce() {
     ps.stderr.setEncoding('utf8');
     ps.stdout.on('data', (d) => (out += d));
     ps.stderr.on('data', (d) => (errOut += d));
+    // the helper could not start at all (blocked by an antivirus, missing file): report and
+    // let the caller retry instead of waiting forever
+    ps.on('error', (err) => {
+      console.error(`[apps] scan could not start: ${err.message}`);
+      resolve(false);
+    });
     // 'close', not 'exit': exit can fire before the last stdout chunk has been read, which
     // showed up as an empty catalogue on the first try (the retry then succeeded)
     ps.on('close', (code) => {

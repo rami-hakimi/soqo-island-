@@ -46,7 +46,8 @@ test/               node:test suites; helpers/electron-stub.js lets main modules
 scripts/            check-syntax, i18n-check, prepare-art, dev-setup.cmd
 docs/               architecture, localisation, privacy, security audit, releasing, checklist,
                     releases/ (notes per version), archive/ (migration plan and log)
-.github/            CI workflow (verify + helper + unsigned installer), issue and PR templates
+.github/            ci.yml (verify + helper + unsigned installer), release.yml (tag-gated
+                    pre-release), issue and PR templates
 ```
 
 ## Processes and trust boundaries
